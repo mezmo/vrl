@@ -157,6 +157,8 @@ mod is_ipv4;
 mod is_ipv6;
 #[cfg(feature = "is_json")]
 mod is_json;
+#[cfg(feature = "is_mezmo_metric")]
+mod is_mezmo_metric;
 #[cfg(feature = "is_null")]
 mod is_null;
 #[cfg(feature = "is_nullish")]
@@ -478,6 +480,8 @@ pub use is_ipv4::IsIpv4;
 pub use is_ipv6::IsIpv6;
 #[cfg(feature = "is_json")]
 pub use is_json::IsJson;
+#[cfg(feature = "is_mezmo_metric")]
+pub use is_mezmo_metric::IsMezmoMetric;
 #[cfg(feature = "is_null")]
 pub use is_null::IsNull;
 #[cfg(feature = "is_nullish")]
@@ -799,6 +803,8 @@ pub fn all() -> Vec<Box<dyn vrl::Function>> {
         Box::new(IsIpv6),
         #[cfg(feature = "is_json")]
         Box::new(IsJson),
+        #[cfg(feature = "is_mezmo_metric")]
+        Box::new(IsMezmoMetric),
         #[cfg(feature = "is_null")]
         Box::new(IsNull),
         #[cfg(feature = "is_nullish")]
