@@ -46,6 +46,16 @@ struct IsMezmoMetricFn {
     value: Box<dyn Expression>,
 }
 
+trait IsNumber {
+    fn is_number(&self) -> bool;
+}
+
+impl IsNumber for Value {
+    fn is_number(&self) -> bool {
+        self.is_float() || self.is_integer()
+    }
+}
+
 impl FunctionExpression for IsMezmoMetricFn {
     fn resolve(&self, ctx: &mut Context) -> Resolved {
         let value = self.value.resolve(ctx)?;
@@ -136,9 +146,9 @@ fn validate_metric_value(value: &Value) -> Result<Value> {
 }
 
 fn validate_counter_or_gauge(value: &Value) -> Result<Value> {
-    if !value.is_float() && !value.is_integer() {
+    if !value.is_number() {
         return Err(
-            "expected counter/gauge metric field \"value.value\" to contain a float".into(),
+            "expected counter/gauge metric field \"value.value\" to contain a number".into(),
         );
     }
     Ok(value!(true))
@@ -188,9 +198,9 @@ fn validate_distribution(value: &Value) -> Result<Value> {
                     "\"value\" field of sample at index {i} in \"value.value.samples\" not found"
                 )
             })?
-            .is_float()
+            .is_number()
         {
-            return Err(format!("expected \"value\" field of sample at index {i} in \"value.value.samples\" to contain a float").into());
+            return Err(format!("expected \"value\" field of sample at index {i} in \"value.value.samples\" to contain a number").into());
         }
 
         let rate = sample
@@ -216,9 +226,9 @@ fn validate_histogram(value: &Value) -> Result<Value> {
         .get("sum")
         .ok_or_else(|| "field \"value.value.sum\" not found")?;
 
-    if !sum.is_float() && !sum.is_integer() {
+    if !sum.is_number() {
         return Err(
-            "expected histogram metric field \"value.value.sum\" to contain a float".into(),
+            "expected histogram metric field \"value.value.sum\" to contain a number".into(),
         );
     }
 
@@ -251,9 +261,9 @@ fn validate_histogram(value: &Value) -> Result<Value> {
             .ok_or_else(|| {
                 format!("\"upper_limit\" field of bucket at index {i} in \"value.value.buckets\" not found")
             })?
-            .is_float()
+            .is_number()
         {
-            return Err(format!("expected \"upper_limit\" field of bucket at index {i} in \"value.value.buckets\" to contain a float").into());
+            return Err(format!("expected \"upper_limit\" field of bucket at index {i} in \"value.value.buckets\" to contain a number").into());
         }
 
         let count = bucket
@@ -280,8 +290,8 @@ fn validate_summary(value: &Value) -> Result<Value> {
         .get("sum")
         .ok_or_else(|| "field \"value.value.sum\" not found")?;
 
-    if !sum.is_float() && !sum.is_integer() {
-        return Err("expected summary metric field \"value.value.sum\" to contain a float".into());
+    if !sum.is_number() {
+        return Err("expected summary metric field \"value.value.sum\" to contain a number".into());
     }
 
     let count = value
@@ -313,9 +323,9 @@ fn validate_summary(value: &Value) -> Result<Value> {
             .ok_or_else(|| {
                 format!("\"quantile\" field of quantile at index {i} in \"value.value.quantiles\" not found")
             })?
-            .is_float()
+            .is_number()
         {
-            return Err(format!("expected \"quantile\" field of quantile at index {i} in \"value.value.quantiles\" to contain a float").into());
+            return Err(format!("expected \"quantile\" field of quantile at index {i} in \"value.value.quantiles\" to contain a number").into());
         }
 
         if !quantile
@@ -323,9 +333,9 @@ fn validate_summary(value: &Value) -> Result<Value> {
             .ok_or_else(|| {
                 format!("\"value\" field of quantile at index {i} in \"value.value.quantiles\" not found")
             })?
-            .is_float()
+            .is_number()
         {
-            return Err(format!("expected \"value\" field of quantile at index {i} in \"value.value.quantiles\" to contain a float").into());
+            return Err(format!("expected \"value\" field of quantile at index {i} in \"value.value.quantiles\" to contain a number").into());
         }
     }
 
@@ -363,7 +373,7 @@ mod tests {
                     value: "invalid"
                 }
             })],
-            want: Err("expected counter/gauge metric field \"value.value\" to contain a float"),
+            want: Err("expected counter/gauge metric field \"value.value\" to contain a number"),
             tdef: TypeDef::boolean().fallible(),
         }
 
@@ -389,7 +399,7 @@ mod tests {
                     value: "invalid"
                 }
             })],
-            want: Err("expected counter/gauge metric field \"value.value\" to contain a float"),
+            want: Err("expected counter/gauge metric field \"value.value\" to contain a number"),
             tdef: TypeDef::boolean().fallible(),
         }
 
@@ -570,7 +580,7 @@ mod tests {
                     }
                 }
             })],
-            want: Err("expected summary metric field \"value.value.sum\" to contain a float"),
+            want: Err("expected summary metric field \"value.value.sum\" to contain a number"),
             tdef: TypeDef::boolean().fallible(),
         }
 
@@ -655,7 +665,7 @@ mod tests {
                     }
                 }
             })],
-            want: Err("expected \"quantile\" field of quantile at index 1 in \"value.value.quantiles\" to contain a float"),
+            want: Err("expected \"quantile\" field of quantile at index 1 in \"value.value.quantiles\" to contain a number"),
             tdef: TypeDef::boolean().fallible(),
         }
 
@@ -708,7 +718,7 @@ mod tests {
                     }
                 }
             })],
-            want: Err("expected \"value\" field of quantile at index 0 in \"value.value.quantiles\" to contain a float"),
+            want: Err("expected \"value\" field of quantile at index 0 in \"value.value.quantiles\" to contain a number"),
             tdef: TypeDef::boolean().fallible(),
         }
 
@@ -829,7 +839,7 @@ mod tests {
                     }
                 }
             })],
-            want: Err("expected histogram metric field \"value.value.sum\" to contain a float"),
+            want: Err("expected histogram metric field \"value.value.sum\" to contain a number"),
             tdef: TypeDef::boolean().fallible(),
         }
 
@@ -914,7 +924,7 @@ mod tests {
                     }
                 }
             })],
-            want: Err("expected \"upper_limit\" field of bucket at index 1 in \"value.value.buckets\" to contain a float"),
+            want: Err("expected \"upper_limit\" field of bucket at index 1 in \"value.value.buckets\" to contain a number"),
             tdef: TypeDef::boolean().fallible(),
         }
 
@@ -1136,7 +1146,7 @@ mod tests {
                     }
                 }
             })],
-            want: Err("expected \"value\" field of sample at index 0 in \"value.value.samples\" to contain a float"),
+            want: Err("expected \"value\" field of sample at index 0 in \"value.value.samples\" to contain a number"),
             tdef: TypeDef::boolean().fallible(),
         }
 
