@@ -59,7 +59,7 @@ value = { path = "lib/value", default-features = false }
 vrl-core = { path = "lib/core" }
 
 [dev-dependencies]
-criterion = "0.4"
+criterion = "0.5"
 indoc = "2"
 serde_json = "1"
 vrl-stdlib = { path = "lib/stdlib" }

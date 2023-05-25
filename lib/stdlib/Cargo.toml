@@ -72,7 +72,7 @@ datadog-grok = { path = "../datadog/grok", optional = true }
 [dev-dependencies]
 anyhow = "1"
 chrono-tz = "0.8"
-criterion = "0.4"
+criterion = "0.5"
 tracing-test = "0.2"
 value = { path = "../value", features = ["test"] }
 vrl-core = { path = "../core", features = ["test"] }
