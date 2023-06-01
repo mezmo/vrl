@@ -201,6 +201,20 @@ mod match_datadog_query;
 mod md5;
 #[cfg(feature = "merge")]
 mod merge;
+#[cfg(feature = "mezmo_arithmetic_operation")]
+mod mezmo_arithmetic_operation;
+#[cfg(feature = "mezmo_arithmetic_operation")]
+mod mezmo_concat_or_add;
+#[cfg(feature = "mezmo_is_truthy")]
+mod mezmo_is_truthy;
+#[cfg(feature = "mezmo_parse_float")]
+mod mezmo_parse_float;
+#[cfg(feature = "mezmo_parse_int")]
+mod mezmo_parse_int;
+#[cfg(feature = "mezmo_relational_comparison")]
+mod mezmo_relational_comparison;
+#[cfg(feature = "mezmo_to_string")]
+mod mezmo_to_string;
 #[cfg(feature = "mod")]
 mod mod_func;
 #[cfg(feature = "now")]
@@ -514,6 +528,20 @@ pub use match_array::MatchArray;
 pub use match_datadog_query::MatchDatadogQuery;
 #[cfg(feature = "merge")]
 pub use merge::Merge;
+#[cfg(feature = "mezmo_arithmetic_operation")]
+pub use mezmo_arithmetic_operation::{MezmoDivide, MezmoMultiply, MezmoSubtract};
+#[cfg(feature = "mezmo_arithmetic_operation")]
+pub use mezmo_concat_or_add::MezmoConcatOrAdd;
+#[cfg(feature = "mezmo_is_truthy")]
+pub use mezmo_is_truthy::MezmoIsTruthy;
+#[cfg(feature = "mezmo_parse_float")]
+pub use mezmo_parse_float::MezmoParseFloat;
+#[cfg(feature = "mezmo_parse_int")]
+pub use mezmo_parse_int::MezmoParseInt;
+#[cfg(feature = "mezmo_relational_comparison")]
+pub use mezmo_relational_comparison::{MezmoGt, MezmoGte, MezmoLt, MezmoLte};
+#[cfg(feature = "mezmo_to_string")]
+pub use mezmo_to_string::MezmoToString;
 #[cfg(feature = "mod")]
 pub use mod_func::Mod;
 #[cfg(feature = "now")]

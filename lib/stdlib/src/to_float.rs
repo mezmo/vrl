@@ -2,7 +2,7 @@ use ::value::Value;
 use vrl::prelude::*;
 use vrl_core::conversion::Conversion;
 
-fn to_float(value: Value) -> Resolved {
+pub(crate) fn to_float(value: Value) -> Resolved {
     use Value::{Boolean, Bytes, Float, Integer, Null, Timestamp};
     match value {
         Float(_) => Ok(value),

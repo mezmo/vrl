@@ -1,7 +1,7 @@
 use ::value::Value;
 use vrl::prelude::*;
 
-fn to_string(value: Value) -> Resolved {
+pub(crate) fn to_string(value: Value) -> Resolved {
     use chrono::SecondsFormat;
     use Value::{Boolean, Bytes, Float, Integer, Null, Timestamp};
     let value = match value {

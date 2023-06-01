@@ -8,6 +8,7 @@ license = "MPL-2.0"
 
 [dependencies]
 vrl = { path = "../.." }
+compiler = { package = "vrl-compiler", path = "../compiler", default-features = false }
 value = { path = "../value", default-features = false }
 
 datadog-filter = { path = "../datadog/filter", optional = true }
@@ -162,6 +163,12 @@ default = [
     "match_datadog_query",
     "md5",
     "merge",
+    "mezmo_arithmetic_operation",
+    "mezmo_is_truthy",
+    "mezmo_parse_float",
+    "mezmo_parse_int",
+    "mezmo_relational_comparison",
+    "mezmo_to_string",
     "mod",
     "now",
     "object",
@@ -323,6 +330,12 @@ match_array = ["dep:regex"]
 match_datadog_query = ["dep:datadog-search-syntax", "dep:datadog-filter", "dep:once_cell", "dep:regex", "dep:lookup_lib"]
 md5 = ["dep:md-5", "dep:hex"]
 merge = []
+mezmo_arithmetic_operation = ["mezmo_to_string"]
+mezmo_is_truthy = []
+mezmo_parse_int = ["parse_int"]
+mezmo_parse_float = ["to_float"]
+mezmo_relational_comparison = []
+mezmo_to_string = ["to_string"]
 mod = []
 now = ["dep:chrono"]
 object = []
