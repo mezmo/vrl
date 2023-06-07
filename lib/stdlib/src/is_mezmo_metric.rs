@@ -20,13 +20,11 @@ impl Function for IsMezmoMetric {
     }
 
     fn examples(&self) -> &'static [Example] {
-        &[
-            Example {
-                title: "counter",
-                source: r#"is_mezmo_metric({"kind":"incremental","name":"metric","value":{"type":"counter","value":1}})"#,
-                result: Ok("true"),
-            },
-        ]
+        &[Example {
+            title: "counter",
+            source: r#"is_mezmo_metric({"kind":"incremental","name":"metric","value":{"type":"counter","value":1}})"#,
+            result: Ok("true"),
+        }]
     }
 
     fn compile(
@@ -69,7 +67,7 @@ impl FunctionExpression for IsMezmoMetricFn {
 
 fn validate_metric(value: &Value) -> Result<Value> {
     if !value.is_object() {
-        return Err("expected an object".into())
+        return Err("expected an object".into());
     }
 
     if !value
