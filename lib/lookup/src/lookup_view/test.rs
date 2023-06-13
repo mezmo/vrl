@@ -23,12 +23,28 @@ static SUFFICIENTLY_DECOMPOSED: Lazy<[Segment<'static>; 10]> = Lazy::new(|| {
 });
 
 #[test]
+fn field_eq_ignores_original_quoting() {
+    let field_1: Field = "a_name".into();
+    let field_2: Field = "\"a_name\"".into();
+
+    assert!(!field_1.requires_quoting);
+    assert!(!field_1.original_quoted);
+
+    assert!(!field_2.requires_quoting);
+    assert!(field_2.original_quoted);
+
+    assert_eq!(field_1, field_2);
+    assert_eq!(field_2, field_1);
+}
+
+#[test]
 fn field_is_quoted() {
     let field: Field = "zork2".into();
     assert_eq!(
         Field {
             name: "zork2",
             requires_quoting: false,
+            original_quoted: false,
         },
         field
     );
@@ -38,6 +54,27 @@ fn field_is_quoted() {
         Field {
             name: "zork2-zoog",
             requires_quoting: true,
+            original_quoted: false,
+        },
+        field
+    );
+
+    let field: FieldBuf = "\"zork2\"".into();
+    assert_eq!(
+        FieldBuf {
+            name: "zork2".into(),
+            requires_quoting: false,
+            original_quoted: true,
+        },
+        field
+    );
+
+    let field: Field = "\"zork2-zoog\"".into();
+    assert_eq!(
+        Field {
+            name: "zork2-zoog",
+            requires_quoting: true,
+            original_quoted: true,
         },
         field
     );

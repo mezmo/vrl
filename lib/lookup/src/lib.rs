@@ -17,6 +17,9 @@ pub mod lookup_v2;
 mod lookup_view;
 pub mod parser;
 
+#[cfg(feature = "path-parsing-wasm")]
+pub mod mezmo_wasm;
+
 /// This trait, while it is not necessarily imported and used, exists
 /// to enforce parity among view/buf types.
 pub trait Look<'a>:

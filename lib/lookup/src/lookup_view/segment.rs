@@ -1,14 +1,39 @@
+use std::cmp::Ordering;
 use std::fmt::{Display, Formatter};
 
 use inherent::inherent;
 
 use crate::{field, FieldBuf, LookSegment, SegmentBuf};
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Hash)]
+#[derive(Debug, Eq, Ord, Clone, Hash)]
 pub struct Field<'a> {
     pub name: &'a str,
+
     // This is a very lazy optimization to avoid having to scan for escapes.
     pub requires_quoting: bool,
+
+    // LOG-17092: Track whether the original was quoted so by default we can generate
+    // the same string as output from the parsed representation. This upholds the existing
+    // API that was previously implemented.
+    pub original_quoted: bool,
+}
+
+// LOG-17092: Part of trying to validate whether a field segment is within a path
+// exposed an issue where `.segment_name == ."segment_name"` would evaluate to false
+// because the derived PartialEq and PartialOrd implementations checked the name and
+// requires_quoting field. We don't need to check the requires_quoting field since it's
+// only in the struct to avoid scanning the name field for quotable characters every time
+// the Field is turned into a string/str.
+impl<'a> PartialEq for Field<'a> {
+    fn eq(&self, other: &Self) -> bool {
+        self.name.eq(other.name)
+    }
+}
+
+impl<'a> PartialOrd for Field<'a> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        self.name.partial_cmp(other.name)
+    }
 }
 
 impl<'a> Field<'a> {
@@ -16,13 +41,25 @@ impl<'a> Field<'a> {
         FieldBuf {
             name: self.name.to_string(),
             requires_quoting: self.requires_quoting,
+            original_quoted: self.original_quoted,
+        }
+    }
+
+    /// Returns the field name only quoting the name if the field name contains characters
+    /// that would require it to be quoted. For fields that were parsed with quotes but do
+    /// not contain any characters that require quotes, the quotes will be omitted.
+    pub fn to_humanized_string(&self) -> String {
+        if self.requires_quoting {
+            format!(r#""{}""#, self.name)
+        } else {
+            self.name.to_string()
         }
     }
 }
 
 impl<'a> Display for Field<'a> {
     fn fmt(&self, formatter: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
-        if self.requires_quoting {
+        if self.requires_quoting || self.original_quoted {
             write!(formatter, r#""{}""#, self.name)
         } else {
             write!(formatter, r#"{}"#, self.name)
@@ -33,18 +70,22 @@ impl<'a> Display for Field<'a> {
 impl<'a> From<&'a str> for Field<'a> {
     fn from(mut name: &'a str) -> Self {
         let mut requires_quoting = false;
+        let mut original_quoted = false;
 
         if name.starts_with('\"') && name.ends_with('\"') {
             let len = name.len();
             name = &name[1..len - 1];
-            requires_quoting = true;
-        } else if !field::is_valid_fieldname(name) {
+            original_quoted = true;
+        }
+
+        if !field::is_valid_fieldname(name) {
             requires_quoting = true;
         }
 
         Self {
             name,
             requires_quoting,
+            original_quoted,
         }
     }
 }
@@ -54,6 +95,7 @@ impl<'a> From<&'a FieldBuf> for Field<'a> {
         Self {
             name: &v.name,
             requires_quoting: v.requires_quoting,
+            original_quoted: v.original_quoted,
         }
     }
 }
@@ -123,6 +165,7 @@ impl<'a> Display for Segment<'a> {
             Segment::Field(Field {
                 name,
                 requires_quoting: false,
+                original_quoted: false,
             }) => write!(formatter, "{}", name),
             Segment::Field(field) => write!(formatter, "{}", field),
             Segment::Coalesce(v) => write!(
