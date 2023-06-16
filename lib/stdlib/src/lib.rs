@@ -869,6 +869,30 @@ pub fn all() -> Vec<Box<dyn vrl::Function>> {
         Box::new(Md5),
         #[cfg(feature = "merge")]
         Box::new(Merge),
+        #[cfg(feature = "mezmo_arithmetic_operation")]
+        Box::new(MezmoDivide),
+        #[cfg(feature = "mezmo_arithmetic_operation")]
+        Box::new(MezmoMultiply),
+        #[cfg(feature = "mezmo_arithmetic_operation")]
+        Box::new(MezmoSubtract),
+        #[cfg(feature = "mezmo_arithmetic_operation")]
+        Box::new(MezmoConcatOrAdd),
+        #[cfg(feature = "mezmo_is_truthy")]
+        Box::new(MezmoIsTruthy),
+        #[cfg(feature = "mezmo_parse_float")]
+        Box::new(MezmoParseFloat),
+        #[cfg(feature = "mezmo_parse_int")]
+        Box::new(MezmoParseInt),
+        #[cfg(feature = "mezmo_relational_comparison")]
+        Box::new(MezmoGt),
+        #[cfg(feature = "mezmo_relational_comparison")]
+        Box::new(MezmoGte),
+        #[cfg(feature = "mezmo_relational_comparison")]
+        Box::new(MezmoLt),
+        #[cfg(feature = "mezmo_relational_comparison")]
+        Box::new(MezmoLte),
+        #[cfg(feature = "mezmo_to_string")]
+        Box::new(MezmoToString),
         #[cfg(feature = "mod")]
         Box::new(Mod),
         #[cfg(feature = "now")]
