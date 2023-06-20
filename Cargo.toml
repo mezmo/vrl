@@ -1,6 +1,6 @@
 [package]
 name = "vrl"
-version = "0.1.0"
+version = "0.3.0"
 authors = ["Vector Contributors <vector@datadoghq.com>"]
 edition = "2021"
 publish = false
@@ -52,11 +52,11 @@ bytes = "1.4.0"
 compiler = { package = "vrl-compiler", path = "lib/compiler", default-features = false }
 diagnostic = { package = "vrl-diagnostic", path = "lib/diagnostic" }
 indoc = "2"
-lookup = { path = "lib/lookup" }
+lookup = { path = "lib/lookup" , version = "0.3.0" }
 ordered-float = "3"
 parser = { package = "vrl-parser", path = "lib/parser" }
-value = { path = "lib/value", default-features = false }
-vrl-core = { path = "lib/core" }
+value = { path = "lib/value", default-features = false , version = "0.3.0" }
+vrl-core = { path = "lib/core" , version = "0.3.0" }
 
 [dev-dependencies]
 criterion = "0.4"
