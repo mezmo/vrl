@@ -58,13 +58,13 @@ impl Function for MezmoStringSlice {
                 required: true,
             },
             Parameter {
-                keyword: "index",
+                keyword: "index_start",
                 kind: kind::INTEGER,
                 required: true,
             },
             Parameter {
-                keyword: "allow_negative",
-                kind: kind::BOOLEAN,
+                keyword: "index_end",
+                kind: kind::INTEGER,
                 required: false,
             },
         ]
