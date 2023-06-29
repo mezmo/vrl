@@ -44,6 +44,7 @@ sha-1 = { version = "0.10", optional = true }
 sha-2 = { package = "sha2", version = "0.10", optional = true }
 sha-3 = { package = "sha3", version = "0.10", optional = true }
 strip-ansi-escapes = { version = "0.1", optional = true }
+substring = { version = "1.4.5", optional = true }
 syslog_loose = { version = "0.18", optional = true }
 tracing = { version = "0.1", optional = true }
 url = { version = "2", optional = true }
@@ -169,6 +170,7 @@ default = [
     "mezmo_parse_int",
     "mezmo_relational_comparison",
     "mezmo_to_string",
+    "mezmo_string_operations",
     "mod",
     "now",
     "object",
@@ -335,6 +337,7 @@ mezmo_is_truthy = []
 mezmo_parse_int = ["parse_int"]
 mezmo_parse_float = ["to_float"]
 mezmo_relational_comparison = []
+mezmo_string_operations = ["substring"]
 mezmo_to_string = ["to_string"]
 mod = []
 now = ["dep:chrono"]

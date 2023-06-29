@@ -213,8 +213,31 @@ mod mezmo_parse_float;
 mod mezmo_parse_int;
 #[cfg(feature = "mezmo_relational_comparison")]
 mod mezmo_relational_comparison;
+#[cfg(feature = "mezmo_string_operations")]
+mod mezmo_char_at;
+#[cfg(feature = "mezmo_string_operations")]
+mod mezmo_index_of;
+#[cfg(feature = "mezmo_string_operations")]
+mod mezmo_last_index_of;
+#[cfg(feature = "mezmo_string_operations")]
+mod mezmo_pad_end;
+#[cfg(feature = "mezmo_string_operations")]
+mod mezmo_pad_start;
+#[cfg(feature = "mezmo_string_operations")]
+mod mezmo_repeat;
+#[cfg(feature = "mezmo_string_operations")]
+mod mezmo_string_at;
+#[cfg(feature = "mezmo_string_operations")]
+mod mezmo_string_slice;
+#[cfg(feature = "mezmo_string_operations")]
+mod mezmo_substring;
+#[cfg(feature = "mezmo_string_operations")]
+mod mezmo_trim_end;
+#[cfg(feature = "mezmo_string_operations")]
+mod mezmo_trim_start;
 #[cfg(feature = "mezmo_to_string")]
 mod mezmo_to_string;
+
 #[cfg(feature = "mod")]
 mod mod_func;
 #[cfg(feature = "now")]
@@ -540,6 +563,28 @@ pub use mezmo_parse_float::MezmoParseFloat;
 pub use mezmo_parse_int::MezmoParseInt;
 #[cfg(feature = "mezmo_relational_comparison")]
 pub use mezmo_relational_comparison::{MezmoGt, MezmoGte, MezmoLt, MezmoLte};
+#[cfg(feature = "mezmo_string_operations")]
+pub use mezmo_char_at::MezmoCharAt;
+#[cfg(feature = "mezmo_string_operations")]
+pub use mezmo_index_of::MezmoIndexOf;
+#[cfg(feature = "mezmo_string_operations")]
+pub use mezmo_last_index_of::MezmoLastIndexOf;
+#[cfg(feature = "mezmo_string_operations")]
+pub use mezmo_pad_end::MezmoPadEnd;
+#[cfg(feature = "mezmo_string_operations")]
+pub use mezmo_pad_start::MezmoPadStart;
+#[cfg(feature = "mezmo_string_operations")]
+pub use mezmo_repeat::MezmoRepeat;
+#[cfg(feature = "mezmo_string_operations")]
+pub use mezmo_string_at::MezmoStringAt;
+#[cfg(feature = "mezmo_string_operations")]
+pub use mezmo_string_slice::MezmoStringSlice;
+#[cfg(feature = "mezmo_string_operations")]
+pub use mezmo_substring::MezmoSubstring;
+#[cfg(feature = "mezmo_string_operations")]
+pub use mezmo_trim_end::MezmoTrimEnd;
+#[cfg(feature = "mezmo_string_operations")]
+pub use mezmo_trim_start::MezmoTrimStart;
 #[cfg(feature = "mezmo_to_string")]
 pub use mezmo_to_string::MezmoToString;
 #[cfg(feature = "mod")]
@@ -891,6 +936,28 @@ pub fn all() -> Vec<Box<dyn vrl::Function>> {
         Box::new(MezmoLt),
         #[cfg(feature = "mezmo_relational_comparison")]
         Box::new(MezmoLte),
+        #[cfg(feature = "mezmo_string_operations")]
+        Box::new(MezmoCharAt),
+        #[cfg(feature = "mezmo_string_operations")]
+        Box::new(MezmoIndexOf),
+        #[cfg(feature = "mezmo_string_operations")]
+        Box::new(MezmoLastIndexOf),
+        #[cfg(feature = "mezmo_string_operations")]
+        Box::new(MezmoPadEnd),
+        #[cfg(feature = "mezmo_string_operations")]
+        Box::new(MezmoPadStart),
+        #[cfg(feature = "mezmo_string_operations")]
+        Box::new(MezmoRepeat),
+        #[cfg(feature = "mezmo_string_operations")]
+        Box::new(MezmoStringAt),
+        #[cfg(feature = "mezmo_string_operations")]
+        Box::new(MezmoStringSlice),
+        #[cfg(feature = "mezmo_string_operations")]
+        Box::new(MezmoSubstring),
+        #[cfg(feature = "mezmo_string_operations")]
+        Box::new(MezmoTrimEnd),
+        #[cfg(feature = "mezmo_string_operations")]
+        Box::new(MezmoTrimStart),
         #[cfg(feature = "mezmo_to_string")]
         Box::new(MezmoToString),
         #[cfg(feature = "mod")]
