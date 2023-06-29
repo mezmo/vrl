@@ -1,6 +1,6 @@
 [package]
 name = "vrl-parser"
-version = "0.1.0"
+version = "0.3.0"
 authors = ["Vector Contributors <vector@datadoghq.com>"]
 edition = "2021"
 publish = false
@@ -8,7 +8,7 @@ build = "build.rs" # LALRPOP preprocessing
 
 [dependencies]
 diagnostic = { package = "vrl-diagnostic", path = "../diagnostic" }
-lookup = { path = "../lookup" }
+lookup = { path = "../lookup" , version = "0.3.0" }
 arbitrary = { version = "1", optional = true, features = ["derive"] }
 
 lalrpop-util = "0.19"
