@@ -1,3 +1,10 @@
+## [0.3.2](https://github.com/answerbook/vrl/compare/v0.3.1...v0.3.2) (2023-06-30)
+
+
+### Bug Fixes
+
+* Avoid panicking on regex error in parse_grok() function [9a96163](https://github.com/answerbook/vrl/commit/9a961632e3e4f2183e19a32e43437622786dcfc9) - GitHub [LOG-17425](https://logdna.atlassian.net/browse/LOG-17425)
+
 ## [0.3.1](https://github.com/answerbook/vrl/compare/v0.3.0...v0.3.1) (2023-06-30)
 
 
