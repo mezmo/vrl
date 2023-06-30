@@ -1,6 +1,6 @@
 [package]
 name = "vrl-compiler"
-version = "0.3.0"
+version = "0.3.1"
 authors = ["Vector Contributors <vector@datadoghq.com>"]
 edition = "2021"
 publish = false
@@ -31,8 +31,8 @@ test = []
 core = { package = "vrl-core", path = "../core", default-features = false }
 diagnostic = { package = "vrl-diagnostic", path = "../diagnostic" }
 parser = { package = "vrl-parser", path = "../parser" }
-lookup = { path = "../lookup" , version = "0.3.0" }
-value = { path = "../value" , version = "0.3.0" }
+lookup = { path = "../lookup" , version = "0.3.1" }
+value = { path = "../value" , version = "0.3.1" }
 getrandom = { version = "0.2", features = ["js"] }
 
 bytes = { version = "1.4.0", default-features = false }
