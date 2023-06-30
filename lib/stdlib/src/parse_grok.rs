@@ -21,14 +21,18 @@ static MEZMO_PATTERNS: &[(&str, &str)] = &[
 mod non_wasm {
     use ::value::Value;
     pub(super) use std::sync::Arc;
-    use std::{collections::BTreeMap, fmt};
+    use std::{collections::BTreeMap, fmt, panic};
     use vrl::prelude::*;
     use vrl::state::TypeState;
     use vrl_diagnostic::{Label, Span};
 
     fn parse_grok(value: Value, pattern: Arc<grok::Pattern>) -> Resolved {
         let bytes = value.try_bytes_utf8_lossy()?;
-        match pattern.match_against(&bytes) {
+
+        // Onig regex library, used by the grok library, panics when it hits a retry-limit-in-match.
+        // Fixing it in the grok library (by using another regex method) can be met
+        // with resistance because it requires a new API function, i.e., pattern.try_match_against()
+        let possible_panic = panic::catch_unwind(|| match pattern.match_against(&bytes) {
             Some(matches) => {
                 let mut result = BTreeMap::new();
 
@@ -39,6 +43,15 @@ mod non_wasm {
                 Ok(Value::from(result))
             }
             None => Err("unable to parse input with grok pattern".into()),
+        });
+
+        match possible_panic {
+            Ok(r) => r,
+            Err(_) => Err(format!(
+                "regex with grok pattern caused a panic. Input: '{}', pattern: {:?}",
+                &bytes, pattern
+            )
+            .into()),
         }
     }
 
