@@ -1,21 +1,21 @@
 [package]
 name = "vrl-stdlib"
-version = "0.3.2"
+version = "0.3.3"
 authors = ["Vector Contributors <vector@datadoghq.com>"]
 edition = "2021"
 publish = false
 license = "MPL-2.0"
 
 [dependencies]
-vrl = { path = "../.." , version = "0.3.2" }
+vrl = { path = "../.." , version = "0.3.3" }
 compiler = { package = "vrl-compiler", path = "../compiler", default-features = false }
-value = { path = "../value", default-features = false , version = "0.3.2" }
+value = { path = "../value", default-features = false , version = "0.3.3" }
 
-datadog-filter = { path = "../datadog/filter", optional = true , version = "0.3.2" }
-datadog-search-syntax = { path = "../datadog/search-syntax", optional = true , version = "0.3.2" }
+datadog-filter = { path = "../datadog/filter", optional = true , version = "0.3.3" }
+datadog-search-syntax = { path = "../datadog/search-syntax", optional = true , version = "0.3.3" }
 lookup_lib = {package = "lookup", path = "../lookup", optional = true }
-vrl-core = { path = "../core" , version = "0.3.2" }
-vrl-diagnostic = { path = "../diagnostic" , version = "0.3.2" }
+vrl-core = { path = "../core" , version = "0.3.3" }
+vrl-diagnostic = { path = "../diagnostic" , version = "0.3.3" }
 
 base16 = { version = "0.2", optional = true }
 base64 = { version = "0.21", optional = true }
@@ -69,7 +69,7 @@ ofb = { version = "0.6.1", optional = true }
 dns-lookup = { version = "1.0.8", optional = true }
 hostname = { version = "0.3", optional = true }
 grok = { version = "2", optional = true }
-datadog-grok = { path = "../datadog/grok", optional = true , version = "0.3.2" }
+datadog-grok = { path = "../datadog/grok", optional = true , version = "0.3.3" }
 
 [dev-dependencies]
 anyhow = "1"

@@ -1,3 +1,10 @@
+## [0.3.3](https://github.com/answerbook/vrl/compare/v0.3.2...v0.3.3) (2023-07-12)
+
+
+### Bug Fixes
+
+* lookup segment handling when quoting is redundant (#25) [1cb9515](https://github.com/answerbook/vrl/commit/1cb9515d45a8a17e3b5b8affb6f9d0348577635f) - GitHub [LOG-17092](https://logdna.atlassian.net/browse/LOG-17092)
+
 ## [0.3.2](https://github.com/answerbook/vrl/compare/v0.3.1...v0.3.2) (2023-06-30)
 
 
