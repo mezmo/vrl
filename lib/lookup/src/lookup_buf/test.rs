@@ -30,6 +30,7 @@ fn field_is_quoted() {
         FieldBuf {
             name: "zork2".into(),
             requires_quoting: false,
+            original_quoted: false,
         },
         field
     );
@@ -39,6 +40,27 @@ fn field_is_quoted() {
         FieldBuf {
             name: "zork2-zoog".into(),
             requires_quoting: true,
+            original_quoted: false,
+        },
+        field
+    );
+
+    let field: FieldBuf = "\"zork2\"".into();
+    assert_eq!(
+        FieldBuf {
+            name: "zork2".into(),
+            requires_quoting: false,
+            original_quoted: true,
+        },
+        field
+    );
+
+    let field: FieldBuf = "\"zork2-zoog\"".into();
+    assert_eq!(
+        FieldBuf {
+            name: "zork2-zoog".into(),
+            requires_quoting: true,
+            original_quoted: true,
         },
         field
     );
