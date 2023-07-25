@@ -1,18 +1,26 @@
-use crate::to_float;
 use ::value::Value;
 use vrl::prelude::*;
+use vrl_core::{conversion::Conversion, Resolved};
 
-/// Converts any value to float, defaulting to f64(0).
-fn mezmo_parse_float(value: Value) -> f64 {
-    use Value::Float;
-    let v = to_float::to_float(value).unwrap_or_else(|_| Value::from(0.0));
-    match v {
-        Float(v) => v.into_inner(),
-        _ => 0.0,
+fn mezmo_parse_float(value: Value) -> Resolved {
+    use Value::{Bytes, Float, Integer};
+    match value {
+        Float(_) => Ok(value),
+        Integer(v) => Ok(Value::from_f64_or_zero(v as f64)),
+        Bytes(v) => Conversion::Float
+            .convert(v)
+            .map_err(|e| e.to_string().into()),
+        v => Err(format!("unable to parse {} into float", v.kind()).into()),
     }
 }
 
-/// Infallible counterpart of ToFloat
+/// Converts int, float, and string value to a float while matching the behavior
+/// of JavaScript's `parseFloat()`. All other types results in an error. This is
+/// also different from `to_float()` in that fallibility is determined
+/// completely at runtime (there's no `type_def()` check on the parameter).
+/// 
+/// FIXME: This doesn't properly handle whitespace or invalid chars at the end
+/// of the float.
 #[derive(Clone, Copy, Debug)]
 pub struct MezmoParseFloat;
 
@@ -53,11 +61,11 @@ struct ParseFloatFn {
 impl FunctionExpression for ParseFloatFn {
     fn resolve(&self, ctx: &mut Context) -> Resolved {
         let value = self.value.resolve(ctx)?;
-        Ok(mezmo_parse_float(value).into())
+        mezmo_parse_float(value)
     }
 
     fn type_def(&self, _state: &state::TypeState) -> TypeDef {
-        TypeDef::float().infallible()
+        TypeDef::float().fallible()
     }
 }
 
@@ -71,25 +79,25 @@ mod tests {
         float {
             args: func_args![value: 20.5],
             want: Ok(20.5),
-            tdef: TypeDef::float().infallible(),
+            tdef: TypeDef::float().fallible(),
         }
 
         integer {
             args: func_args![value: 100],
             want: Ok(100.0),
-            tdef: TypeDef::float().infallible(),
+            tdef: TypeDef::float().fallible(),
         }
 
         string {
             args: func_args![value: "100.1"],
             want: Ok(100.1),
-            tdef: TypeDef::float().infallible(),
+            tdef: TypeDef::float().fallible(),
         }
 
         null {
             args: func_args![value: value!(null)],
-            want: Ok(0.0),
-            tdef: TypeDef::float().infallible(),
+            want: Err("unable to parse null into float"),
+            tdef: TypeDef::float().fallible(),
         }
     ];
 }

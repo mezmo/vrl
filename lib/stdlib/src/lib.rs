@@ -235,6 +235,10 @@ mod mezmo_substring;
 mod mezmo_trim_end;
 #[cfg(feature = "mezmo_string_operations")]
 mod mezmo_trim_start;
+#[cfg(feature = "mezmo_to_int")]
+mod mezmo_to_int;
+#[cfg(feature = "mezmo_to_float")]
+mod mezmo_to_float;
 #[cfg(feature = "mezmo_to_string")]
 mod mezmo_to_string;
 
@@ -585,6 +589,10 @@ pub use mezmo_substring::MezmoSubstring;
 pub use mezmo_trim_end::MezmoTrimEnd;
 #[cfg(feature = "mezmo_string_operations")]
 pub use mezmo_trim_start::MezmoTrimStart;
+#[cfg(feature = "mezmo_to_int")]
+pub use mezmo_to_int::MezmoToInt;
+#[cfg(feature = "mezmo_to_float")]
+pub use mezmo_to_float::MezmoToFloat;
 #[cfg(feature = "mezmo_to_string")]
 pub use mezmo_to_string::MezmoToString;
 #[cfg(feature = "mod")]
@@ -958,6 +966,10 @@ pub fn all() -> Vec<Box<dyn vrl::Function>> {
         Box::new(MezmoTrimEnd),
         #[cfg(feature = "mezmo_string_operations")]
         Box::new(MezmoTrimStart),
+        #[cfg(feature = "mezmo_to_int")]
+        Box::new(MezmoToInt),
+        #[cfg(feature = "mezmo_to_float")]
+        Box::new(MezmoToFloat),
         #[cfg(feature = "mezmo_to_string")]
         Box::new(MezmoToString),
         #[cfg(feature = "mod")]
