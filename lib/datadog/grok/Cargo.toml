@@ -1,6 +1,6 @@
 [package]
 name = "datadog-grok"
-version = "0.3.3"
+version = "0.4.0"
 authors = ["Vector Contributors <vector@datadoghq.com>"]
 edition = "2021"
 build = "build.rs" # LALRPOP preprocessing
@@ -22,9 +22,9 @@ thiserror = { version = "1", default-features = false }
 tracing = { version = "0.1.34", default-features = false }
 
 # Internal
-lookup = { path = "../../lookup" , version = "0.3.3" }
-value = {path = "../../value", features = ["json", "test"], version = "0.3.3" }
-vrl-compiler = { path = "../../compiler" , version = "0.3.3" }
+lookup = { path = "../../lookup" , version = "0.4.0" }
+value = {path = "../../value", features = ["json", "test"], version = "0.4.0" }
+vrl-compiler = { path = "../../compiler" , version = "0.4.0" }
 
 [dev-dependencies]
 vrl-compiler = { path = "../../compiler" }

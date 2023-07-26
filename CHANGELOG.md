@@ -1,3 +1,10 @@
+# [0.4.0](https://github.com/answerbook/vrl/compare/v0.3.3...v0.4.0) (2023-07-26)
+
+
+### Features
+
+* Add functions to coerce int and float types (#28) [093162f](https://github.com/answerbook/vrl/commit/093162fb96fad1a53ec62c6072e8d51803d7119b) - GitHub [LOG-17443](https://logdna.atlassian.net/browse/LOG-17443)
+
 ## [0.3.3](https://github.com/answerbook/vrl/compare/v0.3.2...v0.3.3) (2023-07-12)
 
 

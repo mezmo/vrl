@@ -1,13 +1,13 @@
 [package]
 name = "datadog-filter"
-version = "0.3.3"
+version = "0.4.0"
 authors = ["Vector Contributors <vector@datadoghq.com>"]
 edition = "2021"
 publish = false
 license = "MPL-2.0"
 
 [dependencies]
-datadog-search-syntax = { path = "../search-syntax" , version = "0.3.3" }
+datadog-search-syntax = { path = "../search-syntax" , version = "0.4.0" }
 
 regex = "1"
 dyn-clone = { version = "1.0.11", default-features = false }

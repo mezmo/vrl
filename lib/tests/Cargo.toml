@@ -1,15 +1,15 @@
 [package]
 name = "vrl-tests"
-version = "0.3.3"
+version = "0.4.0"
 authors = ["Vector Contributors <vector@datadoghq.com>"]
 edition = "2021"
 publish = false
 
 [dependencies]
-lookup = { path = "../lookup" , version = "0.3.3" }
+lookup = { path = "../lookup" , version = "0.4.0" }
 stdlib = { package = "vrl-stdlib", path = "../stdlib" }
-vrl = { path = "../.." , version = "0.3.3" }
-value = { path = "../value" , version = "0.3.3" }
+vrl = { path = "../.." , version = "0.4.0" }
+value = { path = "../value" , version = "0.4.0" }
 
 ansi_term = "0.12"
 chrono = "0.4"
