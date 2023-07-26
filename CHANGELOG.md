@@ -1,3 +1,10 @@
+## [0.4.1](https://github.com/answerbook/vrl/compare/v0.4.0...v0.4.1) (2023-07-26)
+
+
+### Bug Fixes
+
+* Invalid return types for mezmo index funcs (#29) [d0d84f5](https://github.com/answerbook/vrl/commit/d0d84f51482a8d64acbbd019b5f340b14caa4e63) - GitHub [LOG-17641](https://logdna.atlassian.net/browse/LOG-17641)
+
 # [0.4.0](https://github.com/answerbook/vrl/compare/v0.3.3...v0.4.0) (2023-07-26)
 
 

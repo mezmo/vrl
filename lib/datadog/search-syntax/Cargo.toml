@@ -1,6 +1,6 @@
 [package]
 name = "datadog-search-syntax"
-version = "0.4.0"
+version = "0.4.1"
 authors = ["Vector Contributors <vector@datadoghq.com>"]
 edition = "2021"
 publish = false
