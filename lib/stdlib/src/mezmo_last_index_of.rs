@@ -144,7 +144,7 @@ impl FunctionExpression for MezmoLastIndexOfFn {
     }
 
     fn type_def(&self, _state: &state::TypeState) -> TypeDef {
-        TypeDef::bytes().infallible()
+        TypeDef::integer().infallible()
     }
 }
 
@@ -158,79 +158,79 @@ mod tests {
         basic {
             args: func_args![value: "abcabc", search_value: "bc"],
             want: Ok(4),
-            tdef: TypeDef::bytes().infallible(),
+            tdef: TypeDef::integer().infallible(),
         }
 
         utf8 {
             args: func_args![value: "नमस्तेनमस्ते", search_value: "स्ते"],
             want: Ok(8),
-            tdef: TypeDef::bytes().infallible(),
+            tdef: TypeDef::integer().infallible(),
         }
 
         not_found {
             args: func_args![value: "abc", search_value: "def"],
             want: Ok(-1),
-            tdef: TypeDef::bytes().infallible(),
+            tdef: TypeDef::integer().infallible(),
         }
 
         position {
             args: func_args![value: "abcabc", search_value: "bc", position: 3],
             want: Ok(1),
-            tdef: TypeDef::bytes().infallible(),
+            tdef: TypeDef::integer().infallible(),
         }
 
         position_boundary {
             args: func_args![value: "abcabc", search_value: "bc", position: 4],
             want: Ok(4),
-            tdef: TypeDef::bytes().infallible(),
+            tdef: TypeDef::integer().infallible(),
         }
 
         position_greater_than_length {
             args: func_args![value: "abc", search_value: "bc", position: 100],
             want: Ok(1),
-            tdef: TypeDef::bytes().infallible(),
+            tdef: TypeDef::integer().infallible(),
         }
 
         negative_position {
             args: func_args![value: "abcdefabcdef", search_value: "abc", position: -5],
             want: Ok(0),
-            tdef: TypeDef::bytes().infallible(),
+            tdef: TypeDef::integer().infallible(),
         }
 
         zero_position {
             args: func_args![value: "abcdefabcdef", search_value: "abc", position: 0],
             want: Ok(0),
-            tdef: TypeDef::bytes().infallible(),
+            tdef: TypeDef::integer().infallible(),
         }
 
         empty {
             args: func_args![value: "", search_value: ""],
             want: Ok(0),
-            tdef: TypeDef::bytes().infallible(),
+            tdef: TypeDef::integer().infallible(),
         }
 
         search_non_empty_with_empty {
             args: func_args![value: "abc", search_value: ""],
             want: Ok(3),
-            tdef: TypeDef::bytes().infallible(),
+            tdef: TypeDef::integer().infallible(),
         }
 
         empty_with_position {
             args: func_args![value: "abc", search_value: "", position: 3],
             want: Ok(3),
-            tdef: TypeDef::bytes().infallible(),
+            tdef: TypeDef::integer().infallible(),
         }
 
         empty_with_negative_position {
             args: func_args![value: "abc", search_value: "", position: -1],
             want: Ok(0),
-            tdef: TypeDef::bytes().infallible(),
+            tdef: TypeDef::integer().infallible(),
         }
 
         empty_with_position_exceed_length {
             args: func_args![value: "abc", search_value: "", position: 6],
             want: Ok(3),
-            tdef: TypeDef::bytes().infallible(),
+            tdef: TypeDef::integer().infallible(),
         }
     ];
 }
