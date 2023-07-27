@@ -1,3 +1,10 @@
+## [0.4.2](https://github.com/answerbook/vrl/compare/v0.4.1...v0.4.2) (2023-07-27)
+
+
+### Bug Fixes
+
+* Narrow return types for mezmo_concat_or_add() (#30) [4cbe11e](https://github.com/answerbook/vrl/commit/4cbe11e3ef317efd7e9cebe4719732a34a544f88) - GitHub [LOG-17443](https://logdna.atlassian.net/browse/LOG-17443)
+
 ## [0.4.1](https://github.com/answerbook/vrl/compare/v0.4.0...v0.4.1) (2023-07-26)
 
 
