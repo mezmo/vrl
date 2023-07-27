@@ -1,4 +1,5 @@
 use crate::mezmo_to_string;
+use ::compiler::{Expression, TypeDef};
 use ::value::Value;
 use vrl::prelude::*;
 
@@ -75,9 +76,24 @@ impl FunctionExpression for MezmoConcatOrAddFn {
         concat_or_add(left, right)
     }
 
-    fn type_def(&self, _state: &state::TypeState) -> TypeDef {
+    fn type_def(&self, state: &state::TypeState) -> TypeDef {
+        let left_type = self.left.type_def(state);
+        let right_type = self.right.type_def(state);
+        if left_type.is_bytes() || right_type.is_bytes() {
+            return TypeDef::bytes().infallible();
+        } else if is_numeric(&left_type) && is_numeric(&right_type) {
+            return if left_type.is_integer() && right_type.is_integer() {
+                TypeDef::integer().infallible()
+            } else {
+                TypeDef::float().infallible()
+            };
+        }
         TypeDef::bytes().or_integer().or_float().fallible()
     }
+}
+
+fn is_numeric(def: &TypeDef) -> bool {
+    return def.is_integer() || def.is_float();
 }
 
 #[cfg(test)]
@@ -90,49 +106,49 @@ mod tests {
         integer {
             args: func_args![left: 1, right: 2],
             want: Ok(3),
-            tdef: TypeDef::bytes().or_integer().or_float().fallible(),
+            tdef: TypeDef::integer().infallible(),
         }
 
         float {
             args: func_args![left: 1.3, right: 8.6],
             want: Ok(9.9),
-            tdef: TypeDef::bytes().or_integer().or_float().fallible(),
+            tdef: TypeDef::float().infallible(),
         }
 
         float_integer {
             args: func_args![left: 1.2, right: 2],
             want: Ok(3.2),
-            tdef: TypeDef::bytes().or_integer().or_float().fallible(),
+            tdef: TypeDef::float().infallible(),
         }
 
         integer_float {
             args: func_args![left: 1, right: 2.9],
             want: Ok(3.9),
-            tdef: TypeDef::bytes().or_integer().or_float().fallible(),
+            tdef: TypeDef::float().infallible(),
         }
 
         string {
             args: func_args![left: "abc", right: "d"],
             want: Ok("abcd"),
-            tdef: TypeDef::bytes().or_integer().or_float().fallible(),
+            tdef: TypeDef::bytes().infallible(),
         }
 
         string_and_integer {
             args: func_args![left: "$ ", right: 1],
             want: Ok("$ 1"),
-            tdef: TypeDef::bytes().or_integer().or_float().fallible(),
+            tdef: TypeDef::bytes().infallible(),
         }
 
         float_string {
             args: func_args![left: 123.45, right: " €"],
             want: Ok("123.45 €"),
-            tdef: TypeDef::bytes().or_integer().or_float().fallible(),
+            tdef: TypeDef::bytes().infallible(),
         }
 
         string_null {
             args: func_args![left: "abc", right: value!(null)],
-            want: Ok("abc"),
-            tdef: TypeDef::bytes().or_integer().or_float().fallible(),
+            want: Ok("abcnull"),
+            tdef: TypeDef::bytes().infallible(),
         }
 
         integer_null {

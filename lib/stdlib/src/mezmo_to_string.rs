@@ -5,10 +5,11 @@ use vrl::prelude::*;
 /// Converts any value into a string.
 /// Returns "[Array]" for arrays, "[Object]" for objects and "" for nulls.
 pub(crate) fn to_string(value: Value) -> String {
-    use Value::{Array, Bytes, Object};
+    use Value::{Array, Bytes, Object, Null};
     match value {
         Array(_) => "[Array]".into(),
         Object(_) => "[Object]".into(),
+        Null => "null".into(),
         _ => {
             let bytes = to_string::to_string(value).unwrap_or_else(|_| Value::from(""));
             match bytes {
