@@ -22,7 +22,7 @@ tracing = { version = "0.1", default-features = false, features = ["attributes"]
 quickcheck = { version = "1.0.3" }
 
 [build-dependencies]
-lalrpop = "0.19.8"
+lalrpop = "0.20.0"
 
 [features]
 arbitrary = ["dep:quickcheck"]
