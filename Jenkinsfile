@@ -118,7 +118,6 @@ pipeline {
                         script {
                             sh "mkdir -p ${NPM_CONFIG_CACHE}"
                             npm.auth token: GITHUB_TOKEN
-                            sh "cargo install semantic-release-cargo --version 2.1.92"
                             sh "npm install -G semantic-release@^19.0.0 @semantic-release/git@10.0.1 @semantic-release/changelog@6.0.3 @semantic-release/exec@6.0.3 @answerbook/release-config-logdna@2.0.0"
                             sh 'npx semantic-release --dry-run --no-ci --branches=${BRANCH_NAME:-main}'
                         }
@@ -147,7 +146,6 @@ pipeline {
                 script {
                     sh "mkdir -p ${NPM_CONFIG_CACHE}"
                     npm.auth token: GITHUB_TOKEN
-                    sh "cargo install semantic-release-cargo --version 2.1.92"
                     sh "npm install -G semantic-release@^19.0.0 @semantic-release/git@10.0.1 @semantic-release/changelog@6.0.3 @semantic-release/exec@6.0.3 @answerbook/release-config-logdna@2.0.0"
                     sh "npx semantic-release"
 
