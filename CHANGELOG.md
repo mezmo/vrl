@@ -1,3 +1,10 @@
+## [0.4.3](https://github.com/answerbook/vrl/compare/v0.4.2...v0.4.3) (2023-08-28)
+
+
+### Bug Fixes
+
+* **build**: bump rust image version to latest (#31) [77c4e70](https://github.com/answerbook/vrl/commit/77c4e7050052d17d0279dfb054917bcb00a5ca47) - GitHub [LOG-17986](https://logdna.atlassian.net/browse/LOG-17986)
+
 ## [0.4.2](https://github.com/answerbook/vrl/compare/v0.4.1...v0.4.2) (2023-07-27)
 
 
