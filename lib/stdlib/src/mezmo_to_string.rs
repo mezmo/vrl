@@ -107,7 +107,7 @@ mod tests {
 
         null {
             args: func_args![value: value!(null)],
-            want: Ok(""),
+            want: Ok("null"),
             tdef: TypeDef::bytes().infallible(),
         }
 

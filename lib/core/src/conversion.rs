@@ -259,6 +259,7 @@ const TIMESTAMP_TZ_FORMATS: &[&str] = &[
 ///
 /// Returns an error if the string could not be matched by one of the
 /// predefined timestamp formats.
+#[allow(deprecated)]
 fn parse_timestamp(tz: TimeZone, s: &str) -> Result<DateTime<Utc>, Error> {
     for format in TIMESTAMP_LOCAL_FORMATS {
         if let Ok(result) = tz.datetime_from_str(s, format) {
