@@ -1,4 +1,4 @@
-use lookup::PathPrefix;
+use path::PathPrefix;
 use std::collections::{hash_map::Entry, HashMap};
 use value::{Kind, Value};
 
@@ -161,12 +161,12 @@ impl ExternalEnv {
 
 /// The state used at runtime to track changes as they happen.
 #[derive(Debug, Default)]
-pub struct Runtime {
+pub struct RuntimeState {
     /// The [`Value`] stored in each variable.
     variables: HashMap<Ident, Value>,
 }
 
-impl Runtime {
+impl RuntimeState {
     #[must_use]
     pub fn is_empty(&self) -> bool {
         self.variables.is_empty()

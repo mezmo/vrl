@@ -1,6 +1,6 @@
 use crate::to_string;
 use ::value::Value;
-use vrl::prelude::*;
+use vrl_compiler::{prelude::*, Resolved};
 
 /// Converts any value into a string.
 /// Returns "[Array]" for arrays, "[Object]" for objects and "" for nulls.

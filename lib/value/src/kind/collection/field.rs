@@ -1,20 +1,20 @@
 use crate::kind::collection::{CollectionKey, CollectionRemove};
 use crate::kind::Collection;
-use lookup::lookup_v2::OwnedSegment;
+use path::OwnedSegment;
 
 /// A `field` type that can be used in `Collection<Field>`
 #[derive(Debug, Clone, Eq, PartialEq, PartialOrd, Ord, Hash)]
-pub struct Field(lookup::FieldBuf);
+pub struct Field(String);
 
 impl std::fmt::Display for Field {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        self.0.fmt(f)
+        write!(f, "{}", OwnedSegment::field(&self.0))
     }
 }
 
 impl CollectionKey for Field {
     fn to_segment(&self) -> OwnedSegment {
-        OwnedSegment::Field(self.0.name.clone())
+        OwnedSegment::Field(self.0.clone())
     }
 }
 
@@ -35,9 +35,9 @@ impl CollectionRemove for Collection<Field> {
 }
 
 impl std::ops::Deref for Field {
-    type Target = lookup::FieldBuf;
+    type Target = String;
 
-    fn deref(&self) -> &Self::Target {
+    fn deref(&self) -> &String {
         &self.0
     }
 }
@@ -50,36 +50,6 @@ impl From<&str> for Field {
 
 impl From<String> for Field {
     fn from(field: String) -> Self {
-        Self(field.into())
-    }
-}
-
-impl From<lookup::FieldBuf> for Field {
-    fn from(field: lookup::FieldBuf) -> Self {
         Self(field)
-    }
-}
-
-impl From<Field> for lookup::FieldBuf {
-    fn from(field: Field) -> Self {
-        field.0
-    }
-}
-
-impl From<lookup::Field<'_>> for Field {
-    fn from(field: lookup::Field<'_>) -> Self {
-        (&field).into()
-    }
-}
-
-impl From<&lookup::Field<'_>> for Field {
-    fn from(field: &lookup::Field<'_>) -> Self {
-        Self(field.as_field_buf())
-    }
-}
-
-impl<'a> From<&'a Field> for lookup::Field<'a> {
-    fn from(field: &'a Field) -> Self {
-        (&field.0).into()
     }
 }

@@ -1,6 +1,6 @@
 use ::value::Value;
-use vrl::prelude::*;
-use vrl::value::Error;
+use vrl_compiler::prelude::*;
+use vrl_compiler::value::ValueError;
 
 type ComparisonFn = fn(Value, Value) -> bool;
 
@@ -20,7 +20,7 @@ fn lte(left: Value, right: Value) -> bool {
     value_to_boolean(left.try_le(right))
 }
 
-fn value_to_boolean(value: std::result::Result<Value, Error>) -> bool {
+fn value_to_boolean(value: std::result::Result<Value, ValueError>) -> bool {
     use Value::Boolean;
 
     match value.unwrap_or_else(|_| Boolean(false)) {

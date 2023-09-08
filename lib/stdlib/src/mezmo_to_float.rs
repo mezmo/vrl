@@ -1,6 +1,5 @@
 use ::value::Value;
-use vrl::prelude::*;
-use vrl_core::{ExpressionError, Resolved};
+use vrl_compiler::prelude::*;
 
 fn to_float(value: Value) -> Resolved {
     use Value::{Boolean, Bytes, Float, Integer, Null, Timestamp};

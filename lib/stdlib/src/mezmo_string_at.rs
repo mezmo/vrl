@@ -1,9 +1,7 @@
 use std::borrow::Cow;
 
-use compiler::{value::VrlValueConvert, Expression};
-use vrl::prelude::*;
-use vrl_core::Resolved;
-
+use vrl_compiler::prelude::*;
+use vrl_compiler::Resolved;
 
 fn string_at(s: Cow<'_, str>, index: i64) -> Resolved {
     if index >= 0 {
@@ -18,13 +16,13 @@ fn string_at(s: Cow<'_, str>, index: i64) -> Resolved {
             .map(|c| c.to_string())
             .unwrap_or(String::new())
             .into())
-    } 
+    }
 }
 
 /// Returns the char at the given index as a string. Allows negative indexes,
 /// but indexes out of range, including out of range negative indexes, return an
 /// emtpy string.
-/// 
+///
 /// Behaves like the JavaScript's String.prototype.at() method except for not
 /// returning an error for out of range indexes. In this case an empty string is
 /// returned.

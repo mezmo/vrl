@@ -1,8 +1,8 @@
-use compiler::{value::VrlValueConvert, Expression};
-use vrl::prelude::*;
-use vrl_core::Resolved;
+use vrl_compiler::prelude::*;
+use vrl_compiler::Resolved;
+
 /// Repeats a the given string by the provided count.
-/// 
+///
 /// Behaves like the JavaScript's String.prototype.repeat() method except for
 /// not returning an error for negative counts. In this case an empty string is
 /// returned (behaves as if the count is 0).

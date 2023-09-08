@@ -1,6 +1,6 @@
 use ::value::Value;
-use vrl::prelude::*;
-use vrl_core::{conversion::Conversion, Resolved};
+use vrl_compiler::conversion::Conversion;
+use vrl_compiler::prelude::*;
 
 fn mezmo_parse_float(value: Value) -> Resolved {
     use Value::{Bytes, Float, Integer};
@@ -18,7 +18,7 @@ fn mezmo_parse_float(value: Value) -> Resolved {
 /// of JavaScript's `parseFloat()`. All other types results in an error. This is
 /// also different from `to_float()` in that fallibility is determined
 /// completely at runtime (there's no `type_def()` check on the parameter).
-/// 
+///
 /// FIXME: This doesn't properly handle whitespace or invalid chars at the end
 /// of the float.
 #[derive(Clone, Copy, Debug)]

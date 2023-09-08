@@ -1,9 +1,7 @@
 use std::borrow::Cow;
 
 use ::value::Value;
-use compiler::{value::VrlValueConvert, Expression};
-use vrl::prelude::*;
-use vrl_core::Resolved;
+use vrl_compiler::prelude::*;
 
 fn char_at(s: Cow<'_, str>, index: i64) -> Value {
     if index >= 0 {
@@ -19,7 +17,7 @@ fn char_at(s: Cow<'_, str>, index: i64) -> Value {
 
 /// Returns the char at the given index as a string. Negative and out of range
 /// indexes return an empty string.
-/// 
+///
 /// Behaves like the JavaScript's String.prototype.charAt() method.
 #[derive(Clone, Copy, Debug)]
 pub struct MezmoCharAt;

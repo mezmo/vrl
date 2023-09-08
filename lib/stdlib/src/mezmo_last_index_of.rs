@@ -1,9 +1,8 @@
 use std::borrow::Cow;
 
 use ::value::Value;
-use compiler::{value::VrlValueConvert, Expression};
-use vrl::prelude::*;
-use vrl_core::Resolved;
+use vrl_compiler::prelude::*;
+use vrl_compiler::Resolved;
 
 fn last_index_of(value: Cow<'_, str>, search_value: Cow<'_, str>, position: Option<i64>) -> Value {
     if search_value.is_empty() {

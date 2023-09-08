@@ -1,7 +1,6 @@
 use crate::mezmo_to_string;
-use ::compiler::{Expression, TypeDef};
 use ::value::Value;
-use vrl::prelude::*;
+use vrl_compiler::prelude::*;
 
 const ERROR_MESSAGE: &str = "Cannot add or concat other values that are not strings or numbers";
 

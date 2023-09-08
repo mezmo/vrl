@@ -1,18 +1,17 @@
-use ::value::Value;
-use lookup_lib::{LookupBuf, SegmentBuf};
-use vrl::prelude::*;
+use path::{OwnedSegment, OwnedValuePath};
+use vrl_compiler::prelude::*;
 
-fn get(value: Value, path: Value) -> Resolved {
-    let path = match path {
-        Value::Array(path) => {
-            let mut get = LookupBuf::root();
+fn get(value: Value, value_path: Value) -> Resolved {
+    let path = match value_path {
+        Value::Array(array) => {
+            let mut path = OwnedValuePath::root();
 
-            for segment in path {
+            for segment in array {
                 let segment = match segment {
                     Value::Bytes(field) => {
-                        SegmentBuf::Field(String::from_utf8_lossy(&field).into_owned().into())
+                        OwnedSegment::field(String::from_utf8_lossy(&field).as_ref())
                     }
-                    Value::Integer(index) => SegmentBuf::Index(index as isize),
+                    Value::Integer(index) => OwnedSegment::index(index as isize),
                     value => {
                         return Err(format!(
                             r#"path segment must be either string or integer, not {}"#,
@@ -21,21 +20,20 @@ fn get(value: Value, path: Value) -> Resolved {
                         .into())
                     }
                 };
-
-                get.push_back(segment)
+                path.push(segment);
             }
 
-            get
+            path
         }
         value => {
-            return Err(value::Error::Expected {
+            return Err(ValueError::Expected {
                 got: value.kind(),
                 expected: Kind::array(Collection::any()),
             }
             .into())
         }
     };
-    Ok(value.get_by_path(&path).cloned().unwrap_or(Value::Null))
+    Ok(value.get(&path).cloned().unwrap_or(Value::Null))
 }
 
 #[derive(Clone, Copy, Debug)]

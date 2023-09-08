@@ -1,16 +1,16 @@
 //! All types related to inserting one [`Kind`] into another.
 
-use lookup::lookup_v2::{BorrowedSegment, ValuePath};
+use path::{BorrowedSegment, ValuePath};
 
 use crate::kind::Collection;
 use crate::Kind;
-use lookup::path;
+use path::path;
 
 impl Kind {
     /// Insert the `Kind` at the given `path` within `self`.
     /// This has the same behavior as `Value::insert`.
     #[allow(clippy::needless_pass_by_value)] // only reference types implement Path
-    pub fn insert<'a>(&'a mut self, path: impl ValuePath<'a>, kind: Self) {
+    pub fn insert<'a>(&mut self, path: impl ValuePath<'a>, kind: Self) {
         self.insert_recursive(path.segment_iter(), kind.upgrade_undefined());
     }
 
@@ -18,7 +18,7 @@ impl Kind {
     /// There is a subtle difference
     /// between this and `Kind::insert` where this function does _not_ convert undefined to null.
     #[allow(clippy::needless_pass_by_value)] // only reference types implement Path
-    pub fn set_at_path<'a>(&'a mut self, path: impl ValuePath<'a>, kind: Self) {
+    pub fn set_at_path<'a>(&mut self, path: impl ValuePath<'a>, kind: Self) {
         self.insert_recursive(path.segment_iter(), kind);
     }
 
@@ -31,10 +31,9 @@ impl Kind {
         mut iter: impl Iterator<Item = BorrowedSegment<'b>> + Clone,
         kind: Self,
     ) {
-        if self.is_never() || kind.is_never() {
-            // If `self` or `kind` is `never`, the program would have already terminated
+        if kind.is_never() {
+            // If `kind` is `never`, the program would have already terminated
             // so this assignment can't happen.
-            *self = Self::never();
             return;
         }
 
@@ -230,8 +229,8 @@ impl Kind {
 
 #[cfg(test)]
 mod tests {
-    use lookup::lookup_v2::{parse_value_path, OwnedValuePath};
-    use lookup::owned_value_path;
+    use path::owned_value_path;
+    use path::{parse_value_path, OwnedValuePath};
     use std::collections::BTreeMap;
 
     use super::*;
@@ -658,9 +657,9 @@ mod tests {
                 "insert into never",
                 TestCase {
                     this: Kind::never(),
-                    path: parse_value_path(".x").unwrap(),
+                    path: parse_value_path(".").unwrap(),
                     kind: Kind::bytes(),
-                    expected: Kind::never(),
+                    expected: Kind::bytes(),
                 },
             ),
             (
@@ -669,7 +668,7 @@ mod tests {
                     this: Kind::object(Collection::empty()),
                     path: parse_value_path(".x").unwrap(),
                     kind: Kind::never(),
-                    expected: Kind::never(),
+                    expected: Kind::object(Collection::empty()),
                 },
             ),
             (

@@ -1,7 +1,4 @@
-use compiler::{Expression, value::VrlValueConvert};
-use vrl::prelude::*;
-use vrl_core::Resolved;
-
+use vrl_compiler::prelude::*;
 
 /// Trims whitespace from the start of a string.
 #[derive(Clone, Copy, Debug)]

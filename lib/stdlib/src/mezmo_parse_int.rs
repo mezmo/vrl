@@ -1,7 +1,7 @@
 use crate::parse_int;
 use ::value::Value;
-use vrl::prelude::*;
-use vrl_core::Resolved;
+use vrl_compiler::prelude::*;
+use vrl_compiler::Resolved;
 
 fn mezmo_parse_int(value: Value, base: Option<Value>) -> Resolved {
     use Value::{Bytes, Float, Integer};
@@ -18,7 +18,7 @@ fn mezmo_parse_int(value: Value, base: Option<Value>) -> Resolved {
 /// error. This is also different from `to_int()` in that fallibility is
 /// determined completely at runtime (there's no `type_def()` check on the
 /// parameter).
-/// 
+///
 /// FIXME: This doesn't properly handle whitespace or invalid chars at the end
 /// of the integer.
 #[derive(Clone, Copy, Debug)]
