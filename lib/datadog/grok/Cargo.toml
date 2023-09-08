@@ -28,7 +28,7 @@ vrl-compiler = { path = "../../compiler" , version = "0.4.2" }
 
 [dev-dependencies]
 vrl-compiler = { path = "../../compiler" }
-criterion = { version = "0.4.0" }
+criterion = { version = "0.5.1" }
 tracing-test = { version = "0.2", default-features = false }
 
 [build-dependencies]
