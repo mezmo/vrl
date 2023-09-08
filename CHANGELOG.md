@@ -1,3 +1,10 @@
+# [0.5.0](https://github.com/answerbook/vrl/compare/v0.4.3...v0.5.0) (2023-09-08)
+
+
+### Features
+
+* New fallible concat or add function [6cb9a0c](https://github.com/answerbook/vrl/commit/6cb9a0c1c67686efecec2da79e256d7fd40a47ec) - Jorge Bay [LOG-17858](https://logdna.atlassian.net/browse/LOG-17858)
+
 ## [0.4.3](https://github.com/answerbook/vrl/compare/v0.4.2...v0.4.3) (2023-08-28)
 
 
