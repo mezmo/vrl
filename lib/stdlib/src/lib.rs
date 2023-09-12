@@ -206,6 +206,8 @@ mod merge;
 mod mezmo_arithmetic_operation;
 #[cfg(feature = "mezmo_arithmetic_operation")]
 mod mezmo_concat_or_add;
+#[cfg(feature = "mezmo_arithmetic_operation")]
+mod mezmo_concat_or_add_fallible;
 #[cfg(feature = "mezmo_is_truthy")]
 mod mezmo_is_truthy;
 #[cfg(feature = "mezmo_parse_float")]
@@ -560,6 +562,8 @@ pub use merge::Merge;
 pub use mezmo_arithmetic_operation::{MezmoDivide, MezmoMultiply, MezmoSubtract};
 #[cfg(feature = "mezmo_arithmetic_operation")]
 pub use mezmo_concat_or_add::MezmoConcatOrAdd;
+#[cfg(feature = "mezmo_arithmetic_operation")]
+pub use mezmo_concat_or_add_fallible::MezmoConcatOrAddFallible;
 #[cfg(feature = "mezmo_is_truthy")]
 pub use mezmo_is_truthy::MezmoIsTruthy;
 #[cfg(feature = "mezmo_parse_float")]
@@ -931,6 +935,8 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(MezmoSubtract),
         #[cfg(feature = "mezmo_arithmetic_operation")]
         Box::new(MezmoConcatOrAdd),
+        #[cfg(feature = "mezmo_arithmetic_operation")]
+        Box::new(MezmoConcatOrAddFallible),
         #[cfg(feature = "mezmo_is_truthy")]
         Box::new(MezmoIsTruthy),
         #[cfg(feature = "mezmo_parse_float")]

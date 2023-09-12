@@ -33,6 +33,7 @@ impl TimeZone {
     /// # Errors
     ///
     /// Returns parse errors from the underlying time parsing functions.
+    #[allow(deprecated)]
     pub fn datetime_from_str(&self, s: &str, format: &str) -> Result<DateTime<Utc>, ParseError> {
         match self {
             Self::Local => Local
