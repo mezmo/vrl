@@ -2,7 +2,7 @@ use ::value::Value;
 use chrono::{DateTime, TimeZone, Utc};
 use serde_json::{Deserializer, Value as JsonValue};
 use std::collections::BTreeMap;
-use vrl::prelude::*;
+use vrl_compiler::prelude::*;
 
 type ParseResult<T> = std::result::Result<T, String>;
 

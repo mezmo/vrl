@@ -1,10 +1,9 @@
 use std::borrow::Cow;
 
 use ::value::Value;
-use compiler::{value::VrlValueConvert, Expression};
 use substring::Substring;
-use vrl::prelude::*;
-use vrl_core::Resolved;
+use vrl_compiler::prelude::*;
+use vrl_compiler::Resolved;
 
 fn string_slice(s: Cow<'_, str>, index_start: i64, index_end: Option<i64>) -> Value {
     let len = s.chars().count();

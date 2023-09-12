@@ -65,20 +65,6 @@ pipeline {
     }
 
     stages {
-        stage("Validate") {
-            tools {
-                nodejs "NodeJS 18"
-            }
-
-            steps {
-                script {
-                    sh "mkdir -p ${NPM_CONFIG_CACHE}"
-                    npm.auth token: GITHUB_TOKEN
-                    sh "npx @answerbook/commitlint-config-logdna"
-                }
-            }
-        }
-
         stage("Test") {
             when {
                 beforeAgent true

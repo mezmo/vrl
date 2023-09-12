@@ -1,18 +1,17 @@
-use ::value::Value;
-use lookup_lib::{LookupBuf, SegmentBuf};
-use vrl::prelude::*;
+use path::{OwnedSegment, OwnedValuePath};
+use vrl_compiler::prelude::*;
 
 fn remove(path: Value, compact: Value, mut value: Value) -> Resolved {
     let path = match path {
         Value::Array(path) => {
-            let mut lookup = LookupBuf::root();
+            let mut lookup = OwnedValuePath::root();
 
             for segment in path {
                 let segment = match segment {
                     Value::Bytes(field) => {
-                        SegmentBuf::Field(String::from_utf8_lossy(&field).into_owned().into())
+                        OwnedSegment::Field(String::from_utf8_lossy(&field).into_owned())
                     }
-                    Value::Integer(index) => SegmentBuf::Index(index as isize),
+                    Value::Integer(index) => OwnedSegment::Index(index as isize),
                     value => {
                         return Err(format!(
                             r#"path segment must be either string or integer, not {}"#,
@@ -22,13 +21,13 @@ fn remove(path: Value, compact: Value, mut value: Value) -> Resolved {
                     }
                 };
 
-                lookup.push_back(segment)
+                lookup.segments.push(segment)
             }
 
             lookup
         }
         value => {
-            return Err(value::Error::Expected {
+            return Err(ValueError::Expected {
                 got: value.kind(),
                 expected: Kind::array(Collection::any()),
             }
@@ -36,7 +35,7 @@ fn remove(path: Value, compact: Value, mut value: Value) -> Resolved {
         }
     };
     let compact = compact.try_boolean()?;
-    value.remove_by_path(&path, compact);
+    value.remove(&path, compact);
     Ok(value)
 }
 

@@ -1,4 +1,4 @@
-use vrl::prelude::*;
+use vrl_compiler::prelude::*;
 
 static MEZMO_PATTERNS: &[(&str, &str)] = &[
     ("JSON_OBJECT", r#"{.*}"#),
@@ -22,8 +22,7 @@ mod non_wasm {
     use ::value::Value;
     pub(super) use std::sync::Arc;
     use std::{collections::BTreeMap, fmt, panic};
-    use vrl::prelude::*;
-    use vrl::state::TypeState;
+    use vrl_compiler::prelude::*;
     use vrl_diagnostic::{Label, Span};
 
     fn parse_grok(value: Value, pattern: Arc<grok::Pattern>) -> Resolved {

@@ -1,6 +1,5 @@
 use crate::mezmo_concat_or_add_fallible::concat_or_add;
-use ::compiler::{Expression, TypeDef};
-use vrl::prelude::*;
+use vrl_compiler::prelude::*;
 
 #[deprecated(note = "This function uses conditional fallibility, use MezmoConcatOrAddFallible instead")]
 #[derive(Clone, Copy, Debug)]

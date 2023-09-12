@@ -981,11 +981,11 @@ dependencies = [
  "criterion",
  "lalrpop",
  "lalrpop-util",
- "lookup",
  "nom",
  "once_cell",
  "onig",
  "ordered-float",
+ "path",
  "peeking_take_while",
  "regex",
  "serde_json",
@@ -1339,19 +1339,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d2fabcfbdc87f4758337ca535fb41a6d701b65693ce38287d856d1674551ec9b"
 
 [[package]]
-name = "gloo-utils"
-version = "0.1.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "037fcb07216cb3a30f7292bd0176b050b7b9a052ba830ef7d5d65f6dc64ba58e"
-dependencies = [
- "js-sys",
- "serde",
- "serde_json",
- "wasm-bindgen",
- "web-sys",
-]
-
-[[package]]
 name = "grok"
 version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1540,17 +1527,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9f2cb48b81b1dc9f39676bf99f5499babfec7cd8fe14307f7b3d747208fb5690"
 
 [[package]]
-name = "inherent"
-version = "1.0.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "20cc83c51f04b1ad3b24cbac53d2ec1a138d699caabe05d315cb8538e8624d01"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.22",
-]
-
-[[package]]
 name = "inout"
 version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1682,9 +1658,6 @@ name = "lalrpop-util"
 version = "0.19.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d3c48237b9604c5a4702de6b824e02006c3214327564636aef27c1028a8fa0ed"
-dependencies = [
- "regex",
-]
 
 [[package]]
 name = "lazy_static"
@@ -1737,23 +1710,6 @@ name = "log"
 version = "0.4.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b06a4cde4c0f271a446782e3eff8de789548ce57dbc8eca9292c27f4a42004b4"
-
-[[package]]
-name = "lookup"
-version = "0.4.2"
-dependencies = [
- "criterion",
- "inherent",
- "lalrpop",
- "lalrpop-util",
- "once_cell",
- "quickcheck",
- "regex",
- "serde",
- "serde_json",
- "snafu",
- "tracing",
-]
 
 [[package]]
 name = "lua-src"
@@ -2091,6 +2047,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9f746c4065a8fa3fe23974dd82f15431cc8d40779821001404d10d2e79ca7d79"
 
 [[package]]
+name = "path"
+version = "0.4.2"
+dependencies = [
+ "criterion",
+ "once_cell",
+ "quickcheck",
+ "regex",
+ "serde",
+ "snafu",
+]
+
+[[package]]
 name = "peeking_take_while"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2364,8 +2332,8 @@ name = "proptests"
 version = "0.4.2"
 dependencies = [
  "chrono",
- "lookup",
  "ordered-float",
+ "path",
  "proptest",
  "vrl-diagnostic",
  "vrl-parser",
@@ -2747,17 +2715,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9e8c8cf938e98f769bc164923b06dce91cea1751522f46f8466461af04c9027d"
 dependencies = [
  "serde_derive",
-]
-
-[[package]]
-name = "serde-wasm-bindgen"
-version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f3b143e2833c57ab9ad3ea280d21fd34e285a42837aeb0ee301f4f41890fa00e"
-dependencies = [
- "js-sys",
- "serde",
- "wasm-bindgen",
 ]
 
 [[package]]
@@ -3476,9 +3433,10 @@ dependencies = [
  "bytes",
  "chrono",
  "indoc",
- "lookup",
  "mlua",
+ "once_cell",
  "ordered-float",
+ "path",
  "quickcheck",
  "regex",
  "serde",
@@ -3504,18 +3462,21 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 name = "vrl"
 version = "0.4.2"
 dependencies = [
- "bytes",
  "criterion",
+ "datadog-filter",
+ "datadog-grok",
+ "datadog-search-syntax",
  "indoc",
- "lookup",
- "ordered-float",
+ "path",
  "serde_json",
  "value",
+ "vrl-cli",
  "vrl-compiler",
  "vrl-core",
  "vrl-diagnostic",
  "vrl-parser",
  "vrl-stdlib",
+ "vrl-tests",
 ]
 
 [[package]]
@@ -3525,16 +3486,17 @@ dependencies = [
  "clap 4.3.10",
  "exitcode",
  "indoc",
- "lookup",
  "once_cell",
+ "path",
  "prettytable-rs",
  "regex",
  "rustyline",
  "serde_json",
  "thiserror",
  "value",
- "vrl",
+ "vrl-compiler",
  "vrl-core",
+ "vrl-diagnostic",
  "vrl-stdlib",
  "webbrowser",
 ]
@@ -3546,19 +3508,21 @@ dependencies = [
  "anymap",
  "bytes",
  "chrono",
+ "chrono-tz",
  "criterion",
  "dyn-clone",
  "getrandom",
  "indoc",
  "lalrpop-util",
- "lookup",
  "ordered-float",
  "paste",
+ "path",
  "regex",
  "serde",
+ "snafu",
  "thiserror",
+ "tracing",
  "value",
- "vrl-core",
  "vrl-diagnostic",
  "vrl-parser",
 ]
@@ -3571,13 +3535,12 @@ dependencies = [
  "chrono",
  "chrono-tz",
  "derivative",
- "lookup",
  "nom",
  "ordered-float",
+ "path",
  "serde",
  "serde_json",
  "snafu",
- "tracing",
  "value",
  "vrl-diagnostic",
 ]
@@ -3597,9 +3560,9 @@ dependencies = [
  "arbitrary",
  "lalrpop",
  "lalrpop-util",
- "lookup",
  "ordered-float",
  "paste",
+ "path",
  "test-case",
  "thiserror",
  "vrl-diagnostic",
@@ -3634,11 +3597,13 @@ dependencies = [
  "hmac",
  "hostname",
  "indexmap 1.9.3",
- "lookup",
+ "indoc",
  "md-5",
  "nom",
  "ofb",
  "once_cell",
+ "ordered-float",
+ "path",
  "percent-encoding",
  "quoted_printable",
  "rand",
@@ -3661,7 +3626,6 @@ dependencies = [
  "utf8-width",
  "uuid",
  "value",
- "vrl",
  "vrl-compiler",
  "vrl-core",
  "vrl-diagnostic",
@@ -3678,7 +3642,7 @@ dependencies = [
  "chrono-tz",
  "clap 4.3.10",
  "glob",
- "lookup",
+ "path",
  "prettydiff",
  "regex",
  "serde",
@@ -3686,22 +3650,10 @@ dependencies = [
  "tikv-jemallocator",
  "tracing-subscriber",
  "value",
- "vrl",
+ "vrl-compiler",
+ "vrl-core",
+ "vrl-diagnostic",
  "vrl-stdlib",
-]
-
-[[package]]
-name = "vrl-web-playground"
-version = "0.4.2"
-dependencies = [
- "getrandom",
- "gloo-utils",
- "serde",
- "serde-wasm-bindgen",
- "value",
- "vrl",
- "vrl-stdlib",
- "wasm-bindgen",
 ]
 
 [[package]]

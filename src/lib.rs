@@ -7,50 +7,40 @@
 #![deny(unused_comparisons)]
 #![allow(clippy::module_name_repetitions)]
 
-pub mod prelude;
-mod runtime;
+#[cfg(feature = "compiler")]
+pub use vrl_compiler as compiler;
+#[cfg(feature = "compiler")]
+pub use vrl_compiler::prelude;
 
-pub use compiler::{
-    function, state, value, CompilationResult, CompileConfig, Compiler, Context, Expression,
-    Function, Program, ProgramInfo, SecretTarget, Target, TargetValue, TargetValueRef, VrlRuntime,
-};
-pub use diagnostic;
-pub use runtime::{Runtime, RuntimeResult, Terminate};
-pub use vrl_core::TimeZone;
+#[cfg(feature = "value")]
+pub use value;
 
-use crate::state::TypeState;
-pub use compiler::expression::query;
+#[cfg(feature = "diagnostic")]
+pub use vrl_diagnostic as diagnostic;
 
-/// Compile a given source into the final [`Program`].
-pub fn compile(source: &str, fns: &[Box<dyn Function>]) -> compiler::Result {
-    let external = state::ExternalEnv::default();
-    let config = CompileConfig::default();
+#[cfg(feature = "path")]
+pub use path;
 
-    compile_with_external(source, fns, &external, config)
-}
+#[cfg(feature = "parser")]
+pub use vrl_parser as parser;
 
-pub fn compile_with_external(
-    source: &str,
-    fns: &[Box<dyn Function>],
-    external: &state::ExternalEnv,
-    config: CompileConfig,
-) -> compiler::Result {
-    let state = TypeState {
-        local: state::LocalEnv::default(),
-        external: external.clone(),
-    };
+#[cfg(feature = "core")]
+pub use vrl_core as core;
 
-    compile_with_state(source, fns, &state, config)
-}
+#[cfg(feature = "stdlib")]
+pub use vrl_stdlib as stdlib;
 
-pub fn compile_with_state(
-    source: &str,
-    fns: &[Box<dyn Function>],
-    state: &TypeState,
-    config: CompileConfig,
-) -> compiler::Result {
-    let ast = parser::parse(source)
-        .map_err(|err| diagnostic::DiagnosticList::from(vec![Box::new(err) as Box<_>]))?;
+#[cfg(feature = "cli")]
+pub use vrl_cli as cli;
 
-    Compiler::compile(fns, ast, state, config)
-}
+#[cfg(feature = "test_framework")]
+pub use vrl_tests as test;
+
+#[cfg(feature = "datadog_filter")]
+pub use datadog_filter;
+
+#[cfg(feature = "datadog_grok")]
+pub use datadog_grok;
+
+#[cfg(feature = "datadog_search")]
+pub use datadog_search_syntax;

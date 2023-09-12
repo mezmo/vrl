@@ -1,6 +1,6 @@
-use compiler::{Expression, value::VrlValueConvert};
-use vrl::prelude::*;
-use vrl_core::Resolved;
+use vrl_compiler::prelude::*;
+use vrl_compiler::Resolved;
+
 
 /// Trims whitespace from the end of a string.
 #[derive(Clone, Copy, Debug)]

@@ -1,5 +1,5 @@
 use ::value::Value;
-use vrl::prelude::*;
+use vrl_compiler::prelude::*;
 
 const ERROR_MESSAGE: &str = "Invalid arithmetic operation";
 

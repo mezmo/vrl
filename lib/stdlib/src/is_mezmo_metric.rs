@@ -1,7 +1,7 @@
 use std::borrow::Borrow;
 
 use ::value::Value;
-use vrl::prelude::*;
+use vrl_compiler::prelude::*;
 
 #[derive(Clone, Copy, Debug)]
 pub struct IsMezmoMetric;
@@ -65,7 +65,7 @@ impl FunctionExpression for IsMezmoMetricFn {
     }
 }
 
-fn validate_metric(value: &Value) -> Result<Value> {
+fn validate_metric(value: &Value) -> Result<Value, ExpressionError> {
     if !value.is_object() {
         return Err("expected an object".into());
     }
@@ -120,7 +120,7 @@ fn validate_metric(value: &Value) -> Result<Value> {
     Ok(value!(true))
 }
 
-fn validate_metric_value(value: &Value) -> Result<Value> {
+fn validate_metric_value(value: &Value) -> Result<Value, ExpressionError> {
     let value_type = value
         .get("type")
         .ok_or_else(|| "field \"value.type\" not found")?
@@ -143,7 +143,7 @@ fn validate_metric_value(value: &Value) -> Result<Value> {
     }
 }
 
-fn validate_counter_or_gauge(value: &Value) -> Result<Value> {
+fn validate_counter_or_gauge(value: &Value) -> Result<Value, ExpressionError> {
     if !value.is_number() {
         return Err(
             "expected counter/gauge metric field \"value.value\" to contain a number".into(),
@@ -152,7 +152,7 @@ fn validate_counter_or_gauge(value: &Value) -> Result<Value> {
     Ok(value!(true))
 }
 
-fn validate_set(value: &Value) -> Result<Value> {
+fn validate_set(value: &Value) -> Result<Value, ExpressionError> {
     let values = value
         .get("values")
         .ok_or_else(|| "field \"value.value.values\" not found")?
@@ -167,7 +167,7 @@ fn validate_set(value: &Value) -> Result<Value> {
     Ok(value!(true))
 }
 
-fn validate_distribution(value: &Value) -> Result<Value> {
+fn validate_distribution(value: &Value) -> Result<Value, ExpressionError> {
     let statistic = value
         .get("statistic")
         .ok_or_else(|| "field \"value.value.statistic\" not found")?
@@ -219,7 +219,7 @@ fn validate_distribution(value: &Value) -> Result<Value> {
     Ok(value!(true))
 }
 
-fn validate_histogram(value: &Value) -> Result<Value> {
+fn validate_histogram(value: &Value) -> Result<Value, ExpressionError> {
     let sum = value
         .get("sum")
         .ok_or_else(|| "field \"value.value.sum\" not found")?;
@@ -283,7 +283,7 @@ fn validate_histogram(value: &Value) -> Result<Value> {
     Ok(value!(true))
 }
 
-fn validate_summary(value: &Value) -> Result<Value> {
+fn validate_summary(value: &Value) -> Result<Value, ExpressionError> {
     let sum = value
         .get("sum")
         .ok_or_else(|| "field \"value.value.sum\" not found")?;

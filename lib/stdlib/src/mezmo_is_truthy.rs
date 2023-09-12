@@ -1,5 +1,5 @@
 use ::value::Value;
-use vrl::prelude::*;
+use vrl_compiler::prelude::*;
 
 fn is_truthy(value: Value) -> bool {
     use Value::{Boolean, Bytes, Float, Integer, Null};
