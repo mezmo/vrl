@@ -1,3 +1,44 @@
+## [0.5.1](https://github.com/answerbook/vrl/compare/v0.5.0...v0.5.1) (2023-09-12)
+
+
+### Bug Fixes
+
+* use `$crate` with the `value` macro so it works when re-exported (#216) [8abd049](https://github.com/answerbook/vrl/commit/8abd0492ae51e0d8ba869fc22896570deb74681c) - GitHub
+
+
+### Chores
+
+* add `arbitrary` and `lua` features (#220) [a0b9892](https://github.com/answerbook/vrl/commit/a0b9892ab90e6b081ce720c22134d71d207eed73) - GitHub
+* **ci**: bump actions/add-to-project from 0.4.1 to 0.5.0 (#184) [4d0fda2](https://github.com/answerbook/vrl/commit/4d0fda2325d6a36a11f3477b37381ed85b313643) - GitHub
+* crate cleanup (#190) [566456d](https://github.com/answerbook/vrl/commit/566456d90d1ae4cc80e8127bb230cde384cf48dc) - GitHub
+* migrate path logic for `parse_grok` (#202) [d42fe98](https://github.com/answerbook/vrl/commit/d42fe98a5e65ea59e028151b56180c54f5a31046) - GitHub
+* Migrate stdlib `get` function to new path code (#200) [c1414e2](https://github.com/answerbook/vrl/commit/c1414e2bb1e9141723d1134bb0c656170333126f) - GitHub
+* move prelude from `stdlib` to `compiler` and re-export it from `vrl` (#218) [4b98f54](https://github.com/answerbook/vrl/commit/4b98f5491bdce4c4784d9ec45c1eb8eb90308d64) - GitHub
+* Move some functionality from `core` to `compiler` (#217) [2d877ad](https://github.com/answerbook/vrl/commit/2d877ade58bb4e27d18ee91a73b02c703deb24db) - GitHub
+* re-export all sub-crates in `vrl` (#213) [efa13f1](https://github.com/answerbook/vrl/commit/efa13f14ecd6e2b7985a10d37daf42e5eb5c8212) - GitHub
+* remove `Value::get_by_path` and `Value::insert_by_path` (#204) [00369f4](https://github.com/answerbook/vrl/commit/00369f4a02fdd7f4d7601f5994f0020c525e062c) - GitHub
+* remove `vrl` as a dependency of the `stdlib` crate (#209) [0e05c24](https://github.com/answerbook/vrl/commit/0e05c2440487397600b594d0d99cf9cb7b88a1a9) - GitHub
+* remove `vrl` as a dependency of the `tests` crate (#208) [247384a](https://github.com/answerbook/vrl/commit/247384a047db91ce3bf4f40e42d3b7f5f8b3dc56) - GitHub
+* remove `vrl` as a dev-dependency of the `stdlib` crate (#210) [c3447c3](https://github.com/answerbook/vrl/commit/c3447c351cef26995d68ccf40f6dc01a61d7b4d3) - GitHub
+* remove deprecated `FieldBuf` from `Field` (#199) [a23ad33](https://github.com/answerbook/vrl/commit/a23ad33340d765c42f9bac43d4edbcf4d5468ad7) - GitHub
+* remove lookup v1 (#207) [e723f96](https://github.com/answerbook/vrl/commit/e723f96c9305d77c853d8f95a1955ff393c8aff1) - GitHub
+* remove web playground (#185) [6505478](https://github.com/answerbook/vrl/commit/650547870a16c66dcfab01ec382cfdc23415d85b) - GitHub
+* rename the `lookup` crate to `path` (#212) [b623b61](https://github.com/answerbook/vrl/commit/b623b615a6ca69c2466dc09a7cac394545cde597) - GitHub
+
+
+### Miscellaneous
+
+* Merge pull request #33 from update upstream to v0.3.0 [00d4830](https://github.com/answerbook/vrl/commit/00d4830c7317decd57eab04f5cec62a9fb09b0c3) - GitHub
+* Merge branch 'main' [7ad96ac](https://github.com/answerbook/vrl/commit/7ad96ac8ae9554fda14280a3d159a05bf861d8b8) - Jorge Bay
+* Merge tag 'v0.3.0' from upstream [1062d7d](https://github.com/answerbook/vrl/commit/1062d7d5260cb5535f015ef79eb14b72296bf202) - Jorge Bay
+* Merge branch 'main' of github.com:vectordotdev/vrl [113005b](https://github.com/answerbook/vrl/commit/113005bcee6cd7b5ea0a53a7db2fc45ba4bc4125) - Nathan Fox
+* save (#221) [0da83a0](https://github.com/answerbook/vrl/commit/0da83a0ba7df2065b272895280b9cac86fb8044d) - GitHub
+* save [bc8b290](https://github.com/answerbook/vrl/commit/bc8b290725403977ede81923c86accf535eaac9f) - Nathan Fox
+* save (#214) [b933b1f](https://github.com/answerbook/vrl/commit/b933b1fedc73d67334210da93113b60d217a78a3) - GitHub
+* save (#205) [42c1764](https://github.com/answerbook/vrl/commit/42c17644a06ca955b11258b0ce211b163aa91205) - GitHub
+* save (#201) [3ba6a85](https://github.com/answerbook/vrl/commit/3ba6a8572d1de5ec0ff98f5d925336cb5c54b389) - GitHub
+* save (#196) [1299360](https://github.com/answerbook/vrl/commit/129936074cfe114672042f4296d90cdb2533f547) - GitHub
+
 # [0.5.0](https://github.com/answerbook/vrl/compare/v0.4.3...v0.5.0) (2023-09-08)
 
 
