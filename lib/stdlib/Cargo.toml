@@ -170,8 +170,10 @@ default = [
     "mezmo_parse_float",
     "mezmo_parse_int",
     "mezmo_relational_comparison",
+    "mezmo_to_array",
     "mezmo_to_int",
     "mezmo_to_float",
+    "mezmo_to_object",
     "mezmo_to_string",
     "mezmo_string_operations",
     "mod",
@@ -341,8 +343,10 @@ mezmo_parse_int = ["parse_int"]
 mezmo_parse_float = []
 mezmo_relational_comparison = []
 mezmo_string_operations = ["substring"]
+mezmo_to_array = []
 mezmo_to_int = []
 mezmo_to_float = []
+mezmo_to_object = []
 mezmo_to_string = ["to_string"]
 mod = []
 now = ["dep:chrono"]
