@@ -204,28 +204,28 @@ mod md5;
 mod merge;
 #[cfg(feature = "mezmo_arithmetic_operation")]
 mod mezmo_arithmetic_operation;
+#[cfg(feature = "mezmo_string_operations")]
+mod mezmo_char_at;
 #[cfg(feature = "mezmo_arithmetic_operation")]
 mod mezmo_concat_or_add;
 #[cfg(feature = "mezmo_arithmetic_operation")]
 mod mezmo_concat_or_add_fallible;
-#[cfg(feature = "mezmo_is_truthy")]
-mod mezmo_is_truthy;
-#[cfg(feature = "mezmo_parse_float")]
-mod mezmo_parse_float;
-#[cfg(feature = "mezmo_parse_int")]
-mod mezmo_parse_int;
-#[cfg(feature = "mezmo_relational_comparison")]
-mod mezmo_relational_comparison;
-#[cfg(feature = "mezmo_string_operations")]
-mod mezmo_char_at;
 #[cfg(feature = "mezmo_string_operations")]
 mod mezmo_index_of;
+#[cfg(feature = "mezmo_is_truthy")]
+mod mezmo_is_truthy;
 #[cfg(feature = "mezmo_string_operations")]
 mod mezmo_last_index_of;
 #[cfg(feature = "mezmo_string_operations")]
 mod mezmo_pad_end;
 #[cfg(feature = "mezmo_string_operations")]
 mod mezmo_pad_start;
+#[cfg(feature = "mezmo_parse_float")]
+mod mezmo_parse_float;
+#[cfg(feature = "mezmo_parse_int")]
+mod mezmo_parse_int;
+#[cfg(feature = "mezmo_relational_comparison")]
+mod mezmo_relational_comparison;
 #[cfg(feature = "mezmo_string_operations")]
 mod mezmo_repeat;
 #[cfg(feature = "mezmo_string_operations")]
@@ -234,16 +234,20 @@ mod mezmo_string_at;
 mod mezmo_string_slice;
 #[cfg(feature = "mezmo_string_operations")]
 mod mezmo_substring;
+#[cfg(feature = "mezmo_to_array")]
+mod mezmo_to_array;
+#[cfg(feature = "mezmo_to_float")]
+mod mezmo_to_float;
+#[cfg(feature = "mezmo_to_int")]
+mod mezmo_to_int;
+#[cfg(feature = "mezmo_to_object")]
+mod mezmo_to_object;
+#[cfg(feature = "mezmo_to_string")]
+mod mezmo_to_string;
 #[cfg(feature = "mezmo_string_operations")]
 mod mezmo_trim_end;
 #[cfg(feature = "mezmo_string_operations")]
 mod mezmo_trim_start;
-#[cfg(feature = "mezmo_to_int")]
-mod mezmo_to_int;
-#[cfg(feature = "mezmo_to_float")]
-mod mezmo_to_float;
-#[cfg(feature = "mezmo_to_string")]
-mod mezmo_to_string;
 
 #[cfg(feature = "mod")]
 mod mod_func;
@@ -560,28 +564,28 @@ pub use match_datadog_query::MatchDatadogQuery;
 pub use merge::Merge;
 #[cfg(feature = "mezmo_arithmetic_operation")]
 pub use mezmo_arithmetic_operation::{MezmoDivide, MezmoMultiply, MezmoSubtract};
+#[cfg(feature = "mezmo_string_operations")]
+pub use mezmo_char_at::MezmoCharAt;
 #[cfg(feature = "mezmo_arithmetic_operation")]
 pub use mezmo_concat_or_add::MezmoConcatOrAdd;
 #[cfg(feature = "mezmo_arithmetic_operation")]
 pub use mezmo_concat_or_add_fallible::MezmoConcatOrAddFallible;
-#[cfg(feature = "mezmo_is_truthy")]
-pub use mezmo_is_truthy::MezmoIsTruthy;
-#[cfg(feature = "mezmo_parse_float")]
-pub use mezmo_parse_float::MezmoParseFloat;
-#[cfg(feature = "mezmo_parse_int")]
-pub use mezmo_parse_int::MezmoParseInt;
-#[cfg(feature = "mezmo_relational_comparison")]
-pub use mezmo_relational_comparison::{MezmoGt, MezmoGte, MezmoLt, MezmoLte};
-#[cfg(feature = "mezmo_string_operations")]
-pub use mezmo_char_at::MezmoCharAt;
 #[cfg(feature = "mezmo_string_operations")]
 pub use mezmo_index_of::MezmoIndexOf;
+#[cfg(feature = "mezmo_is_truthy")]
+pub use mezmo_is_truthy::MezmoIsTruthy;
 #[cfg(feature = "mezmo_string_operations")]
 pub use mezmo_last_index_of::MezmoLastIndexOf;
 #[cfg(feature = "mezmo_string_operations")]
 pub use mezmo_pad_end::MezmoPadEnd;
 #[cfg(feature = "mezmo_string_operations")]
 pub use mezmo_pad_start::MezmoPadStart;
+#[cfg(feature = "mezmo_parse_float")]
+pub use mezmo_parse_float::MezmoParseFloat;
+#[cfg(feature = "mezmo_parse_int")]
+pub use mezmo_parse_int::MezmoParseInt;
+#[cfg(feature = "mezmo_relational_comparison")]
+pub use mezmo_relational_comparison::{MezmoGt, MezmoGte, MezmoLt, MezmoLte};
 #[cfg(feature = "mezmo_string_operations")]
 pub use mezmo_repeat::MezmoRepeat;
 #[cfg(feature = "mezmo_string_operations")]
@@ -590,16 +594,20 @@ pub use mezmo_string_at::MezmoStringAt;
 pub use mezmo_string_slice::MezmoStringSlice;
 #[cfg(feature = "mezmo_string_operations")]
 pub use mezmo_substring::MezmoSubstring;
+#[cfg(feature = "mezmo_to_array")]
+pub use mezmo_to_array::MezmoToArray;
+#[cfg(feature = "mezmo_to_float")]
+pub use mezmo_to_float::MezmoToFloat;
+#[cfg(feature = "mezmo_to_int")]
+pub use mezmo_to_int::MezmoToInt;
+#[cfg(feature = "mezmo_to_object")]
+pub use mezmo_to_object::MezmoToObject;
+#[cfg(feature = "mezmo_to_string")]
+pub use mezmo_to_string::MezmoToString;
 #[cfg(feature = "mezmo_string_operations")]
 pub use mezmo_trim_end::MezmoTrimEnd;
 #[cfg(feature = "mezmo_string_operations")]
 pub use mezmo_trim_start::MezmoTrimStart;
-#[cfg(feature = "mezmo_to_int")]
-pub use mezmo_to_int::MezmoToInt;
-#[cfg(feature = "mezmo_to_float")]
-pub use mezmo_to_float::MezmoToFloat;
-#[cfg(feature = "mezmo_to_string")]
-pub use mezmo_to_string::MezmoToString;
 #[cfg(feature = "mod")]
 pub use mod_func::Mod;
 #[cfg(feature = "now")]
@@ -973,10 +981,14 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(MezmoTrimEnd),
         #[cfg(feature = "mezmo_string_operations")]
         Box::new(MezmoTrimStart),
+        #[cfg(feature = "mezmo_to_array")]
+        Box::new(MezmoToArray),
         #[cfg(feature = "mezmo_to_int")]
         Box::new(MezmoToInt),
         #[cfg(feature = "mezmo_to_float")]
         Box::new(MezmoToFloat),
+        #[cfg(feature = "mezmo_to_object")]
+        Box::new(MezmoToObject),
         #[cfg(feature = "mezmo_to_string")]
         Box::new(MezmoToString),
         #[cfg(feature = "mod")]
