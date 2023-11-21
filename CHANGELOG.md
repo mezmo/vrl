@@ -1,3 +1,10 @@
+# [0.6.0](https://github.com/answerbook/vrl/compare/v0.5.1...v0.6.0) (2023-11-21)
+
+
+### Features
+
+* Expose fallible functions mezmo_to_object() and mezmo_to_array() [5afe456](https://github.com/answerbook/vrl/commit/5afe4564a8aa7b8feda0ba19d3a950f1c5a82552) - Jorge Bay [LOG-17868](https://logdna.atlassian.net/browse/LOG-17868)
+
 ## [0.5.1](https://github.com/answerbook/vrl/compare/v0.5.0...v0.5.1) (2023-09-12)
 
 
