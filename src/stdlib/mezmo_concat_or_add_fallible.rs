@@ -1,7 +1,10 @@
-use crate::mezmo_to_string;
-use vrl_compiler::prelude::*;
+use super::mezmo_to_string;
+use crate::compiler::prelude::*;
+use crate::value::Value;
+use ordered_float::NotNan;
 
-pub(crate) const ERROR_MESSAGE: &str = "Cannot add or concat other values that are not strings or numbers";
+pub(crate) const ERROR_MESSAGE: &str =
+    "Cannot add or concat other values that are not strings or numbers";
 
 /// Concatenates if any of the parameters is a string.
 /// Adds if both are numbers.
@@ -13,9 +16,12 @@ pub(crate) fn concat_or_add(left: Value, right: Value) -> Resolved {
             let right = mezmo_to_string::to_string(right);
             Ok(Value::from(left + &right))
         }
-        (Float(l), Float(r)) => Ok(Value::from(l.into_inner() + r.into_inner())),
-        (Float(l), Integer(r)) => Ok(Value::from(l.into_inner() + *r as f64)),
-        (Integer(l), Float(r)) => Ok(Value::from(*l as f64 + r.into_inner())),
+        (Float(l), Float(r)) => Ok(Value::from(l + r)),
+        (Float(l), Integer(r)) => Ok(Value::from(l + *r as f64)),
+        // `Value` only implements From<NotNan<f64>> in its crate
+        (Integer(l), Float(r)) => Ok(Value::from(
+            NotNan::new(*l as f64 + r.into_inner()).unwrap(),
+        )),
         (Integer(l), Integer(r)) => Ok(Value::from(l + r)),
         _ => Err(ERROR_MESSAGE.into()),
     }
@@ -82,6 +88,7 @@ impl FunctionExpression for MezmoConcatOrAddFallibleFn {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::value;
 
     test_function![
         mezmo_concat_or_add_fallible => MezmoConcatOrAddFallible;

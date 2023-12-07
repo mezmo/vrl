@@ -1,4 +1,4 @@
-use vrl_compiler::prelude::*;
+use crate::compiler::prelude::*;
 
 /// Trims whitespace from the start of a string.
 #[derive(Clone, Copy, Debug)]
@@ -10,13 +10,11 @@ impl Function for MezmoTrimStart {
     }
 
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-        ]
+        &[Parameter {
+            keyword: "value",
+            kind: kind::BYTES,
+            required: true,
+        }]
     }
 
     fn examples(&self) -> &'static [Example] {
@@ -35,10 +33,7 @@ impl Function for MezmoTrimStart {
     ) -> Compiled {
         let value = arguments.required("value");
 
-        Ok(MezmoTrimStartFn {
-            value,
-        }
-        .as_expr())
+        Ok(MezmoTrimStartFn { value }.as_expr())
     }
 }
 

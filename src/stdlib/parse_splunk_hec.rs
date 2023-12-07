@@ -1,8 +1,7 @@
-use ::value::Value;
+use crate::compiler::prelude::*;
 use chrono::{DateTime, TimeZone, Utc};
 use serde_json::{Deserializer, Value as JsonValue};
 use std::collections::BTreeMap;
-use vrl_compiler::prelude::*;
 
 type ParseResult<T> = std::result::Result<T, String>;
 
@@ -184,6 +183,7 @@ fn type_def() -> TypeDef {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::value;
 
     test_function![
         parse_splunk_hec => ParseSplunkHec;

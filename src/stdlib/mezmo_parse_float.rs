@@ -1,6 +1,6 @@
-use ::value::Value;
-use vrl_compiler::conversion::Conversion;
-use vrl_compiler::prelude::*;
+use crate::compiler::conversion::Conversion;
+use crate::compiler::prelude::*;
+use crate::value::Value;
 
 fn mezmo_parse_float(value: Value) -> Resolved {
     use Value::{Bytes, Float, Integer};
@@ -72,6 +72,7 @@ impl FunctionExpression for ParseFloatFn {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::value;
 
     test_function![
         mezmo_parse_float => MezmoParseFloat;

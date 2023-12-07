@@ -1,5 +1,4 @@
-use ::value::Value;
-use vrl_compiler::prelude::*;
+use crate::compiler::prelude::*;
 
 fn to_float(value: Value) -> Resolved {
     use Value::{Boolean, Bytes, Float, Integer, Null, Timestamp};
@@ -79,6 +78,7 @@ impl FunctionExpression for ToFloatFn {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::value;
 
     test_function![
         mezmo_to_float => MezmoToFloat;

@@ -1,7 +1,6 @@
 use std::borrow::Cow;
 
-use vrl_compiler::prelude::*;
-use vrl_compiler::Resolved;
+use crate::compiler::prelude::*;
 
 fn string_at(s: Cow<'_, str>, index: i64) -> Resolved {
     if index >= 0 {
@@ -66,11 +65,7 @@ impl Function for MezmoStringAt {
         let value = arguments.required("value");
         let index = arguments.required("index");
 
-        Ok(MezmoStringAtFn {
-            value,
-            index,
-        }
-        .as_expr())
+        Ok(MezmoStringAtFn { value, index }.as_expr())
     }
 }
 
@@ -84,10 +79,7 @@ impl FunctionExpression for MezmoStringAtFn {
     fn resolve(&self, ctx: &mut Context) -> Resolved {
         let value = self.value.resolve(ctx)?;
         let index = self.index.resolve(ctx)?;
-        string_at(
-            value.try_bytes_utf8_lossy()?,
-            index.try_integer()?,
-        )
+        string_at(value.try_bytes_utf8_lossy()?, index.try_integer()?)
     }
 
     fn type_def(&self, _state: &state::TypeState) -> TypeDef {

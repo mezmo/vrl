@@ -1,8 +1,5 @@
+use crate::compiler::prelude::*;
 use std::borrow::Cow;
-
-use ::value::Value;
-use vrl_compiler::prelude::*;
-use vrl_compiler::Resolved;
 
 fn index_of(value: Cow<'_, str>, search_value: Cow<'_, str>, position: i64) -> Value {
     let position = std::cmp::max(position, 0); // Negative values clamped to 0

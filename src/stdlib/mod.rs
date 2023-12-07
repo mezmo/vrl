@@ -118,6 +118,31 @@ cfg_if::cfg_if! {
         mod match_datadog_query;
         mod md5;
         mod merge;
+        mod is_mezmo_metric;
+        mod mezmo_arithmetic_operation;
+        mod mezmo_char_at;
+        mod mezmo_concat_or_add;
+        mod mezmo_concat_or_add_fallible;
+        mod mezmo_index_of;
+        mod mezmo_is_truthy;
+        mod mezmo_last_index_of;
+        mod mezmo_pad_end;
+        mod mezmo_pad_start;
+        mod mezmo_parse_float;
+        mod mezmo_parse_int;
+        mod mezmo_relational_comparison;
+        mod mezmo_repeat;
+        mod mezmo_string_at;
+        mod mezmo_string_slice;
+        mod mezmo_substring;
+        mod mezmo_to_array;
+        mod mezmo_to_float;
+        mod mezmo_to_int;
+        mod mezmo_to_object;
+        mod mezmo_to_string;
+        mod mezmo_trim_end;
+        mod mezmo_trim_start;
+        mod parse_splunk_hec;
         mod mod_func;
         mod now;
         mod object;
@@ -259,6 +284,7 @@ cfg_if::cfg_if! {
         pub use is_ipv4::IsIpv4;
         pub use is_ipv6::IsIpv6;
         pub use is_json::IsJson;
+        pub use is_mezmo_metric::IsMezmoMetric;
         pub use is_null::IsNull;
         pub use is_nullish::IsNullish;
         pub use is_object::IsObject;
@@ -275,6 +301,29 @@ cfg_if::cfg_if! {
         pub use match_array::MatchArray;
         pub use match_datadog_query::MatchDatadogQuery;
         pub use merge::Merge;
+        pub use mezmo_arithmetic_operation::*;
+        pub use mezmo_char_at::MezmoCharAt;
+        pub use mezmo_concat_or_add::MezmoConcatOrAdd;
+        pub use mezmo_concat_or_add_fallible::MezmoConcatOrAddFallible;
+        pub use mezmo_index_of::MezmoIndexOf;
+        pub use mezmo_is_truthy::MezmoIsTruthy;
+        pub use mezmo_last_index_of::MezmoLastIndexOf;
+        pub use mezmo_pad_end::MezmoPadEnd;
+        pub use mezmo_pad_start::MezmoPadStart;
+        pub use mezmo_parse_float::MezmoParseFloat;
+        pub use mezmo_parse_int::MezmoParseInt;
+        pub use mezmo_relational_comparison::*;
+        pub use mezmo_repeat::MezmoRepeat;
+        pub use mezmo_string_at::MezmoStringAt;
+        pub use mezmo_string_slice::MezmoStringSlice;
+        pub use mezmo_substring::MezmoSubstring;
+        pub use mezmo_to_array::MezmoToArray;
+        pub use mezmo_to_float::MezmoToFloat;
+        pub use mezmo_to_int::MezmoToInt;
+        pub use mezmo_to_object::MezmoToObject;
+        pub use mezmo_to_string::MezmoToString;
+        pub use mezmo_trim_end::MezmoTrimEnd;
+        pub use mezmo_trim_start::MezmoTrimStart;
         pub use mod_func::Mod;
         pub use now::Now;
         pub use object::Object;
@@ -300,6 +349,7 @@ cfg_if::cfg_if! {
         pub use parse_regex::ParseRegex;
         pub use parse_regex_all::ParseRegexAll;
         pub use parse_ruby_hash::ParseRubyHash;
+        pub use parse_splunk_hec::ParseSplunkHec;
         pub use parse_syslog::ParseSyslog;
         pub use parse_timestamp::ParseTimestamp;
         pub use parse_tokens::ParseTokens;
@@ -422,6 +472,7 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(IsIpv4),
         Box::new(IsIpv6),
         Box::new(IsJson),
+        Box::new(IsMezmoMetric),
         Box::new(IsNull),
         Box::new(IsNullish),
         Box::new(IsObject),
@@ -438,6 +489,34 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(MatchAny),
         Box::new(MatchArray),
         Box::new(MatchDatadogQuery),
+        Box::new(MezmoCharAt),
+        Box::new(MezmoConcatOrAdd),
+        Box::new(MezmoConcatOrAddFallible),
+        Box::new(MezmoDivide),
+        Box::new(MezmoGt),
+        Box::new(MezmoGte),
+        Box::new(MezmoIndexOf),
+        Box::new(MezmoIsTruthy),
+        Box::new(MezmoLastIndexOf),
+        Box::new(MezmoLt),
+        Box::new(MezmoLte),
+        Box::new(MezmoMultiply),
+        Box::new(MezmoPadEnd),
+        Box::new(MezmoPadStart),
+        Box::new(MezmoParseFloat),
+        Box::new(MezmoParseInt),
+        Box::new(MezmoRepeat),
+        Box::new(MezmoStringAt),
+        Box::new(MezmoStringSlice),
+        Box::new(MezmoSubstring),
+        Box::new(MezmoSubtract),
+        Box::new(MezmoToArray),
+        Box::new(MezmoToFloat),
+        Box::new(MezmoToInt),
+        Box::new(MezmoToObject),
+        Box::new(MezmoToString),
+        Box::new(MezmoTrimEnd),
+        Box::new(MezmoTrimStart),
         Box::new(Md5),
         Box::new(Merge),
         Box::new(Mod),
@@ -465,6 +544,7 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(ParseRegex),
         Box::new(ParseRegexAll),
         Box::new(ParseRubyHash),
+        Box::new(ParseSplunkHec),
         Box::new(ParseSyslog),
         Box::new(ParseTimestamp),
         Box::new(ParseTokens),

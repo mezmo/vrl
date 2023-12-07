@@ -1,11 +1,10 @@
-use crate::to_string;
-use ::value::Value;
-use vrl_compiler::{prelude::*, Resolved};
+use super::to_string;
+use crate::compiler::prelude::*;
 
 /// Converts any value into a string.
 /// Returns "[Array]" for arrays, "[Object]" for objects and "" for nulls.
 pub(crate) fn to_string(value: Value) -> String {
-    use Value::{Array, Bytes, Object, Null};
+    use Value::{Array, Bytes, Null, Object};
     match value {
         Array(_) => "[Array]".into(),
         Object(_) => "[Object]".into(),
@@ -76,6 +75,7 @@ impl FunctionExpression for MezmoToStringFn {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::value;
     use chrono::{TimeZone, Utc};
 
     test_function![

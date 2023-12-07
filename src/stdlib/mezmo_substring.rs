@@ -1,9 +1,6 @@
+use crate::compiler::prelude::*;
 use std::borrow::Cow;
-
-use ::value::Value;
 use substring::Substring;
-use vrl_compiler::prelude::*;
-use vrl_compiler::Resolved;
 
 fn substring(s: Cow<'_, str>, index_start: i64, index_end: Option<i64>) -> Value {
     let len = s.chars().count();

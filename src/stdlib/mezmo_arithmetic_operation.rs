@@ -1,5 +1,4 @@
-use ::value::Value;
-use vrl_compiler::prelude::*;
+use crate::compiler::prelude::*;
 
 const ERROR_MESSAGE: &str = "Invalid arithmetic operation";
 
@@ -108,6 +107,7 @@ impl FunctionExpression for ArithmeticOperatorFn {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::value;
 
     test_function![
         mezmo_sub => MezmoSubtract;

@@ -1,5 +1,4 @@
-use vrl_compiler::prelude::*;
-use vrl_compiler::Resolved;
+use crate::compiler::prelude::*;
 
 /// Repeats a the given string by the provided count.
 ///

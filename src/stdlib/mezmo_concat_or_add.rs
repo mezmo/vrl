@@ -1,7 +1,9 @@
-use crate::mezmo_concat_or_add_fallible::concat_or_add;
-use vrl_compiler::prelude::*;
+use super::mezmo_concat_or_add_fallible::concat_or_add;
+use crate::compiler::prelude::*;
 
-#[deprecated(note = "This function uses conditional fallibility, use MezmoConcatOrAddFallible instead")]
+#[deprecated(
+    note = "This function uses conditional fallibility, use MezmoConcatOrAddFallible instead"
+)]
 #[derive(Clone, Copy, Debug)]
 pub struct MezmoConcatOrAdd;
 
@@ -78,8 +80,9 @@ fn is_numeric(def: &TypeDef) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::value;
 
-    use crate::mezmo_concat_or_add_fallible::ERROR_MESSAGE;
+    use crate::stdlib::mezmo_concat_or_add_fallible::ERROR_MESSAGE;
 
     test_function![
         mezmo_concat_or_add => MezmoConcatOrAdd;

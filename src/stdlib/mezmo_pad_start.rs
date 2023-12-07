@@ -1,8 +1,6 @@
 use std::borrow::Cow;
 
-use ::value::Value;
-use vrl_compiler::prelude::*;
-use vrl_compiler::Resolved;
+use crate::compiler::prelude::*;
 
 fn pad_start(value: Cow<'_, str>, target_length: i64, pad_value: Cow<'_, str>) -> Value {
     let current_length = value.chars().count();

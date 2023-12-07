@@ -1,6 +1,4 @@
-use vrl_compiler::prelude::*;
-use vrl_compiler::Resolved;
-
+use crate::compiler::prelude::*;
 
 /// Trims whitespace from the end of a string.
 #[derive(Clone, Copy, Debug)]
@@ -12,13 +10,11 @@ impl Function for MezmoTrimEnd {
     }
 
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-        ]
+        &[Parameter {
+            keyword: "value",
+            kind: kind::BYTES,
+            required: true,
+        }]
     }
 
     fn examples(&self) -> &'static [Example] {
@@ -37,10 +33,7 @@ impl Function for MezmoTrimEnd {
     ) -> Compiled {
         let value = arguments.required("value");
 
-        Ok(MezmoTrimEndFn {
-            value,
-        }
-        .as_expr())
+        Ok(MezmoTrimEndFn { value }.as_expr())
     }
 }
 

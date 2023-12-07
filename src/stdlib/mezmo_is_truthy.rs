@@ -1,5 +1,4 @@
-use ::value::Value;
-use vrl_compiler::prelude::*;
+use crate::compiler::prelude::*;
 
 fn is_truthy(value: Value) -> bool {
     use Value::{Boolean, Bytes, Float, Integer, Null};
@@ -84,6 +83,7 @@ impl FunctionExpression for MezmoIsTruthyFn {
 
 #[cfg(test)]
 mod tests {
+    use crate::value;
     use chrono::prelude::*;
 
     use super::*;

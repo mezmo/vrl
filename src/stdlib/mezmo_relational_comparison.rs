@@ -1,6 +1,4 @@
-use ::value::Value;
-use vrl_compiler::prelude::*;
-use vrl_compiler::value::ValueError;
+use crate::compiler::prelude::*;
 
 type ComparisonFn = fn(Value, Value) -> bool;
 
@@ -114,6 +112,7 @@ impl FunctionExpression for RelationalOperatorFn {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::value;
 
     test_function![
         mezmo_gt => MezmoGt;

@@ -23,7 +23,7 @@ mod non_wasm {
     use crate::diagnostic::{Label, Span};
     use crate::value::Value;
     pub(super) use std::sync::Arc;
-    use std::{collections::BTreeMap, fmt};
+    use std::{collections::BTreeMap, fmt, panic};
 
     fn parse_grok(value: Value, pattern: Arc<grok::Pattern>) -> Resolved {
         let bytes = value.try_bytes_utf8_lossy()?;

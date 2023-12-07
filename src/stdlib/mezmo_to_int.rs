@@ -1,5 +1,4 @@
-use ::value::Value;
-use vrl_compiler::prelude::*;
+use crate::compiler::prelude::*;
 
 fn to_int(value: Value) -> Resolved {
     use Value::{Boolean, Bytes, Float, Integer, Null, Timestamp};
@@ -78,6 +77,7 @@ impl FunctionExpression for ToIntFn {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::value;
 
     test_function![
         mezmo_to_int => MezmoToInt;

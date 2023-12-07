@@ -1,7 +1,9 @@
 use std::borrow::Borrow;
 
-use ::value::Value;
-use vrl_compiler::prelude::*;
+use crate::compiler::prelude::*;
+use crate::value::Value;
+
+use crate::value;
 
 #[derive(Clone, Copy, Debug)]
 pub struct IsMezmoMetric;

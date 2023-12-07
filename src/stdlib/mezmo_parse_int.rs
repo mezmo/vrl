@@ -1,7 +1,5 @@
-use crate::parse_int;
-use ::value::Value;
-use vrl_compiler::prelude::*;
-use vrl_compiler::Resolved;
+use super::parse_int;
+use crate::compiler::prelude::*;
 
 fn mezmo_parse_int(value: Value, base: Option<Value>) -> Resolved {
     use Value::{Bytes, Float, Integer};
@@ -86,6 +84,7 @@ impl FunctionExpression for ParseIntFn {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::value;
 
     test_function![
         mezmo_parse_int => MezmoParseInt;

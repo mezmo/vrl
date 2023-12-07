@@ -1,7 +1,6 @@
 use std::borrow::Cow;
-
-use ::value::Value;
-use vrl_compiler::prelude::*;
+// use crate::value;
+use crate::compiler::prelude::*;
 
 fn char_at(s: Cow<'_, str>, index: i64) -> Value {
     if index >= 0 {
