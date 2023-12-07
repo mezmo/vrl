@@ -1,10 +1,9 @@
-use vrl_compiler::{CompileConfig, TimeZone, VrlRuntime};
-use vrl_tests::{get_tests_from_functions, run_tests, Test, TestConfig};
+use vrl::compiler::{CompileConfig, TimeZone, VrlRuntime};
+use vrl::test::{get_tests_from_functions, run_tests, test_dir, Test, TestConfig};
 
 use chrono_tz::Tz;
 use clap::Parser;
 use glob::glob;
-
 #[cfg(not(target_env = "msvc"))]
 #[global_allocator]
 static ALLOC: tikv_jemallocator::Jemalloc = tikv_jemallocator::Jemalloc;
@@ -81,20 +80,24 @@ fn main() {
     run_tests(
         tests,
         &cfg,
-        &stdlib::all(),
+        &vrl::stdlib::all(),
         || (CompileConfig::default(), ()),
         |_| {},
     );
 }
 
+fn test_glob_pattern() -> String {
+    test_dir().join("**/*.vrl").to_str().unwrap().to_string()
+}
+
 fn get_tests(cmd: &Cmd) -> Vec<Test> {
-    glob("tests/**/*.vrl")
+    glob(test_glob_pattern().as_str())
         .expect("valid pattern")
         .filter_map(|entry| {
             let path = entry.ok()?;
             Some(Test::from_path(&path))
         })
-        .chain(get_tests_from_functions(stdlib::all()))
+        .chain(get_tests_from_functions(vrl::stdlib::all()))
         .filter(|test| should_run(&format!("{}/{}", test.category, test.name), &cmd.pattern))
         .collect::<Vec<_>>()
 }
