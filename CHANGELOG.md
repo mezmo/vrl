@@ -1,3 +1,52 @@
+# [0.7.0](https://github.com/answerbook/vrl/compare/v0.6.0...v0.7.0) (2023-12-18)
+
+
+### Bug Fixes
+
+* arithmetic overflow panic (#252) [1ff642d](https://github.com/answerbook/vrl/commit/1ff642dc940c7d07ea29627b010806086f968953) - GitHub
+
+
+### Chores
+
+* add badges to README (#236) [43df337](https://github.com/answerbook/vrl/commit/43df3373c03125d53ee1638909227ce9eca66955) - GitHub
+* add simple example (#231) [e007923](https://github.com/answerbook/vrl/commit/e00792337b8dce414fa8ca8c535753d5536e6df7) - GitHub
+* consolidate internal crates (#235) [8f13cd2](https://github.com/answerbook/vrl/commit/8f13cd241565e7e85eb541ca3be483b1192cbb5c) - GitHub
+* **deps**: Bump rust-toolchain.toml to 1.69.0 (#253) [a1ec917](https://github.com/answerbook/vrl/commit/a1ec91715140a510086e83fba0b880bf20a3588e) - GitHub
+* **deps**: update afl requirement from 0.12.17 to 0.13.0 (#256) [c5fa9ce](https://github.com/answerbook/vrl/commit/c5fa9ce726c69cb12a461fa05a6bdf7d1f3ca648) - GitHub
+* **deps**: update criterion requirement from 0.4 to 0.5 (#255) [c7c95b8](https://github.com/answerbook/vrl/commit/c7c95b855f74e0f9e9ce35b06587712ccaed9050) - GitHub
+* **deps**: update dns-lookup requirement from 1.0.8 to 2.0.1 (#224) [6500539](https://github.com/answerbook/vrl/commit/6500539808cff2f21d5e9bd80e5e85cb4e2f560a) - GitHub
+* **deps**: update indexmap requirement from ~1.9.2 to ~2.0.0 (#279) [078f47a](https://github.com/answerbook/vrl/commit/078f47aac45d1cdddf76c7ffbdf239c55e14376c) - GitHub
+* **deps**: update itertools requirement from 0.10.5 to 0.11.0 (#276) [c7572ff](https://github.com/answerbook/vrl/commit/c7572ff0597b86d8c4232eddb43ebcea60b7f484) - GitHub
+* **deps**: update lalrpop requirement from 0.19.8 to 0.20.0 (#225) [04941e7](https://github.com/answerbook/vrl/commit/04941e71487166c9746a504bf6fcddefd198b13d) - GitHub
+* **deps**: update lalrpop-util requirement from 0.19 to 0.20 (#223) [3ac0149](https://github.com/answerbook/vrl/commit/3ac0149cf5e853a309eb7887f7356c44e54b6314) - GitHub
+* **deps**: update quoted_printable requirement from 0.4.7 to 0.5.0 (#275) [b322236](https://github.com/answerbook/vrl/commit/b322236a35fd5a957b17c6c18acaf75f1ca86a50) - GitHub
+* **deps**: update rustyline requirement from 11 to 12 (#278) [72315d6](https://github.com/answerbook/vrl/commit/72315d674b02f4246c736bb446bffbff601fd76a) - GitHub
+* prepare for crates.io release (#234) [0de9b0c](https://github.com/answerbook/vrl/commit/0de9b0c3cad5392a0c8a1e41d70ef6ad5af265e5) - GitHub
+* Regenerate license inventory (#248) [ff35551](https://github.com/answerbook/vrl/commit/ff35551f22034d567c3a6a1b1355ace63be4cd00) - GitHub
+* remove `getrandom` dependency (#237) [d9fa124](https://github.com/answerbook/vrl/commit/d9fa124f29002568e49e03667ebd30df8fdf4f6b) - GitHub
+* Set up 3rd party license list file (#222) [cfa9aad](https://github.com/answerbook/vrl/commit/cfa9aadbd19770def92cfefcf2853810efbb955b) - GitHub
+* Update README (#230) [ecfb31e](https://github.com/answerbook/vrl/commit/ecfb31e7bae6143814fa727b7a256c5cc0215567) - GitHub
+
+
+### Features
+
+* add from_unix_timestamp function (#277) [5739fdd](https://github.com/answerbook/vrl/commit/5739fddd20b6c8f4ed76890da2c49a5df8109c7f) - GitHub
+* add fuzzer (#245) [935e2ab](https://github.com/answerbook/vrl/commit/935e2ab91d2c3a9f536e499459121361e8eefe28) - GitHub
+* give access to the program result type definition (#262) [2bbe672](https://github.com/answerbook/vrl/commit/2bbe6728fc0a9d0c20b6ee8634346bdbf28f78d8) - GitHub
+* **stdlib**: Add `ingress_upstreaminfo` log format to `parse_nginx_log` function (#193) [64a5cac](https://github.com/answerbook/vrl/commit/64a5cac56c8e80d18c17a4b1b06110d49790446f) - GitHub
+* **stdlib**: Add timezone argument to format_timestamp (#247) [52959f8](https://github.com/answerbook/vrl/commit/52959f8c24d5524c6e0a4eaef83962049fbfe8f6) - GitHub
+
+
+### Miscellaneous
+
+* Merge pull request #35 from answerbook/darinspivey/LOG-18807 [34285e3](https://github.com/answerbook/vrl/commit/34285e38b19bd425f8d2d231c7484a08ed0b2db5) - GitHub [LOG-18807](https://logdna.atlassian.net/browse/LOG-18807)
+* Merge branch 'from-upstream-0.5.0' into upstream-0.5.0 [73716ee](https://github.com/answerbook/vrl/commit/73716ee7050ed9865fcab64877b8a26060f115a8) - Darin Spivey
+* prepare for 0.5.0 release (#281) [e82e7eb](https://github.com/answerbook/vrl/commit/e82e7ebfca7981c6570b03de093cb52974e0a1b2) - GitHub
+* Added null escape to lexer (#259) [bab67a5](https://github.com/answerbook/vrl/commit/bab67a5d832eef396c7612510b539e24c479f3f1) - GitHub
+* changelog (#260) [c5c607f](https://github.com/answerbook/vrl/commit/c5c607f748302f8ab5f62501384b5655d445e485) - GitHub
+* fix typedefs with query side-effects (#258) [d2c4d84](https://github.com/answerbook/vrl/commit/d2c4d841296f7c9e5fd735684f0c536b6708f148) - GitHub
+* remove stdlib function features (#251) [b308189](https://github.com/answerbook/vrl/commit/b308189e6966df1e61416f9b7a4e5d36e211fc80) - GitHub
+
 # [0.6.0](https://github.com/answerbook/vrl/compare/v0.5.1...v0.6.0) (2023-11-21)
 
 
