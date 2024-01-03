@@ -55,12 +55,12 @@ impl Function for FromUnixTimestamp {
         &[
             Example {
                 title: "integer as seconds",
-                source: "to_timestamp!(5)",
+                source: "from_unix_timestamp!(5)",
                 result: Ok("t'1970-01-01T00:00:05Z'"),
             },
             Example {
                 title: "integer as milliseconds",
-                source: r#"to_timestamp!(5000, unit: "milliseconds")"#,
+                source: r#"from_unix_timestamp!(5000, unit: "milliseconds")"#,
                 result: Ok("t'1970-01-01T00:00:05Z'"),
             },
             Example {
@@ -73,14 +73,14 @@ impl Function for FromUnixTimestamp {
 
     fn compile(
         &self,
-        _state: &state::TypeState,
+        state: &state::TypeState,
         _ctx: &mut FunctionCompileContext,
         arguments: ArgumentList,
     ) -> Compiled {
         let value = arguments.required("value");
 
         let unit = arguments
-            .optional_enum("unit", Unit::all_value().as_slice())?
+            .optional_enum("unit", Unit::all_value().as_slice(), state)?
             .map(|s| {
                 Unit::from_str(&s.try_bytes_utf8_lossy().expect("unit not bytes"))
                     .expect("validated enum")
