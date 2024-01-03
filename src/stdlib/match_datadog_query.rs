@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 use crate::compiler::prelude::*;
 use crate::datadog_filter::{
     build_matcher,
@@ -7,7 +9,6 @@ use crate::datadog_filter::{
 use crate::datadog_search_syntax::{parse, Comparison, ComparisonValue, Field};
 use crate::owned_value_path;
 use crate::path::{parse_value_path, OwnedValuePath};
-use std::borrow::Cow;
 
 #[derive(Clone, Copy, Debug)]
 pub struct MatchDatadogQuery;
@@ -64,7 +65,7 @@ impl Function for MatchDatadogQuery {
         // Build the matcher function that accepts a VRL event value. This will parse the `node`
         // at boot-time and return a boxed func that contains just the logic required to match a
         // VRL `Value` against the Datadog Search Syntax literal.
-        let filter = build_matcher(&node, &VrlFilter::default());
+        let filter = build_matcher(&node, &VrlFilter);
 
         Ok(MatchDatadogQueryFn { value, filter }.as_expr())
     }
@@ -399,7 +400,9 @@ fn resolve_value(
 ) -> Box<dyn Matcher<Value>> {
     let func = move |obj: &Value| {
         // Get the value by path, or return early with `false` if it doesn't exist.
-        let Some(value) = obj.get(&buf) else {return false};
+        let Some(value) = obj.get(&buf) else {
+            return false;
+        };
 
         match_fn.run(value)
     };
@@ -430,8 +433,9 @@ fn string_value(value: &Value) -> Cow<str> {
 
 #[cfg(test)]
 mod test {
-    use super::*;
     use crate::value;
+
+    use super::*;
 
     test_function![
         match_datadog_query => MatchDatadogQuery;
