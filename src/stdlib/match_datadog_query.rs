@@ -399,7 +399,9 @@ fn resolve_value(
 ) -> Box<dyn Matcher<Value>> {
     let func = move |obj: &Value| {
         // Get the value by path, or return early with `false` if it doesn't exist.
-        let Some(value) = obj.get(&buf) else {return false};
+        let Some(value) = obj.get(&buf) else {
+            return false;
+        };
 
         match_fn.run(value)
     };

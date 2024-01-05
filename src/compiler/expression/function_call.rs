@@ -50,7 +50,8 @@ impl<'a> Builder<'a> {
         let Some((function_id, function)) = funcs
             .iter()
             .enumerate()
-            .find(|(_pos, f)| f.identifier() == ident.as_ref()) else {
+            .find(|(_pos, f)| f.identifier() == ident.as_ref())
+        else {
             let idents = funcs
                 .iter()
                 .map(|func| func.identifier())
