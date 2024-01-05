@@ -1,3 +1,10 @@
+# [0.9.0](https://github.com/answerbook/vrl/compare/v0.8.0...v0.9.0) (2024-01-05)
+
+
+### Features
+
+* Expose new vrl function mezmo_length [b689c3a](https://github.com/answerbook/vrl/commit/b689c3ab675c8a075d4c393ed33de3d20769a7fb) - Jorge Bay [LOG-17304](https://logdna.atlassian.net/browse/LOG-17304)
+
 # [0.8.0](https://github.com/answerbook/vrl/compare/v0.7.0...v0.8.0) (2024-01-03)
 
 

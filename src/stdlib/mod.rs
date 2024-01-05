@@ -124,8 +124,9 @@ cfg_if::cfg_if! {
         mod mezmo_concat_or_add_fallible;
         mod mezmo_concat_or_add;
         mod mezmo_index_of;
-        mod mezmo_last_index_of;
         mod mezmo_is_truthy;
+        mod mezmo_last_index_of;
+        mod mezmo_length;
         mod mezmo_pad_end;
         mod mezmo_pad_start;
         mod mezmo_parse_float;
@@ -308,6 +309,7 @@ cfg_if::cfg_if! {
         pub use mezmo_index_of::MezmoIndexOf;
         pub use mezmo_is_truthy::MezmoIsTruthy;
         pub use mezmo_last_index_of::MezmoLastIndexOf;
+        pub use mezmo_length::MezmoLength;
         pub use mezmo_pad_end::MezmoPadEnd;
         pub use mezmo_pad_start::MezmoPadStart;
         pub use mezmo_parse_float::MezmoParseFloat;
@@ -500,6 +502,7 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(MezmoIndexOf),
         Box::new(MezmoIsTruthy),
         Box::new(MezmoLastIndexOf),
+        Box::new(MezmoLength),
         Box::new(MezmoLt),
         Box::new(MezmoLte),
         Box::new(MezmoMultiply),
