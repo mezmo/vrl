@@ -1,7 +1,5 @@
-use crate::diagnostic::{DiagnosticMessage, Label, Note, Urls};
 use std::{fmt, sync::Arc};
 
-use super::Block;
 use crate::compiler::state::{TypeInfo, TypeState};
 use crate::compiler::{
     expression::{levenstein, ExpressionError, FunctionArgument},
@@ -15,6 +13,9 @@ use crate::compiler::{
     value::Kind,
     CompileConfig, Context, Expression, Function, Resolved, Span, TypeDef,
 };
+use crate::diagnostic::{DiagnosticMessage, Label, Note, Urls};
+
+use super::Block;
 
 pub(crate) struct Builder<'a> {
     abort_on_error: bool,
@@ -1125,7 +1126,7 @@ impl DiagnosticMessage for Error {
                 } else if kind.is_boolean() {
                     Some(format!("to_bool({argument}) ?? false"))
                 } else if kind.is_timestamp() {
-                    Some(format!("to_timestamp({argument}) ?? now()"))
+                    Some(format!("to_unix_timestamp({argument}) ?? now()"))
                 } else {
                     None
                 };
@@ -1180,8 +1181,9 @@ impl DiagnosticMessage for Error {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::compiler::{value::kind, FunctionExpression};
+
+    use super::*;
 
     #[derive(Clone, Debug)]
     struct Fn;

@@ -1,12 +1,13 @@
 #![allow(deprecated)]
 
-use crate::value::Value;
 use chrono::{DateTime, Datelike, TimeZone, Utc};
 use criterion::{criterion_group, criterion_main, Criterion};
 use regex::Regex;
-use vrl::compiler::prelude::*;
 
+use vrl::compiler::prelude::*;
 use vrl::{bench_function, btreemap, func_args, value};
+
+use crate::value::Value;
 
 criterion_group!(
     name = benches;
@@ -145,7 +146,6 @@ criterion_group!(
               to_syslog_facility,
               to_syslog_level,
               to_syslog_severity,
-              to_timestamp,
               to_unix_timestamp,
               truncate,
               unique,
@@ -155,6 +155,7 @@ criterion_group!(
               //uuidv4,
               upcase,
               values,
+              community_id,
 );
 criterion_main!(benches);
 
@@ -1417,7 +1418,7 @@ bench_function! {
 
     complex {
         args: func_args! [
-            value: r#"CEF:0|Check Point|VPN-1 & FireWall-1|Check Point|Log|https|Unknown|act=Accept destinationTranslatedAddress=0.0.0.0 destinationTranslatedPort=0 deviceDirection=0 rt=1543270652000 sourceTranslatedAddress=192.168.103.254 sourceTranslatedPort=35398 spt=49363 dpt=443 cs2Label=Rule Name layer_name=Network layer_uuid=b406b732-2437-4848-9741-6eae1f5bf112 match_id=4 parent_rule=0 rule_action=Accept rule_uid=9e5e6e74-aa9a-4693-b9fe-53712dd27bea ifname=eth0 logid=0 loguid={0x5bfc70fc,0x1,0xfe65a8c0,0xc0000001} origin=192.168.101.254 originsicname=CN\=R80,O\=R80_M..6u6bdo sequencenum=1 version=5 dst=52.173.84.157 inzone=Internal nat_addtnl_rulenum=1 nat_rulenum=4 outzone=External product=VPN-1 & FireWall-1 proto=6 service_id=https src=192.168.101.100"#,
+            value: r"CEF:0|Check Point|VPN-1 & FireWall-1|Check Point|Log|https|Unknown|act=Accept destinationTranslatedAddress=0.0.0.0 destinationTranslatedPort=0 deviceDirection=0 rt=1543270652000 sourceTranslatedAddress=192.168.103.254 sourceTranslatedPort=35398 spt=49363 dpt=443 cs2Label=Rule Name layer_name=Network layer_uuid=b406b732-2437-4848-9741-6eae1f5bf112 match_id=4 parent_rule=0 rule_action=Accept rule_uid=9e5e6e74-aa9a-4693-b9fe-53712dd27bea ifname=eth0 logid=0 loguid={0x5bfc70fc,0x1,0xfe65a8c0,0xc0000001} origin=192.168.101.254 originsicname=CN\=R80,O\=R80_M..6u6bdo sequencenum=1 version=5 dst=52.173.84.157 inzone=Internal nat_addtnl_rulenum=1 nat_rulenum=4 outzone=External product=VPN-1 & FireWall-1 proto=6 service_id=https src=192.168.101.100",
         ],
         want: Ok(value!({
             "cefVersion":"0",
@@ -1742,24 +1743,24 @@ bench_function! {
             format: "ingress_upstreaminfo",
         ],
         want: Ok(value!({
-            "remote_addr" => "0.0.0.0",
-            "timestamp" => Value::Timestamp(DateTime::parse_from_rfc3339("2023-03-18T15:00:00Z").unwrap().info()),
-            "request" => "GET /some/path HTTP/2.0",
-            "method" => "GET",
-            "path" => "/some/path",
-            "protocol" => "HTTP/2.0",
-            "status" => 200,
-            "body_bytes_size" => 12312,
-            "http_referer" => "https://10.0.0.1/some/referer",
-            "http_user_agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36",
-            "request_length" => 462,
-            "request_time" => 0.050,
-            "proxy_upstream_name" => "some-upstream-service-9000",
-            "upstream_addr" => "10.0.50.80:9000",
-            "upstream_response_length" => 19437,
-            "upstream_response_time" => 0.049,
-            "upstream_status" => 200,
-            "req_id" => "752178adb17130b291aefd8c386279e7",
+            "remote_addr": "0.0.0.0",
+            "timestamp": (DateTime::parse_from_rfc3339("2023-03-18T15:00:00Z").unwrap().with_timezone(&Utc)),
+            "request": "GET /some/path HTTP/2.0",
+            "method": "GET",
+            "path": "/some/path",
+            "protocol": "HTTP/2.0",
+            "status": 200,
+            "body_bytes_size": 12312,
+            "http_referer": "https://10.0.0.1/some/referer",
+            "http_user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36",
+            "request_length": 462,
+            "request_time": 0.050,
+            "proxy_upstream_name": "some-upstream-service-9000",
+            "upstream_addr": "10.0.50.80:9000",
+            "upstream_response_length": 19437,
+            "upstream_response_time": 0.049,
+            "upstream_status": 200,
+            "req_id": "752178adb17130b291aefd8c386279e7",
         })),
     }
 
@@ -1842,7 +1843,7 @@ bench_function! {
     matches {
         args: func_args![
             value: "apples and carrots, peaches and peas",
-            pattern: Regex::new(r#"(?P<fruit>[\w\.]+) and (?P<veg>[\w]+)"#).unwrap(),
+            pattern: Regex::new(r"(?P<fruit>[\w\.]+) and (?P<veg>[\w]+)").unwrap(),
             numeric_groups: true
         ],
         want: Ok(value!([
@@ -2603,25 +2604,6 @@ bench_function! {
 }
 
 bench_function! {
-    to_timestamp => vrl::stdlib::ToTimestamp;
-
-    string {
-        args: func_args![value: "2001-07-08T00:34:60.026490+09:30"],
-        want: Ok(DateTime::parse_from_rfc3339("2001-07-08T00:34:60.026490+09:30").unwrap().with_timezone(&Utc))
-    }
-
-    int {
-        args: func_args![value: 1612814266],
-        want: Ok(DateTime::parse_from_rfc3339("2021-02-08T19:57:46+00:00").unwrap().with_timezone(&Utc))
-    }
-
-    float {
-        args: func_args![value: 1612814266.1],
-        want: Ok(DateTime::parse_from_rfc3339("2021-02-08T19:57:46.099999905+00:00").unwrap().with_timezone(&Utc))
-    }
-}
-
-bench_function! {
     to_unix_timestamp => vrl::stdlib::ToUnixTimestamp;
 
     default {
@@ -2685,5 +2667,14 @@ bench_function! {
     literal {
         args: func_args![value: value!({"key1": "val1", "key2": "val2"})],
         want: Ok(value!(["val1", "val2"])),
+    }
+}
+
+bench_function! {
+    community_id => vrl::stdlib::CommunityID;
+
+    literal {
+        args: func_args![source_ip: "1.2.3.4", destination_ip: "5.6.7.8", protocol: 6, source_port: 1122, destination_port: 3344],
+        want: Ok("1:wCb3OG7yAFWelaUydu0D+125CLM="),
     }
 }

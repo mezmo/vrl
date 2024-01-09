@@ -27,12 +27,14 @@ fn main() {
 
 /// Reads grok patterns defined in the `patterns` folder into the static `PATTERNS` variable
 fn read_grok_patterns() {
-    let mut output = "static PATTERNS: &[(&str, &str)] = &[\n".to_string();
+    let mut output =
+        "#[allow(clippy::needless_raw_string_hashes)]\nstatic PATTERNS: &[(&str, &str)] = &[\n"
+            .to_string();
 
     fs::read_dir(Path::new("src/datadog/grok/patterns"))
         .expect("can't read 'patterns' dir")
         .filter_map(|path| File::open(path.expect("can't read 'patterns' dir").path()).ok())
-        .flat_map(|f| BufReader::new(f).lines().filter_map(|l| l.ok()))
+        .flat_map(|f| BufReader::new(f).lines().map_while(Result::ok))
         .filter(|line| !line.starts_with('#') && !line.trim().is_empty())
         .for_each(|line| {
             let (key, value) = line.split_at(

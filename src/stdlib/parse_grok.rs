@@ -35,7 +35,7 @@ mod non_wasm {
             Some(matches) => {
                 let mut result = BTreeMap::new();
 
-                for (name, value) in matches.iter() {
+                for (name, value) in &matches {
                     result.insert(name.to_string(), Value::from(value));
                 }
 

@@ -1,12 +1,12 @@
 use mlua::prelude::LuaResult;
-use mlua::{FromLua, Lua, ToLua, Value as LuaValue};
+use mlua::{FromLua, IntoLua, Lua, Value as LuaValue};
 use ordered_float::NotNan;
 
 use crate::value::Value;
 
-impl<'a> ToLua<'a> for Value {
+impl<'a> IntoLua<'a> for Value {
     #![allow(clippy::wrong_self_convention)] // this trait is defined by mlua
-    fn to_lua(self, lua: &'a Lua) -> LuaResult<LuaValue<'_>> {
+    fn into_lua(self, lua: &'a Lua) -> LuaResult<LuaValue<'_>> {
         match self {
             Self::Bytes(b) => lua.create_string(b.as_ref()).map(LuaValue::String),
             Self::Regex(regex) => lua
@@ -16,8 +16,8 @@ impl<'a> ToLua<'a> for Value {
             Self::Float(f) => Ok(LuaValue::Number(f.into_inner())),
             Self::Boolean(b) => Ok(LuaValue::Boolean(b)),
             Self::Timestamp(t) => timestamp_to_table(lua, t).map(LuaValue::Table),
-            Self::Object(m) => lua.create_table_from(m.into_iter()).map(LuaValue::Table),
-            Self::Array(a) => lua.create_sequence_from(a.into_iter()).map(LuaValue::Table),
+            Self::Object(m) => lua.create_table_from(m).map(LuaValue::Table),
+            Self::Array(a) => lua.create_sequence_from(a).map(LuaValue::Table),
             Self::Null => lua.create_string("").map(LuaValue::String),
         }
     }
@@ -190,11 +190,11 @@ mod test {
         let pairs = vec![
             (
                 Value::Bytes("\u{237a}\u{3b2}\u{3b3}".into()),
-                r#"
+                r"
                 function (value)
                     return value == '\u{237a}\u{3b2}\u{3b3}'
                 end
-                "#,
+                ",
             ),
             (
                 Value::Integer(123),

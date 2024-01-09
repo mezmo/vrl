@@ -1,4 +1,5 @@
 use crate::compiler::prelude::*;
+use crate::path;
 use crate::value;
 use std::borrow::Borrow;
 
@@ -70,7 +71,7 @@ fn validate_metric(value: &Value) -> Result<Value, ExpressionError> {
     }
 
     if !value
-        .get("name")
+        .get(path!("name"))
         .ok_or_else(|| "field \"name\" not found")?
         .is_bytes()
     {
@@ -78,7 +79,7 @@ fn validate_metric(value: &Value) -> Result<Value, ExpressionError> {
     }
 
     let kind = value
-        .get("kind")
+        .get(path!("kind"))
         .ok_or_else(|| "field \"kind\" not found")?
         .as_str()
         .ok_or_else(|| "expected field \"kind\" to contain a string")?;
@@ -89,19 +90,19 @@ fn validate_metric(value: &Value) -> Result<Value, ExpressionError> {
 
     validate_metric_value(
         value
-            .get("value")
+            .get(path!("value"))
             .ok_or_else(|| "field \"value\" not found")?,
     )?;
 
     // Optional fields
 
-    if let Some(namespace) = value.get("namespace") {
+    if let Some(namespace) = value.get(path!("namespace")) {
         if !namespace.is_bytes() {
             return Err("expected field \"namespace\" to contain a string".into());
         }
     }
 
-    if let Some(tags) = value.get("tags") {
+    if let Some(tags) = value.get(path!("tags")) {
         let tags = tags
             .as_object()
             .ok_or_else(|| "expected field \"tags\" to contain an array")?;
@@ -121,13 +122,13 @@ fn validate_metric(value: &Value) -> Result<Value, ExpressionError> {
 
 fn validate_metric_value(value: &Value) -> Result<Value, ExpressionError> {
     let value_type = value
-        .get("type")
+        .get(path!("type"))
         .ok_or_else(|| "field \"value.type\" not found")?
         .as_str()
         .ok_or_else(|| "expected field \"value.type\" to contain a string")?;
 
     let value_value = value
-        .get("value")
+        .get(path!("value"))
         .ok_or_else(|| "field \"value.value\" not found")?;
 
     match value_type.borrow() {
@@ -153,7 +154,7 @@ fn validate_counter_or_gauge(value: &Value) -> Result<Value, ExpressionError> {
 
 fn validate_set(value: &Value) -> Result<Value, ExpressionError> {
     let values = value
-        .get("values")
+        .get(path!("values"))
         .ok_or_else(|| "field \"value.value.values\" not found")?
         .as_array()
         .ok_or_else(|| "expected set metric field \"value.value.values\" to contain an array")?;
@@ -168,7 +169,7 @@ fn validate_set(value: &Value) -> Result<Value, ExpressionError> {
 
 fn validate_distribution(value: &Value) -> Result<Value, ExpressionError> {
     let statistic = value
-        .get("statistic")
+        .get(path!("statistic"))
         .ok_or_else(|| "field \"value.value.statistic\" not found")?
         .as_str()
         .ok_or_else(|| {
@@ -180,7 +181,7 @@ fn validate_distribution(value: &Value) -> Result<Value, ExpressionError> {
     }
 
     let samples = value
-        .get("samples")
+        .get(path!("samples"))
         .ok_or_else(|| "field \"value.value.samples\" not found")?
         .as_array()
         .ok_or_else(|| {
@@ -189,7 +190,7 @@ fn validate_distribution(value: &Value) -> Result<Value, ExpressionError> {
 
     for (i, sample) in samples.iter().enumerate() {
         if !sample
-            .get("value")
+            .get(path!("value"))
             .ok_or_else(|| {
                 format!(
                     "\"value\" field of sample at index {i} in \"value.value.samples\" not found"
@@ -201,7 +202,7 @@ fn validate_distribution(value: &Value) -> Result<Value, ExpressionError> {
         }
 
         let rate = sample
-            .get("rate")
+            .get(path!("rate"))
             .ok_or_else(|| {
                 format!("\"rate\" field of sample at index {i} in \"value.value.samples\" not found")
             })?
@@ -220,7 +221,7 @@ fn validate_distribution(value: &Value) -> Result<Value, ExpressionError> {
 
 fn validate_histogram(value: &Value) -> Result<Value, ExpressionError> {
     let sum = value
-        .get("sum")
+        .get(path!("sum"))
         .ok_or_else(|| "field \"value.value.sum\" not found")?;
 
     if !sum.is_number() {
@@ -230,7 +231,7 @@ fn validate_histogram(value: &Value) -> Result<Value, ExpressionError> {
     }
 
     let count = value
-        .get("count")
+        .get(path!("count"))
         .ok_or_else(|| "field \"value.value.count\" not found")?
         .as_integer()
         .ok_or_else(|| {
@@ -245,7 +246,7 @@ fn validate_histogram(value: &Value) -> Result<Value, ExpressionError> {
     }
 
     let buckets = value
-        .get("buckets")
+        .get(path!("buckets"))
         .ok_or_else(|| "field \"value.value.buckets\" not found")?
         .as_array()
         .ok_or_else(|| {
@@ -254,7 +255,7 @@ fn validate_histogram(value: &Value) -> Result<Value, ExpressionError> {
 
     for (i, bucket) in buckets.iter().enumerate() {
         if !bucket
-            .get("upper_limit")
+            .get(path!("upper_limit"))
             .ok_or_else(|| {
                 format!("\"upper_limit\" field of bucket at index {i} in \"value.value.buckets\" not found")
             })?
@@ -264,7 +265,7 @@ fn validate_histogram(value: &Value) -> Result<Value, ExpressionError> {
         }
 
         let count = bucket
-            .get("count")
+            .get(path!("count"))
             .ok_or_else(|| {
                 format!("\"count\" field of bucket at index {i} in \"value.value.buckets\" not found")
             })?
@@ -284,7 +285,7 @@ fn validate_histogram(value: &Value) -> Result<Value, ExpressionError> {
 
 fn validate_summary(value: &Value) -> Result<Value, ExpressionError> {
     let sum = value
-        .get("sum")
+        .get(path!("sum"))
         .ok_or_else(|| "field \"value.value.sum\" not found")?;
 
     if !sum.is_number() {
@@ -292,7 +293,7 @@ fn validate_summary(value: &Value) -> Result<Value, ExpressionError> {
     }
 
     let count = value
-        .get("count")
+        .get(path!("count"))
         .ok_or_else(|| "field \"value.value.count\" not found")?
         .as_integer()
         .ok_or_else(|| {
@@ -307,7 +308,7 @@ fn validate_summary(value: &Value) -> Result<Value, ExpressionError> {
     }
 
     let quantiles = value
-        .get("quantiles")
+        .get(path!("quantiles"))
         .ok_or_else(|| "field \"value.value.quantiles\" not found")?
         .as_array()
         .ok_or_else(|| {
@@ -316,7 +317,7 @@ fn validate_summary(value: &Value) -> Result<Value, ExpressionError> {
 
     for (i, quantile) in quantiles.iter().enumerate() {
         if !quantile
-            .get("quantile")
+            .get(path!("quantile"))
             .ok_or_else(|| {
                 format!("\"quantile\" field of quantile at index {i} in \"value.value.quantiles\" not found")
             })?
@@ -326,7 +327,7 @@ fn validate_summary(value: &Value) -> Result<Value, ExpressionError> {
         }
 
         if !quantile
-            .get("value")
+            .get(path!("value"))
             .ok_or_else(|| {
                 format!("\"value\" field of quantile at index {i} in \"value.value.quantiles\" not found")
             })?
