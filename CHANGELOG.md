@@ -1,3 +1,105 @@
+# [0.10.0](https://github.com/answerbook/vrl/compare/v0.9.0...v0.10.0) (2024-01-09)
+
+
+### Bug Fixes
+
+* check compression level in `encode_zlib` and `encode_gzip` (#393) [bb519f9](https://github.com/answerbook/vrl/commit/bb519f95fc20c0428ddc1aa528c9ef73d2bd9ec6) - GitHub
+* fix query display metadata write (#374) [3bad80c](https://github.com/answerbook/vrl/commit/3bad80c942b75049d46531cc4eb74dfc3b4cb9b1) - GitHub
+* typedef of array/object literals containing undefined values (#401) [82fa612](https://github.com/answerbook/vrl/commit/82fa61219540ac85abc7048ed24ad0296f9773b0) - GitHub
+* update AWS VPC Flow Log fields to version 5 (#411) [50d971c](https://github.com/answerbook/vrl/commit/50d971c1b265b4c4187767dcef20214a357f434a) - GitHub
+* vpc flow log field account-id as string (#415) [b3e93d8](https://github.com/answerbook/vrl/commit/b3e93d8a9a3b82982cb4ae3aa1c2a9f1341743c8) - GitHub
+* VRL tests glob now returns all tests locally (#368) [6cc5570](https://github.com/answerbook/vrl/commit/6cc5570a1362831e40e40f2c9b67816875f4e9eb) - GitHub
+
+
+### Chores
+
+* Add version to deprecation warnings (#469) [ad754fc](https://github.com/answerbook/vrl/commit/ad754fc04a966980c80ead75e1b16c70394de474) - GitHub
+* **ci**: bump actions/checkout from 3 to 4 (#434) [34a3653](https://github.com/answerbook/vrl/commit/34a36534d6b475fbbbf264f5cd55b5f64a56a0af) - GitHub
+* **ci**: bump tibdex/github-app-token from 1.8.0 to 1.8.2 (#430) [0001093](https://github.com/answerbook/vrl/commit/000109385569314c6715300bfd84cba0971646c3) - GitHub
+* **ci**: bump tibdex/github-app-token from 1.8.2 to 2.0.0 (#447) [b63121b](https://github.com/answerbook/vrl/commit/b63121bba7503ba9a98dbf2572677764977dcef9) - GitHub
+* **ci**: bump tibdex/github-app-token from 2.0.0 to 2.1.0 (#467) [8a6906e](https://github.com/answerbook/vrl/commit/8a6906ec60da4a3c1b559e1da1a62df52c7461a7) - GitHub
+* **deps**: bump afl from 0.13.3 to 0.13.4 (#380) [bf1f0ba](https://github.com/answerbook/vrl/commit/bf1f0bac6e6f793a93e3e66bb1f3b60144a61461) - GitHub
+* **deps**: bump afl from 0.13.4 to 0.13.5 (#414) [1c87c6b](https://github.com/answerbook/vrl/commit/1c87c6ba145350bfc091f5c245adc8c4cdd47b15) - GitHub
+* **deps**: bump afl from 0.13.5 to 0.14.1 (#421) [a0cc05c](https://github.com/answerbook/vrl/commit/a0cc05c83d0c98f572a0f37b67466eabdb194f2e) - GitHub
+* **deps**: bump anyhow from 1.0.72 to 1.0.74 (#385) [303e13c](https://github.com/answerbook/vrl/commit/303e13c230e93d841a1c9c23f8cf8105ce8b39ea) - GitHub
+* **deps**: bump anyhow from 1.0.74 to 1.0.75 (#388) [2b21016](https://github.com/answerbook/vrl/commit/2b21016e1e03c722d57e119773b5df20f26a41a3) - GitHub
+* **deps**: bump base64 from 0.21.2 to 0.21.3 (#418) [708f1be](https://github.com/answerbook/vrl/commit/708f1be5068a659e45b17afdbcd0149602fec00a) - GitHub
+* **deps**: bump base64 from 0.21.3 to 0.21.4 (#445) [a966339](https://github.com/answerbook/vrl/commit/a966339eeacb64798edc268d04d8627caf082e77) - GitHub
+* **deps**: bump bytes from 1.4.0 to 1.5.0 (#441) [a56921b](https://github.com/answerbook/vrl/commit/a56921ba418e5f360e60154e1acee0dbdb92be55) - GitHub
+* **deps**: bump chrono from 0.4.26 to 0.4.28 (#427) [de4f980](https://github.com/answerbook/vrl/commit/de4f9808721f3ecf853e53b3686f6cf2bfc712b8) - GitHub
+* **deps**: bump chrono from 0.4.28 to 0.4.30 (#440) [d783abe](https://github.com/answerbook/vrl/commit/d783abe01e5a95ad8dc34a158691e3e59abcdd63) - GitHub
+* **deps**: bump chrono from 0.4.30 to 0.4.31 (#456) [dd28df6](https://github.com/answerbook/vrl/commit/dd28df601c02148b013168594b949ff23a7067db) - GitHub
+* **deps**: bump cidr-utils from 0.5.10 to 0.5.11 (#443) [b64f0fc](https://github.com/answerbook/vrl/commit/b64f0fc74865d43c8e0450108c67962397458d84) - GitHub
+* **deps**: bump clap from 4.3.19 to 4.3.21 (#375) [e1f64cf](https://github.com/answerbook/vrl/commit/e1f64cfe2c0c329d67b8f3623c31078c886f6dbe) - GitHub
+* **deps**: bump clap from 4.3.21 to 4.3.22 (#396) [31e3258](https://github.com/answerbook/vrl/commit/31e325828a8e3b029909de09b49ec33fbed8ff72) - GitHub
+* **deps**: bump clap from 4.3.22 to 4.3.23 (#404) [660ecac](https://github.com/answerbook/vrl/commit/660ecacba7feb9ab1835d887185bd9ff2bbe3eb2) - GitHub
+* **deps**: bump clap from 4.3.23 to 4.4.0 (#413) [0b097ed](https://github.com/answerbook/vrl/commit/0b097ed2a21b2af453f04a30694e072d07852033) - GitHub
+* **deps**: bump clap from 4.4.0 to 4.4.1 (#423) [57a2edf](https://github.com/answerbook/vrl/commit/57a2edfed1e3e7c35dec7bbbb2ccfad9e74d47b5) - GitHub
+* **deps**: bump clap from 4.4.1 to 4.4.2 (#429) [a551227](https://github.com/answerbook/vrl/commit/a55122771de57d1c1bb64b8d424f87b3fe39d7a9) - GitHub
+* **deps**: bump clap from 4.4.2 to 4.4.3 (#450) [2c46990](https://github.com/answerbook/vrl/commit/2c4699067ebfc12301f17c2261717d3d2025b44c) - GitHub
+* **deps**: bump clap from 4.4.3 to 4.4.4 (#460) [70350a2](https://github.com/answerbook/vrl/commit/70350a22e07d1ba8c35ca16581ff64c62d3e154d) - GitHub
+* **deps**: bump dns-lookup from 2.0.2 to 2.0.3 (#455) [ad17a96](https://github.com/answerbook/vrl/commit/ad17a96f11b71320a23969e522e685f09898c243) - GitHub
+* **deps**: bump dyn-clone from 1.0.12 to 1.0.13 (#390) [69fffb9](https://github.com/answerbook/vrl/commit/69fffb9a3d09eb94a07bcf6dfc45593ce4a83072) - GitHub
+* **deps**: bump dyn-clone from 1.0.13 to 1.0.14 (#466) [3390e6b](https://github.com/answerbook/vrl/commit/3390e6b295b22e3fbc932e8f689d438c9d949e9d) - GitHub
+* **deps**: bump flate2 from 1.0.26 to 1.0.27 (#383) [577c6c1](https://github.com/answerbook/vrl/commit/577c6c17d00adfe43283d326201361133c92f85c) - GitHub
+* **deps**: bump indoc from 2.0.3 to 2.0.4 (#457) [bd09a0f](https://github.com/answerbook/vrl/commit/bd09a0ff9791d9bc1a5490ee60126596bd6efc7a) - GitHub
+* **deps**: bump md-5 from 0.10.5 to 0.10.6 (#472) [110e90a](https://github.com/answerbook/vrl/commit/110e90a9f7a59c80cf0e951b79e463d82971ed90) - GitHub
+* **deps**: bump mlua from 0.8.9 to 0.9.0 (#397) [2aadcf3](https://github.com/answerbook/vrl/commit/2aadcf388e26c52336aefe9a646e98e10d452b5f) - GitHub
+* **deps**: bump mlua from 0.9.0 to 0.9.1 (#412) [67de2dc](https://github.com/answerbook/vrl/commit/67de2dc3cdbdfadfef98ce3cbee16d950d692e56) - GitHub
+* **deps**: bump ordered-float from 3.7.0 to 3.8.0 (#399) [af83d14](https://github.com/answerbook/vrl/commit/af83d149fa17de3fa07c1907f18c7345c373d0e2) - GitHub
+* **deps**: bump ordered-float from 3.8.0 to 3.9.0 (#405) [a4c077d](https://github.com/answerbook/vrl/commit/a4c077d51d9f0884af4d8774dcf59e20af0c3506) - GitHub
+* **deps**: bump ordered-float from 3.9.0 to 3.9.1 (#407) [2536f75](https://github.com/answerbook/vrl/commit/2536f7571bba61ffd5d6c437b0a41dbc06fc41db) - GitHub
+* **deps**: bump ordered-float from 3.9.1 to 4.1.0 (#473) [e2142f5](https://github.com/answerbook/vrl/commit/e2142f5f2890484f54d51a5256627de65bdfccb7) - GitHub
+* **deps**: bump pest from 2.7.2 to 2.7.3 (#426) [3f0a580](https://github.com/answerbook/vrl/commit/3f0a580524a78bad67daee5b1d58d429bb4ae7cb) - GitHub
+* **deps**: bump pest_derive from 2.7.1 to 2.7.2 (#366) [c31a061](https://github.com/answerbook/vrl/commit/c31a06160905ccadf0d6aec190b17e732978c306) - GitHub
+* **deps**: bump pest_derive from 2.7.2 to 2.7.3 (#428) [7df5dbc](https://github.com/answerbook/vrl/commit/7df5dbc417f4a3180b6487c44b71ad2346c8d289) - GitHub
+* **deps**: bump regex from 1.9.1 to 1.9.3 (#371) [87dab4f](https://github.com/answerbook/vrl/commit/87dab4f5c30eba1a13a655d061c240cbe4e674ce) - GitHub
+* **deps**: bump regex from 1.9.3 to 1.9.4 (#420) [4e400d2](https://github.com/answerbook/vrl/commit/4e400d2e39234cf85237870ca0a77e11e88e93d8) - GitHub
+* **deps**: bump regex from 1.9.4 to 1.9.5 (#433) [5001c95](https://github.com/answerbook/vrl/commit/5001c950298419e7d263f59bcfbcbc844c5827f3) - GitHub
+* **deps**: bump rust_decimal from 1.31.0 to 1.32.0 (#409) [33bb8fa](https://github.com/answerbook/vrl/commit/33bb8facd6ddbbac748053b562b1f1ff2f8b946e) - GitHub
+* **deps**: bump serde from 1.0.180 to 1.0.181 (#369) [22a875d](https://github.com/answerbook/vrl/commit/22a875d08905f2ea36c815ce63e3aa0eb6f2df7e) - GitHub
+* **deps**: bump serde from 1.0.181 to 1.0.183 (#372) [23c9098](https://github.com/answerbook/vrl/commit/23c90987bda0a90b7f2d1123cd1c5717cc4f3453) - GitHub
+* **deps**: bump serde from 1.0.183 to 1.0.185 (#403) [4a33698](https://github.com/answerbook/vrl/commit/4a336981822c01e626017fffc5a52929e8c98d89) - GitHub
+* **deps**: bump serde from 1.0.185 to 1.0.186 (#408) [b4e42bb](https://github.com/answerbook/vrl/commit/b4e42bb6f0ad668f4da7baeb695c3d676b29579b) - GitHub
+* **deps**: bump serde from 1.0.186 to 1.0.188 (#419) [dd1b888](https://github.com/answerbook/vrl/commit/dd1b888b6e224bfe7f31b2e9bfa1b0eed45e7b09) - GitHub
+* **deps**: bump serde_json from 1.0.104 to 1.0.105 (#384) [7489514](https://github.com/answerbook/vrl/commit/748951448090568ef44eda42a6be825c9a38620c) - GitHub
+* **deps**: bump serde_json from 1.0.105 to 1.0.106 (#446) [1bd2b6c](https://github.com/answerbook/vrl/commit/1bd2b6c3756593709072099c7bcb92584a13573e) - GitHub
+* **deps**: bump serde_json from 1.0.106 to 1.0.107 (#451) [697cb00](https://github.com/answerbook/vrl/commit/697cb007cbda9dab365049742f2c5eaa1b25a24d) - GitHub
+* **deps**: bump strip-ansi-escapes from 0.1.1 to 0.2.0 (#378) [60aae9c](https://github.com/answerbook/vrl/commit/60aae9c7ab98eeea0810a31383cd0be2f1ed4f21) - GitHub
+* **deps**: bump termcolor from 1.2.0 to 1.3.0 (#461) [d7b089f](https://github.com/answerbook/vrl/commit/d7b089f1123cb2ef34a0cbd116c9b9872c4782f4) - GitHub
+* **deps**: bump thiserror from 1.0.44 to 1.0.46 (#386) [1835940](https://github.com/answerbook/vrl/commit/1835940202c57357c08e4853fe33668f7703a3e6) - GitHub
+* **deps**: bump thiserror from 1.0.46 to 1.0.47 (#389) [44dba3d](https://github.com/answerbook/vrl/commit/44dba3dfffa1e563b73c7cfce9cbbdc7a76e4e8d) - GitHub
+* **deps**: bump thiserror from 1.0.47 to 1.0.48 (#432) [a04482e](https://github.com/answerbook/vrl/commit/a04482e7b7c983bd20766d51d69ab9d0e3255e0a) - GitHub
+* **deps**: bump toml from 0.7.6 to 0.7.7 (#439) [ae4bc6f](https://github.com/answerbook/vrl/commit/ae4bc6fcaccbfefcc0a6f9fd6df99e017a5bb2f0) - GitHub
+* **deps**: bump toml from 0.7.7 to 0.7.8 (#444) [942b125](https://github.com/answerbook/vrl/commit/942b12530b2e1a3a95734cc629b7a305661e98ea) - GitHub
+* **deps**: bump toml from 0.7.8 to 0.8.0 (#449) [5b1792c](https://github.com/answerbook/vrl/commit/5b1792c3badb81e2e2e3aa9792639d1db7fc5f53) - GitHub
+* **deps**: bump url from 2.4.0 to 2.4.1 (#422) [78695f6](https://github.com/answerbook/vrl/commit/78695f67a1e0a2d8d42a9f4117b5764ee2620ac4) - GitHub
+* **deps**: bump webbrowser from 0.8.10 to 0.8.11 (#398) [467be67](https://github.com/answerbook/vrl/commit/467be67462f20865caabf38ace4244a43416a46c) - GitHub
+* **deps**: Update to Rust 1.72.0 (#416) [b61fd61](https://github.com/answerbook/vrl/commit/b61fd616a7263e6ffd24cec673894ab09da23cdd) - GitHub
+* prepare for 0.7.0 release (#474) [fd7b8b9](https://github.com/answerbook/vrl/commit/fd7b8b9cfc7ce876974e128c592c7a24878851a1) - GitHub
+* small improvement to checks.sh (#465) [bf955f6](https://github.com/answerbook/vrl/commit/bf955f60c460afb8209793225f185e283422a544) - GitHub
+* standard cargo commands work without enabling 'test' feature (#470) [f23180d](https://github.com/answerbook/vrl/commit/f23180d8ed6b1cb7708f3f3a1adabad401403e19) - GitHub
+* update rust toolchain version (#400) [e9ab9b5](https://github.com/answerbook/vrl/commit/e9ab9b5d6e2b773c240e399b45b7ffc09130ef5c) - GitHub
+
+
+### Features
+
+* implement local CI check/test runners (#402) [5b14980](https://github.com/answerbook/vrl/commit/5b1498035cb366bbad12d010b790e5c0e4c457d1) - GitHub
+* remove string_path from the default features (#392) [8278cc3](https://github.com/answerbook/vrl/commit/8278cc33ec272ddcd1bfbe14f958039d956ae298) - GitHub
+
+
+### Miscellaneous
+
+* Merge pull request #38 from answerbook/darinspivey/LOG-18932 [88acea4](https://github.com/answerbook/vrl/commit/88acea4cd8b1c5b5713579640108bbd4354597f4) - GitHub [LOG-18932](https://logdna.atlassian.net/browse/LOG-18932)
+* Merge branch 'main' into darinspivey/LOG-18932 [5f5e7ab](https://github.com/answerbook/vrl/commit/5f5e7ab47fd8fd5cf757f574532b738654007e84) - Darin Spivey [LOG-18932](https://logdna.atlassian.net/browse/LOG-18932)
+* Merge tag 'v0.7.0' into darinspivey/LOG-18932 [c569498](https://github.com/answerbook/vrl/commit/c569498adf5577d2bf5f01fa463ae6f5fa7218ca) - Darin Spivey [LOG-18932](https://logdna.atlassian.net/browse/LOG-18932) [LOG-18932](https://logdna.atlassian.net/browse/LOG-18932)
+* chore!:remove deprecated 'to_timestamp' function (#452) [9d2d5af](https://github.com/answerbook/vrl/commit/9d2d5afdf90cb8185845d362c0956e0b415b9f0e) - GitHub
+* Loosen Nginx error log regex matching (#442) [e6ca833](https://github.com/answerbook/vrl/commit/e6ca833237c8f113950a12d69e07033c141bc285) - GitHub
+* Allow 's around values in parse_key_value / parse_logfmt (#382) [f33b01d](https://github.com/answerbook/vrl/commit/f33b01d0fcf7a932307b42f2ecfb3fb4c73c653a) - GitHub
+* Added community_id fuction to the changelog (#425) [420c760](https://github.com/answerbook/vrl/commit/420c76045a1ef183e7014fd1dae1a0af2033a1bd) - GitHub
+* Added a Community ID Function to the stdlib (#360) [2a7295b](https://github.com/answerbook/vrl/commit/2a7295b6a49ba8ec0ea98b0a4525a6315fb1d952) - GitHub
+* Add `pretty` parameter for `encode_json` (#370) [3093834](https://github.com/answerbook/vrl/commit/3093834c9c864da177430ca6b261b9cd73780ca9) - GitHub
+
 # [0.9.0](https://github.com/answerbook/vrl/compare/v0.8.0...v0.9.0) (2024-01-05)
 
 
