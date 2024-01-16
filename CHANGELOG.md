@@ -1,3 +1,78 @@
+# [0.11.0](https://github.com/answerbook/vrl/compare/v0.10.0...v0.11.0) (2024-01-16)
+
+
+### Bug Fixes
+
+* build dep 'lalrpop' specified a yanked version (#539) [ed65eda](https://github.com/answerbook/vrl/commit/ed65edaa98d230bb3f664eb8ffbb43728f0df939) - GitHub
+* **stdlib**: add missing contains_all function (#527) [f205530](https://github.com/answerbook/vrl/commit/f20553009f215b2e2650989630dd7b7de137bdab) - GitHub
+
+
+### Chores
+
+* Add MSRV (#476) [9063e78](https://github.com/answerbook/vrl/commit/9063e787caa251d4d4b3ad9f4eee6b5a2bd44d73) - GitHub
+* **ci**: bump tspascoal/get-user-teams-membership from 2 to 3 (#497) [ddedee7](https://github.com/answerbook/vrl/commit/ddedee72bc0307fa79b95e0d4e9d58cfb3c780a8) - GitHub
+* **deps**: bump afl from 0.14.1 to 0.14.3 (#500) [e304123](https://github.com/answerbook/vrl/commit/e304123927c396657f86a5d935c7cb16ed5eb1ff) - GitHub
+* **deps**: bump arbitrary from 1.3.0 to 1.3.1 (#505) [3d8b859](https://github.com/answerbook/vrl/commit/3d8b8596ba00a3b3e40429e712ff8c78df7d0f74) - GitHub
+* **deps**: bump arbitrary from 1.3.1 to 1.3.2 (#537) [f6a7656](https://github.com/answerbook/vrl/commit/f6a76561533b787cb5287fe0b3d742b5fdc4d350) - GitHub
+* **deps**: bump base64 from 0.21.4 to 0.21.5 (#521) [80d1d6f](https://github.com/answerbook/vrl/commit/80d1d6f167f273098bfc1f4122b66fe384f19229) - GitHub
+* **deps**: bump chrono-tz from 0.8.3 to 0.8.4 (#535) [9fc6c45](https://github.com/answerbook/vrl/commit/9fc6c45d74e110a3db09a26fe92646f89c28aa66) - GitHub
+* **deps**: bump clap from 4.4.4 to 4.4.5 (#475) [5c15675](https://github.com/answerbook/vrl/commit/5c15675533a378736b9eb956625cf003674d1584) - GitHub
+* **deps**: bump clap from 4.4.5 to 4.4.6 (#482) [b39a587](https://github.com/answerbook/vrl/commit/b39a587ffcc77ef5848e22c844dacf41ed994e14) - GitHub
+* **deps**: bump clap from 4.4.6 to 4.4.7 (#524) [80b1a31](https://github.com/answerbook/vrl/commit/80b1a31a2f229cf248c806cf1ce331e296bcd42b) - GitHub
+* **deps**: bump community-id from 0.2.1 to 0.2.2 (#496) [c95642b](https://github.com/answerbook/vrl/commit/c95642b3e9ae86ac3563ecca5b960bb286c2e5b8) - GitHub
+* **deps**: bump csv from 1.2.2 to 1.3.0 (#493) [9f91c5c](https://github.com/answerbook/vrl/commit/9f91c5c210a32f8423e5fbb2ceaff2c8ae598582) - GitHub
+* **deps**: bump dns-lookup from 2.0.3 to 2.0.4 (#509) [c4c7c95](https://github.com/answerbook/vrl/commit/c4c7c951dc3309b210ebe9a89961908987ec94d7) - GitHub
+* **deps**: bump flate2 from 1.0.27 to 1.0.28 (#512) [598bc80](https://github.com/answerbook/vrl/commit/598bc80e868714017d7a3f6e616130d7a1f0a92c) - GitHub
+* **deps**: bump indexmap from 2.0.0 to 2.0.1 (#480) [c092937](https://github.com/answerbook/vrl/commit/c0929370913cb148ff83100059938702fe9f819e) - GitHub
+* **deps**: bump indexmap from 2.0.1 to 2.0.2 (#486) [2dce695](https://github.com/answerbook/vrl/commit/2dce6953828b007fe86b36fa4f35690124b3df47) - GitHub
+* **deps**: bump indexmap from 2.0.2 to 2.1.0 (#540) [c3f2f1e](https://github.com/answerbook/vrl/commit/c3f2f1ec26e34472a0fcbffd326b4b2c10ebe823) - GitHub
+* **deps**: bump lalrpop from 0.20.0 to 0.20.1 (#519) [c49e072](https://github.com/answerbook/vrl/commit/c49e072fa619f5cac83896ad901a2bf1d39a407d) - GitHub
+* **deps**: bump lalrpop-util from 0.20.0 to 0.20.1 (#518) [6df76c4](https://github.com/answerbook/vrl/commit/6df76c44972b903faaadad46436ecc2ef5ea0a46) - GitHub
+* **deps**: bump ordered-float from 4.1.0 to 4.1.1 (#504) [1fd1971](https://github.com/answerbook/vrl/commit/1fd1971e40ba992af7b2098600a98a1d9d9630f9) - GitHub
+* **deps**: bump pest from 2.7.3 to 2.7.4 (#479) [0c75b9c](https://github.com/answerbook/vrl/commit/0c75b9c8840881c61000edfbe1f04b57f1767ffb) - GitHub
+* **deps**: bump pest from 2.7.4 to 2.7.5 (#525) [b97eb38](https://github.com/answerbook/vrl/commit/b97eb3855682cddf66cc39e70d7194c4ce1bdf36) - GitHub
+* **deps**: bump pest_derive from 2.7.3 to 2.7.4 (#481) [2cf730a](https://github.com/answerbook/vrl/commit/2cf730aa4eab8da06e404c3bbe357043a4f0347e) - GitHub
+* **deps**: bump pest_derive from 2.7.4 to 2.7.5 (#528) [280675c](https://github.com/answerbook/vrl/commit/280675c031528d98f9d88ebb85842e426277b704) - GitHub
+* **deps**: bump regex from 1.10.0 to 1.10.1 (#511) [666f542](https://github.com/answerbook/vrl/commit/666f542c3d936ebf17e0c53bb6300c4fe81c42ae) - GitHub
+* **deps**: bump regex from 1.10.1 to 1.10.2 (#513) [166e5b5](https://github.com/answerbook/vrl/commit/166e5b5281be44858b44e2cc1869568cbd128c16) - GitHub
+* **deps**: bump regex from 1.9.5 to 1.10.0 (#499) [c39e0c7](https://github.com/answerbook/vrl/commit/c39e0c75616d301d3abb4f72972b10f5e77cfe3b) - GitHub
+* **deps**: bump roxmltree from 0.18.0 to 0.18.1 (#487) [1be5db9](https://github.com/answerbook/vrl/commit/1be5db978664f562d0d04f7bed6e3200ca388454) - GitHub
+* **deps**: bump rustix from 0.37.20 to 0.37.25 (#514) [71ee49b](https://github.com/answerbook/vrl/commit/71ee49b3f6d9cdeb0581c15d13f46bc54305d884) - GitHub
+* **deps**: bump serde from 1.0.188 to 1.0.189 (#508) [8b7491b](https://github.com/answerbook/vrl/commit/8b7491b94c0559dfd2b65c289b0e9d0c010e6988) - GitHub
+* **deps**: bump serde from 1.0.189 to 1.0.190 (#529) [f9209bb](https://github.com/answerbook/vrl/commit/f9209bb417275316297314250dc6a50877a2578c) - GitHub
+* **deps**: bump serde_json from 1.0.107 to 1.0.108 (#536) [aa88d79](https://github.com/answerbook/vrl/commit/aa88d79fec53be9cffd77128946540c7eef425c7) - GitHub
+* **deps**: bump thiserror from 1.0.48 to 1.0.49 (#477) [e7d454f](https://github.com/answerbook/vrl/commit/e7d454fe09bb54d9bc9f3d5e6ab4f478cf515eaa) - GitHub
+* **deps**: bump thiserror from 1.0.49 to 1.0.50 (#517) [ab47f5a](https://github.com/answerbook/vrl/commit/ab47f5a672c5b69048a9ef8718e2f27403671639) - GitHub
+* **deps**: bump toml from 0.8.0 to 0.8.1 (#478) [39e1ef0](https://github.com/answerbook/vrl/commit/39e1ef0c65f15daf17ccbaabe93a2b5e09e34219) - GitHub
+* **deps**: bump toml from 0.8.1 to 0.8.2 (#490) [6fbdaea](https://github.com/answerbook/vrl/commit/6fbdaea899fdf286b9772bf83894e32a069d61b4) - GitHub
+* **deps**: bump toml from 0.8.2 to 0.8.4 (#520) [b1c286f](https://github.com/answerbook/vrl/commit/b1c286f6babe86e24e160291b09b2eb5894dfc02) - GitHub
+* **deps**: bump toml from 0.8.4 to 0.8.5 (#531) [fde43ef](https://github.com/answerbook/vrl/commit/fde43ef47faa09f5b32f5d65991002b26d7bff79) - GitHub
+* **deps**: bump toml from 0.8.5 to 0.8.6 (#532) [f02e20c](https://github.com/answerbook/vrl/commit/f02e20cf0d68e7a866be7bde58800c197824f5fd) - GitHub
+* **deps**: bump tracing from 0.1.37 to 0.1.39 (#510) [fea4d26](https://github.com/answerbook/vrl/commit/fea4d26cfafca811d69915f5949e6ee9c2d15737) - GitHub
+* **deps**: bump tracing from 0.1.39 to 0.1.40 (#515) [915a702](https://github.com/answerbook/vrl/commit/915a702c8728d71308a5286045dd57b5e079ffbc) - GitHub
+* **deps**: bump uuid from 1.4.1 to 1.5.0 (#516) [db91a8d](https://github.com/answerbook/vrl/commit/db91a8d61522a1147bec6e6c3f50e10172e3dce9) - GitHub
+* **deps**: bump webbrowser from 0.8.11 to 0.8.12 (#507) [0fdfb8b](https://github.com/answerbook/vrl/commit/0fdfb8b0b65cbd2d835f950205619b88e3fc9a14) - GitHub
+* **deps**: bump zstd from 0.12.4 to 0.13.0 (#506) [d335744](https://github.com/answerbook/vrl/commit/d335744ce5b614f3bde930405c800fb0fd5effac) - GitHub
+* prepare for 0.8.0 release (#538) [fb02bfd](https://github.com/answerbook/vrl/commit/fb02bfddc856537ace4e742bc907f3a3ff6abf59) - GitHub
+* prepare for 0.8.1 release [8548521](https://github.com/answerbook/vrl/commit/854852100d0ad7f52f970d2843bad09d3055ee56) - Pavlos Rontidis
+
+
+### Features
+
+* Add 'contains_all' VRL function (#468) [a4f9c51](https://github.com/answerbook/vrl/commit/a4f9c517b8db6fafae0b42b6db31096b633c5b15) - GitHub
+* **diagnostics**: improve fallibility error notes (#523) [8fbf561](https://github.com/answerbook/vrl/commit/8fbf561712323784e23535101aa8c018a22b610c) - GitHub
+* replace 'truncate' ellipsis argument with user defined suffix (#454) [a801436](https://github.com/answerbook/vrl/commit/a80143681f1c8d42a939b39ae489655da6b274f0) - GitHub
+
+
+### Miscellaneous
+
+* Merge pull request #39 from answerbook/darinspivey/LOG-18979 [c624d21](https://github.com/answerbook/vrl/commit/c624d212b3b616b8a655bb2729b0e2fe6d86841d) - GitHub [LOG-18979](https://logdna.atlassian.net/browse/LOG-18979)
+* Merge tag 'v0.8.1' into darinspivey/LOG-18979 [94973b3](https://github.com/answerbook/vrl/commit/94973b3c4ee1cefcd8884c5017a008a13e94fc24) - Darin Spivey [LOG-18979](https://logdna.atlassian.net/browse/LOG-18979) [LOG-18979](https://logdna.atlassian.net/browse/LOG-18979)
+* Add parse_float() VRL function (#484) [b993cfd](https://github.com/answerbook/vrl/commit/b993cfdd27730d7b382a5216ddd9009502a9e682) - GitHub
+* allow more missing upstream info in parse_nginx_log (#498) [a8469ad](https://github.com/answerbook/vrl/commit/a8469adc5611a9e0e7bf4b029a6fb25b6f1f10a2) - GitHub
+* Conversion for TimeZone to FixedOffset (#489) [232e665](https://github.com/answerbook/vrl/commit/232e6659ca2287994b3be12184171944e92bf23d) - GitHub
+* **stdlib**: support new Unit for UNIX timestamps- microseconds (#492) [4dc9d14](https://github.com/answerbook/vrl/commit/4dc9d14d5fb77c02ff52ab525b400dcf41f17cdd) - GitHub
+
 # [0.10.0](https://github.com/answerbook/vrl/compare/v0.9.0...v0.10.0) (2024-01-09)
 
 
