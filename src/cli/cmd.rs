@@ -141,7 +141,7 @@ fn run(opts: &Opts, stdlib_functions: Vec<Box<dyn Function>>) -> Result<(), Erro
             config: _,
         } = compile_with_state(
             &source,
-            &crate::stdlib::all(),
+            &stdlib_functions,
             &state,
             CompileConfig::default(),
         )
