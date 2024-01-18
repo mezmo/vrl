@@ -1,3 +1,10 @@
+## [0.11.1](https://github.com/answerbook/vrl/compare/v0.11.0...v0.11.1) (2024-01-18)
+
+
+### Bug Fixes
+
+* **cli**: Use same fn list for repl and script execution (#40) [362ba4c](https://github.com/answerbook/vrl/commit/362ba4c0a87bfb505ed0b8fdc6a768a9919d6f2e) - GitHub [LOG-19051](https://logdna.atlassian.net/browse/LOG-19051)
+
 # [0.11.0](https://github.com/answerbook/vrl/compare/v0.10.0...v0.11.0) (2024-01-16)
 
 
