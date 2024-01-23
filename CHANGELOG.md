@@ -1,3 +1,15 @@
+# [0.12.0](https://github.com/answerbook/vrl/compare/v0.11.1...v0.12.0) (2024-01-23)
+
+
+### Features
+
+* **grok**: add golang, psql, & elasticsearch logs [2cca79e](https://github.com/answerbook/vrl/commit/2cca79e1ab785a97a0f5e3f2cad9f5cf8a0ac5dd) - dominic-mcallister-logdna [LOG-18993](https://logdna.atlassian.net/browse/LOG-18993) [LOG-18994](https://logdna.atlassian.net/browse/LOG-18994) [LOG-18999](https://logdna.atlassian.net/browse/LOG-18999)
+
+
+### Miscellaneous
+
+* Merge pull request #41 from answerbook/dominic/LOGs-18993_18994_18999-add_groks [385ab55](https://github.com/answerbook/vrl/commit/385ab553319203c09ac40e3b4c53fe131882b833) - GitHub
+
 ## [0.11.1](https://github.com/answerbook/vrl/compare/v0.11.0...v0.11.1) (2024-01-18)
 
 
