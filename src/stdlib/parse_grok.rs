@@ -15,6 +15,9 @@ static MEZMO_PATTERNS: &[(&str, &str)] = &[
     ("UTF8_WORD", r#"\p{L}+"#),
     ("SENTENCE", r#"[\p{L},":;\s\-]+"#), // Sentence with UTF8 chars
     ("OPTIONAL_SENTENCE", r#"[\p{L},":;\s\-]*"#),
+    ("PSQL_LOG", "%{TIMESTAMP_ISO8601:timestamp} %{DATA} %{SQUARE_BRACKET}%{INT:pid}%{SQUARE_BRACKET} %{EMAILLOCALPART:username}%{NOTSPACE}%{WORD:database} %{GREEDYDATA:message}"),
+    ("GOLANG_LOG", "%{DATESTAMP:timestamp} %{LOGLEVEL:level} %{GREEDYDATA:message}"),
+    ("ELASTICSEARCH_LOG", "%{SQUARE_BRACKET}%{TIMESTAMP_ISO8601:timestamp}%{SQUARE_BRACKET}%{SQUARE_BRACKET}%{LOGLEVEL:level}%{SPACE}%{SQUARE_BRACKET}%{SQUARE_BRACKET}%{DATA:source}%{SQUARE_BRACKET} %{GREEDYDATA:message}")
 ];
 
 #[cfg(not(target_arch = "wasm32"))]
@@ -395,5 +398,49 @@ mod test {
             })),
             tdef: TypeDef::object(Collection::any()).fallible(),
         }
+
+        parsed_mezmo_psql_log {
+            args: func_args![
+                value: "2023-07-30 08:31:50.628 UTC [2176] postgres@chinook starting PostgreSQL 15.3 (Ubuntu 15.3-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0, 64-bit",
+                pattern: "%{PSQL_LOG}"
+            ],
+            want: Ok(Value::from(btreemap! {
+                "database" => "chinook",
+                "message" => "starting PostgreSQL 15.3 (Ubuntu 15.3-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.3.0-1ubuntu1~22.04.1) 11.3.0, 64-bit",
+                "pid" => "2176",
+                "timestamp" => "2023-07-30 08:31:50.628",
+                "username" => "postgres"
+            })),
+            tdef: TypeDef::object(Collection::any()).fallible(),
+        }
+
+        parsed_mezmo_golang_log {
+            args: func_args![
+                value: "01/23/2024 16:24:22 INFO this is a demo line",
+                pattern: "%{GOLANG_LOG}"
+            ],
+            want: Ok(Value::from(btreemap! {
+                "level" => "INFO",
+                "message" => "this is a demo line",
+                "timestamp" => "01/23/2024 16:24:22",
+            })),
+            tdef: TypeDef::object(Collection::any()).fallible(),
+        }
+
+        parsed_mezmo_elasticsearch_log {
+            args: func_args![
+                value: "[2023-02-24 10:45:49,124][WARN ][index.search.slowlog.query] took[2.9ms], took_millis[2], types[config], stats[], search_type[QUERY_AND_FETCH], total_shards[1], source[{\"size\":1000,\"sort\":[{\"timestamp\":{\"order\":\"desc\",\"ignore_unmapped\":true}}]}], extra_source[],",
+                pattern: "%{ELASTICSEARCH_LOG}"
+            ],
+            want: Ok(Value::from(btreemap! {
+                "level" => "WARN",
+                "message" => "took[2.9ms], took_millis[2], types[config], stats[], search_type[QUERY_AND_FETCH], total_shards[1], source[{\"size\":1000,\"sort\":[{\"timestamp\":{\"order\":\"desc\",\"ignore_unmapped\":true}}]}], extra_source[],",
+                "source" => "index.search.slowlog.query",
+                "timestamp" => "2023-02-24 10:45:49,124"
+            })),
+            tdef: TypeDef::object(Collection::any()).fallible(),
+        }
+
+
     ];
 }
