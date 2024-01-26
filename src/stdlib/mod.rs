@@ -122,6 +122,7 @@ cfg_if::cfg_if! {
         mod match_datadog_query;
         mod md5;
         mod merge;
+        mod mezmo_add_ts_components;
         mod mezmo_arithmetic_operation;
         mod mezmo_char_at;
         mod mezmo_concat_or_add_fallible;
@@ -136,6 +137,7 @@ cfg_if::cfg_if! {
         mod mezmo_parse_int;
         mod mezmo_relational_comparison;
         mod mezmo_repeat;
+        mod mezmo_set_ts_components;
         mod mezmo_string_at;
         mod mezmo_string_slice;
         mod mezmo_substring;
@@ -307,6 +309,7 @@ cfg_if::cfg_if! {
         pub use match_array::MatchArray;
         pub use match_datadog_query::MatchDatadogQuery;
         pub use merge::Merge;
+        pub use mezmo_add_ts_components::MezmoAddTsComponents;
         pub use mezmo_arithmetic_operation::*;
         pub use mezmo_char_at::MezmoCharAt;
         pub use mezmo_concat_or_add::MezmoConcatOrAdd;
@@ -321,6 +324,7 @@ cfg_if::cfg_if! {
         pub use mezmo_parse_int::MezmoParseInt;
         pub use mezmo_relational_comparison::*;
         pub use mezmo_repeat::MezmoRepeat;
+        pub use mezmo_set_ts_components::MezmoSetTsComponents;
         pub use mezmo_string_at::MezmoStringAt;
         pub use mezmo_string_slice::MezmoStringSlice;
         pub use mezmo_substring::MezmoSubstring;
@@ -500,6 +504,7 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(MatchDatadogQuery),
         Box::new(Md5),
         Box::new(Merge),
+        Box::new(MezmoAddTsComponents),
         Box::new(MezmoCharAt),
         Box::new(MezmoConcatOrAdd),
         Box::new(MezmoConcatOrAddFallible),
@@ -518,6 +523,7 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(MezmoParseFloat),
         Box::new(MezmoParseInt),
         Box::new(MezmoRepeat),
+        Box::new(MezmoSetTsComponents),
         Box::new(MezmoStringAt),
         Box::new(MezmoStringSlice),
         Box::new(MezmoSubstring),
