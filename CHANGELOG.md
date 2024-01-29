@@ -1,3 +1,15 @@
+# [0.13.0](https://github.com/answerbook/vrl/compare/v0.12.0...v0.13.0) (2024-01-29)
+
+
+### Features
+
+* Implement mezmo_add_ts_components and mezmo_set_ts_components functions [3b7d3a0](https://github.com/answerbook/vrl/commit/3b7d3a0e66753602ddb468833865d3bc89ba1eb5) - Kwabena Boadu [LOG-19068](https://logdna.atlassian.net/browse/LOG-19068)
+
+
+### Miscellaneous
+
+* Merge pull request #42 from answerbook/biblicalph/LOG-19068 [c6418e4](https://github.com/answerbook/vrl/commit/c6418e479d3da1cb8a80b5b99eebe881f27fe8d7) - GitHub [LOG-19068](https://logdna.atlassian.net/browse/LOG-19068)
+
 # [0.12.0](https://github.com/answerbook/vrl/compare/v0.11.1...v0.12.0) (2024-01-23)
 
 
