@@ -1,5 +1,7 @@
 use crate::compiler::prelude::*;
 
+const LETTER_NUMBER_DASH: &str = r#"[a-z0-9A-Z\-.]+"#;
+
 static MEZMO_PATTERNS: &[(&str, &str)] = &[
     ("JSON_OBJECT", r#"{.*}"#),
     ("JSON_ARRAY", r#"\[.*\]"#),
@@ -17,7 +19,12 @@ static MEZMO_PATTERNS: &[(&str, &str)] = &[
     ("OPTIONAL_SENTENCE", r#"[\p{L},":;\s\-]*"#),
     ("PSQL_LOG", "%{TIMESTAMP_ISO8601:timestamp} %{DATA} %{SQUARE_BRACKET}%{INT:pid}%{SQUARE_BRACKET} %{EMAILLOCALPART:username}%{NOTSPACE}%{WORD:database} %{GREEDYDATA:message}"),
     ("GOLANG_LOG", "%{DATESTAMP:timestamp} %{LOGLEVEL:level} %{GREEDYDATA:message}"),
-    ("ELASTICSEARCH_LOG", "%{SQUARE_BRACKET}%{TIMESTAMP_ISO8601:timestamp}%{SQUARE_BRACKET}%{SQUARE_BRACKET}%{LOGLEVEL:level}%{SPACE}%{SQUARE_BRACKET}%{SQUARE_BRACKET}%{DATA:source}%{SQUARE_BRACKET} %{GREEDYDATA:message}")
+    ("ELASTICSEARCH_LOG", "%{SQUARE_BRACKET}%{TIMESTAMP_ISO8601:timestamp}%{SQUARE_BRACKET}%{SQUARE_BRACKET}%{LOGLEVEL:level}%{SPACE}%{SQUARE_BRACKET}%{SQUARE_BRACKET}%{DATA:source}%{SQUARE_BRACKET} %{GREEDYDATA:message}"),
+    ("K8S_POD_NAME", LETTER_NUMBER_DASH),
+    ("K8S_NAMESPACE", LETTER_NUMBER_DASH),
+    ("K8S_CONTAINER", LETTER_NUMBER_DASH),
+    ("K8S_CONTAINER_ID", r"[a-z0-9]{64}"),
+    ("K8S_MEZMO_AGENT_FILENAME", "/var/log/containers/%{K8S_POD_NAME:pod}_%{K8S_NAMESPACE:namespace}_%{K8S_CONTAINER:container}-%{K8S_CONTAINER_ID:containerid}\\.log")
 ];
 
 #[cfg(not(target_arch = "wasm32"))]
@@ -441,6 +448,62 @@ mod test {
             tdef: TypeDef::object(Collection::any()).fallible(),
         }
 
+        parsed_kubernetes_pod_name {
+            args: func_args![
+                value: "calico-node-dr4wc",
+                pattern: "%{K8S_POD_NAME:pod}"
+            ],
+            want: Ok(Value::from(btreemap! {
+                "pod" => "calico-node-dr4wc",
+            })),
+            tdef: TypeDef::object(Collection::any()).fallible(),
+        }
 
+        parsed_kubernetes_namespace {
+            args: func_args![
+                value: "kube-system",
+                pattern: "%{K8S_NAMESPACE:namespace}"
+            ],
+            want: Ok(Value::from(btreemap! {
+                "namespace" => "kube-system",
+            })),
+            tdef: TypeDef::object(Collection::any()).fallible(),
+        }
+
+        parsed_kubernetes_container {
+            args: func_args![
+                value: "calico-node",
+                pattern: "%{K8S_CONTAINER:container}"
+            ],
+            want: Ok(Value::from(btreemap! {
+                "container" => "calico-node",
+            })),
+            tdef: TypeDef::object(Collection::any()).fallible(),
+        }
+
+        parsed_kubernetes_containerid {
+            args: func_args![
+                value: "abfd21da18f04db30f848e58e9d5f3c55fdcfb6a12b32e972e04b784b04d915a",
+                pattern: "%{K8S_CONTAINER_ID:containerid}"
+            ],
+            want: Ok(Value::from(btreemap! {
+                "containerid" => "abfd21da18f04db30f848e58e9d5f3c55fdcfb6a12b32e972e04b784b04d915a",
+            })),
+            tdef: TypeDef::object(Collection::any()).fallible(),
+        }
+
+        parsed_kubernetes_mezmo_agent_filename {
+            args: func_args![
+                value: "/var/log/containers/calico-node-dr4wc_kube-system_calico-node-abfd21da18f04db30f848e58e9d5f3c55fdcfb6a12b32e972e04b784b04d915a.log",
+                pattern: "%{K8S_MEZMO_AGENT_FILENAME}"
+            ],
+            want: Ok(Value::from(btreemap! {
+                "pod" => "calico-node-dr4wc",
+                "namespace" => "kube-system",
+                "container" => "calico-node",
+                "containerid" => "abfd21da18f04db30f848e58e9d5f3c55fdcfb6a12b32e972e04b784b04d915a",
+            })),
+            tdef: TypeDef::object(Collection::any()).fallible(),
+        }
     ];
 }
