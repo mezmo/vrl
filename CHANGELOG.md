@@ -1,3 +1,15 @@
+# [0.14.0](https://github.com/mezmo/vrl/compare/v0.13.0...v0.14.0) (2024-02-01)
+
+
+### Features
+
+* **grok**: add kubernetes groks [4680237](https://github.com/mezmo/vrl/commit/46802375fd0c24716181485548756dfc9cc245b8) - dominic-mcallister-logdna [LOG-18911](https://logdna.atlassian.net/browse/LOG-18911)
+
+
+### Miscellaneous
+
+* Merge pull request #48 from mezmo/dominic/LOG-18911 [221aa64](https://github.com/mezmo/vrl/commit/221aa64e44bc91f5474eb5e818cfa1ef1bcde9f7) - GitHub [LOG-18911](https://logdna.atlassian.net/browse/LOG-18911)
+
 # [0.13.0](https://github.com/answerbook/vrl/compare/v0.12.0...v0.13.0) (2024-01-29)
 
 
