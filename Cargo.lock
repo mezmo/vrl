@@ -2882,6 +2882,7 @@ dependencies = [
  "csv",
  "ctr",
  "data-encoding",
+ "digest",
  "dns-lookup",
  "dyn-clone",
  "exitcode",
