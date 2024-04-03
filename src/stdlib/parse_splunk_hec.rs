@@ -19,7 +19,7 @@ fn parse_splunk_hec(value: Value) -> Resolved {
         match json.get("event") {
             Some(event) => {
                 let event = event.into();
-                object.insert("event".to_string(), event);
+                object.insert(KeyString::from("event"), event);
             }
             None => return Err(r#"missing "event" field"#.into()),
         }
@@ -31,13 +31,19 @@ fn parse_splunk_hec(value: Value) -> Resolved {
 
         match json.get("time") {
             Some(JsonValue::Number(time)) => {
-                object.insert("time".to_string(), Value::Timestamp(to_timestamp(time)?));
+                object.insert(
+                    KeyString::from("time"),
+                    Value::Timestamp(to_timestamp(time)?),
+                );
             }
             Some(JsonValue::String(time)) => {
                 let time = time
                     .parse::<serde_json::Number>()
                     .map_err(|e| format!("invalid time format: {e}"))?;
-                object.insert("time".to_string(), Value::Timestamp(to_timestamp(&time)?));
+                object.insert(
+                    KeyString::from("time"),
+                    Value::Timestamp(to_timestamp(&time)?),
+                );
             }
             None => (), // "time" is optional
             _ => return Err(r#""time" is invalid type"#.into()),
@@ -47,7 +53,7 @@ fn parse_splunk_hec(value: Value) -> Resolved {
             if !fields.is_object() {
                 return Err(r#""fields" is not an object"#.into());
             }
-            object.insert("fields".to_string(), fields.into());
+            object.insert(KeyString::from("fields"), fields.into());
         }
 
         values.push(Value::Object(object));
@@ -77,13 +83,13 @@ fn to_timestamp(number: &serde_json::Number) -> ParseResult<DateTime<Utc>> {
 fn insert_string_value(
     json: &JsonValue,
     name: &str,
-    object: &mut BTreeMap<String, Value>,
+    object: &mut BTreeMap<KeyString, Value>,
 ) -> ParseResult<()> {
     if let Some(value) = json.get(name) {
         let value = value
             .as_str()
             .ok_or_else(|| format!(r#""{name}" is not a string"#))?;
-        object.insert(name.to_string(), Value::from(value));
+        object.insert(KeyString::from(name), Value::from(value));
     }
     Ok(())
 }

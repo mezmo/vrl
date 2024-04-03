@@ -85,7 +85,7 @@ impl FunctionExpression for MezmoIsTruthyFn {
 mod tests {
     use super::*;
     use crate::value;
-    use chrono::prelude::*;
+    use chrono::{prelude::*, TimeZone};
 
     test_function![
         is_truthy => MezmoIsTruthy;
