@@ -31,13 +31,19 @@ fn parse_splunk_hec(value: Value) -> Resolved {
 
         match json.get("time") {
             Some(JsonValue::Number(time)) => {
-                object.insert(KeyString::from("time"), Value::Timestamp(to_timestamp(time)?));
+                object.insert(
+                    KeyString::from("time"),
+                    Value::Timestamp(to_timestamp(time)?),
+                );
             }
             Some(JsonValue::String(time)) => {
                 let time = time
                     .parse::<serde_json::Number>()
                     .map_err(|e| format!("invalid time format: {e}"))?;
-                object.insert(KeyString::from("time"), Value::Timestamp(to_timestamp(&time)?));
+                object.insert(
+                    KeyString::from("time"),
+                    Value::Timestamp(to_timestamp(&time)?),
+                );
             }
             None => (), // "time" is optional
             _ => return Err(r#""time" is invalid type"#.into()),
