@@ -8,12 +8,8 @@ use std::{
     convert::{TryFrom, TryInto},
 };
 
-// https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s12.html
-// (converted to non-lookaround version given `regex` does not support lookarounds)
-// See also: https://www.ssa.gov/history/ssn/geocard.html
 static US_SOCIAL_SECURITY_NUMBER: Lazy<regex::Regex> =
     Lazy::new(|| regex::Regex::new(US_SOCIAL_SECURITY_NUMBER_PATTERN).unwrap());
-// Patterns taken from: https://github.com/logdna/logdna-agent-v2/blob/master/docs/REGEX.md
 static EMAIL_ADDRESS: Lazy<regex::Regex> =
     Lazy::new(|| regex::Regex::new(EMAIL_ADDRESS_PATTERN).unwrap());
 static CREDIT_CARD_NUMBER: Lazy<regex::Regex> =
@@ -117,27 +113,7 @@ impl Function for MezmoRedact {
             })
             .collect::<std::result::Result<Vec<FilterWithRedactor>, _>>()?;
 
-        // let redactor = arguments
-        //     .optional_literal("redactor", state)?
-        //     .map(|value| {
-        //         value
-        //             .clone()
-        //             .try_into()
-        //             .map_err(|error| function::Error::InvalidArgument {
-        //                 keyword: "redactor",
-        //                 value,
-        //                 error,
-        //             })
-        //     })
-        //     .transpose()?
-        //     .unwrap_or(Redactor::Full);
-
-        Ok(RedactFn {
-            value,
-            filters,
-            // redactor,
-        }
-        .as_expr())
+        Ok(RedactFn { value, filters }.as_expr())
     }
 }
 
@@ -147,7 +123,6 @@ impl Function for MezmoRedact {
 struct RedactFn {
     value: Box<dyn Expression>,
     filters: Vec<FilterWithRedactor>,
-    // redactor: Redactor,
 }
 
 fn redact(value: Value, processor: &mut FilterProcessor) -> Value {
