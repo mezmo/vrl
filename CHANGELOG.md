@@ -1,3 +1,12 @@
+# [0.16.0](https://github.com/mezmo/vrl/compare/v0.15.0...v0.16.0) (2024-07-08)
+
+
+### Features
+
+* **mezmo_matching_patterns**: Add mezmo_matching_patterns function [7b20ff8](https://github.com/mezmo/vrl/commit/7b20ff8c30a39de423d72596c8ccdc51aca1f193) - kwabena [LOG-20230](https://logdna.atlassian.net/browse/LOG-20230)
+* **redact**: Create mezmo_redact VRL function [d81a7c6](https://github.com/mezmo/vrl/commit/d81a7c6ae1927d4d63f6efc72a5cf4dcf14058a9) - kwabena [LOG-20230](https://logdna.atlassian.net/browse/LOG-20230)
+* **redact**: Fetch upstream changes [67f40b0](https://github.com/mezmo/vrl/commit/67f40b0fd07c1bc63a247a91129e36613420c077) - kwabena
+
 # [0.15.0](https://github.com/mezmo/vrl/compare/v0.14.0...v0.15.0) (2024-04-03)
 
 
