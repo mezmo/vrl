@@ -133,10 +133,13 @@ cfg_if::cfg_if! {
         mod mezmo_is_truthy;
         mod mezmo_last_index_of;
         mod mezmo_length;
+        mod mezmo_matching_patterns;
         mod mezmo_pad_end;
         mod mezmo_pad_start;
         mod mezmo_parse_float;
         mod mezmo_parse_int;
+        mod mezmo_patterns;
+        mod mezmo_redact;
         mod mezmo_relational_comparison;
         mod mezmo_repeat;
         mod mezmo_set_ts_components;
@@ -322,10 +325,12 @@ cfg_if::cfg_if! {
         pub use mezmo_is_truthy::MezmoIsTruthy;
         pub use mezmo_last_index_of::MezmoLastIndexOf;
         pub use mezmo_length::MezmoLength;
+        pub use mezmo_matching_patterns::MatchingPatterns;
         pub use mezmo_pad_end::MezmoPadEnd;
         pub use mezmo_pad_start::MezmoPadStart;
         pub use mezmo_parse_float::MezmoParseFloat;
         pub use mezmo_parse_int::MezmoParseInt;
+        pub use mezmo_redact::MezmoRedact;
         pub use mezmo_relational_comparison::*;
         pub use mezmo_repeat::MezmoRepeat;
         pub use mezmo_set_ts_components::MezmoSetTsComponents;
