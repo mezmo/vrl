@@ -3334,7 +3334,7 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 
 [[package]]
 name = "vrl"
-version = "0.16.0"
+version = "0.16.1"
 dependencies = [
  "aes",
  "ansi_term",
@@ -3418,6 +3418,7 @@ dependencies = [
  "syslog_loose",
  "termcolor",
  "thiserror",
+ "tokio",
  "toml",
  "tracing",
  "tracing-test",
