@@ -339,7 +339,7 @@ cfg_if::cfg_if! {
         pub use mezmo_is_truthy::MezmoIsTruthy;
         pub use mezmo_last_index_of::MezmoLastIndexOf;
         pub use mezmo_length::MezmoLength;
-        pub use mezmo_matching_patterns::MatchingPatterns;
+        pub use mezmo_matching_patterns::MezmoMatchingPatterns;
         pub use mezmo_pad_end::MezmoPadEnd;
         pub use mezmo_pad_start::MezmoPadStart;
         pub use mezmo_parse_float::MezmoParseFloat;
@@ -551,11 +551,13 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(MezmoLength),
         Box::new(MezmoLt),
         Box::new(MezmoLte),
+        Box::new(MezmoMatchingPatterns),
         Box::new(MezmoMultiply),
         Box::new(MezmoPadEnd),
         Box::new(MezmoPadStart),
         Box::new(MezmoParseFloat),
         Box::new(MezmoParseInt),
+        Box::new(MezmoRedact),
         Box::new(MezmoRepeat),
         Box::new(MezmoSetTsComponents),
         Box::new(MezmoStringAt),

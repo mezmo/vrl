@@ -1,3 +1,10 @@
+## [0.17.1](https://github.com/mezmo/vrl/compare/v0.17.0...v0.17.1) (2024-07-10)
+
+
+### Chores
+
+* **mezmo_redact**: Add mezmo_redact and mezmo_matching_patterns to stdlib functions [b8ac294](https://github.com/mezmo/vrl/commit/b8ac294831bb3e418952087a3cd2f43f6aaaea8f) - kwabena [LOG-20230](https://logdna.atlassian.net/browse/LOG-20230)
+
 # [0.17.0](https://github.com/mezmo/vrl/compare/v0.16.0...v0.17.0) (2024-07-10)
 
 
