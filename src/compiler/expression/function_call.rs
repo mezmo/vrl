@@ -520,10 +520,14 @@ impl<'a> Builder<'a> {
             // Check the type definition of the resulting block.This needs to match
             // whatever is configured by the closure input type.
             let expected_kind = input.output.into_kind();
-            if expected_kind.is_superset(block_type_def.kind()).is_err() {
+            let found_kind = block_type_def
+                .kind()
+                .union(block_type_def.returns().clone());
+
+            if expected_kind.is_superset(&found_kind).is_err() {
                 return Err(FunctionCallError::ReturnTypeMismatch {
                     block_span,
-                    found_kind: block_type_def.kind().clone(),
+                    found_kind,
                     expected_kind,
                 });
             }
@@ -643,6 +647,14 @@ impl Expression for FunctionCall {
                 // propagate the error
                 err
             }
+            ExpressionError::Return { span, .. } => ExpressionError::Error {
+                message: "return cannot be used inside closures".to_owned(),
+                labels: vec![Label::primary(
+                    "return cannot be used inside closures",
+                    span,
+                )],
+                notes: Vec::new(),
+            },
             ExpressionError::Error {
                 message,
                 mut labels,
@@ -1030,7 +1042,7 @@ impl DiagnosticMessage for FunctionCallError {
                     if kind.is_any() {
                         kind.to_string()
                     } else if kind.is_exact() {
-                        format!(r#"the exact type {kind}"#)
+                        format!("the exact type {kind}")
                     } else {
                         format!("one of {kind}")
                     }
