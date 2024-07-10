@@ -25,6 +25,7 @@ criterion_group!(
               decode_base16,
               decode_base64,
               decode_percent,
+              decode_punycode,
               decrypt,
               // TODO: Cannot pass a Path to bench_function
               //del,
@@ -35,6 +36,7 @@ criterion_group!(
               encode_json,
               encode_logfmt,
               encode_percent,
+              encode_punycode,
               encrypt,
               ends_with,
               // TODO: Cannot pass a Path to bench_function
@@ -49,6 +51,7 @@ criterion_group!(
               get,
               get_env_var,
               get_hostname,
+              get_timezone_name,
               includes,
               int,
               ip_aton,
@@ -94,6 +97,7 @@ criterion_group!(
               parse_common_log,
               parse_csv,
               parse_duration,
+              parse_etld,
               parse_glog,
               parse_grok,
               parse_groks,
@@ -300,6 +304,20 @@ bench_function! {
 }
 
 bench_function! {
+    decode_punycode => vrl::stdlib::DecodePunycode;
+
+    encoded {
+        args: func_args![value: "www.xn--caf-dma.com"],
+        want: Ok("www.café.com"),
+    }
+
+    non_encoded {
+        args: func_args![value: "www.cafe.com"],
+        want: Ok("www.cafe.com"),
+    }
+}
+
+bench_function! {
     decode_mime_q => vrl::stdlib::DecodeMimeQ;
 
     base_64 {
@@ -442,6 +460,20 @@ bench_function! {
 }
 
 bench_function! {
+    encode_punycode => vrl::stdlib::EncodePunycode;
+
+    idn {
+        args: func_args![value: "www.CAFé.com"],
+        want: Ok("www.xn--caf-dma.com"),
+    }
+
+    ascii {
+        args: func_args![value: "www.cafe.com"],
+        want: Ok("www.cafe.com"),
+    }
+}
+
+bench_function! {
     ends_with => vrl::stdlib::EndsWith;
 
     case_sensitive {
@@ -575,6 +607,15 @@ bench_function! {
     get {
         args: func_args![],
         want: Ok(hostname::get().unwrap().to_string_lossy()),
+    }
+}
+
+bench_function! {
+    get_timezone_name => vrl::stdlib::GetTimezoneName;
+
+    get {
+        args: func_args![],
+        want: Ok(vrl::stdlib::get_name_for_timezone(&vrl::compiler::TimeZone::Named(chrono_tz::Tz::UTC))),
     }
 }
 
@@ -1557,6 +1598,19 @@ bench_function! {
     literal {
         args: func_args![value: "1005ms", unit: "s"],
         want: Ok(1.005),
+    }
+}
+
+bench_function! {
+    parse_etld => vrl::stdlib::ParseEtld;
+
+    literal {
+        args: func_args![value: "vector.dev"],
+        want: Ok(Value::from(btreemap! {
+                    "etld" => "dev",
+                    "etld_plus" => "dev",
+                    "known_suffix" => true
+        }))
     }
 }
 

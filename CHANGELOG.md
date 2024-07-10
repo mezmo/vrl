@@ -544,7 +544,46 @@
 
 # Changelog
 
-## unreleased
+ This project uses [*towncrier*](https://towncrier.readthedocs.io/) for changelog generation.
+
+<!-- changelog start -->
+
+## [0.11.0 (2024-02-07)]
+
+
+### New Features
+
+- Added `parse_etld` function for extracting eTLD and eTLD+1 (https://github.com/vectordotdev/vrl/pull/669)
+- Added `encode_punycode` and `decode_punycode` functions (https://github.com/vectordotdev/vrl/pull/672)
+
+### Enhancements
+
+- Introduced a `redactor` option in `redact` function to enable the substitution of redacted content with either a custom string or a hash representation. (https://github.com/vectordotdev/vrl/pull/633)
+- Add VRL function `get_timezone_name` to return the configured/resolved IANA timezone name.
+
+  authors: klondikedragon (https://github.com/vectordotdev/vrl/pull/671)
+
+### Fixes
+
+- Fixed a bug in exporting paths containing more than one "coalesce" segment. (https://github.com/vectordotdev/vrl/pull/679)
+
+
+## [0.10.0 (2024-01-24)]
+
+
+### New Features
+
+- Introduced an unused expression checker. It's designed to detect and report unused expressions,
+  helping users to clean up and optimize their VRL scripts. Note that this checker will not catch everything, 
+  but it does aim to eliminate false positives. For example, shadowed variables are not reported as unused.
+  (https://github.com/vectordotdev/vrl/pull/622)
+- Add a `replace_with` function that is similar to `replace` but takes a closure instead of a
+  replacement string. (https://github.com/vectordotdev/vrl/pull/628)
+
+### Enhancements
+
+- Added the `alias_sources` parameter for `parse_groks` to read sources from files. (https://github.com/vectordotdev/vrl/pull/194)
+
 
 ## `0.9.1` (2023-12-21)
 
