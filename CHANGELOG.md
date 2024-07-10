@@ -1,3 +1,85 @@
+# [0.17.0](https://github.com/mezmo/vrl/compare/v0.16.0...v0.17.0) (2024-07-10)
+
+
+### Bug Fixes
+
+* publish script tag name (#656) [469ce2a](https://github.com/mezmo/vrl/commit/469ce2a3246c1c8fbc2a4bd3cfce78cff64273bc) - GitHub
+* typos and missing PR link (#655) [b376d2f](https://github.com/mezmo/vrl/commit/b376d2f258bf24dedd4d299dbce62ebe61191cef) - GitHub
+
+
+### Chores
+
+* **ci**: bump actions/checkout from 3 to 4 (#626) [db872c5](https://github.com/mezmo/vrl/commit/db872c555a72732327dd07e41e1920445b20cd11) - GitHub
+* **ci**: Run changelog check on merge queues (#653) [877d783](https://github.com/mezmo/vrl/commit/877d7831a4c1796e11c9b2f0ff78b8f01d5bf60e) - GitHub
+* **deps**: bump afl from 0.15.1 to 0.15.2 (#645) [65243c0](https://github.com/mezmo/vrl/commit/65243c0a0f04cf69cfe9ae95441174406c80aba5) - GitHub
+* **deps**: bump afl from 0.15.2 to 0.15.3 (#674) [29bb9db](https://github.com/mezmo/vrl/commit/29bb9db1ad8e6baae09644a248f4daaa2d68aa44) - GitHub
+* **deps**: bump anyhow from 1.0.76 to 1.0.79 (#615) [cd2869c](https://github.com/mezmo/vrl/commit/cd2869cf1f40efebd042f254b9a2dfe4ee19a58f) - GitHub
+* **deps**: bump base64 from 0.21.5 to 0.21.6 (#631) [8ca5624](https://github.com/mezmo/vrl/commit/8ca5624e8ea6268cd7f0edd3f87f3451e58dff5a) - GitHub
+* **deps**: bump base64 from 0.21.6 to 0.21.7 (#638) [d4e654f](https://github.com/mezmo/vrl/commit/d4e654f82c089dc00a6916bb954ae3eec01524dc) - GitHub
+* **deps**: bump chrono from 0.4.31 to 0.4.32 (#650) [6617aa0](https://github.com/mezmo/vrl/commit/6617aa0ffd6981a2946830065384d154a7574455) - GitHub
+* **deps**: bump chrono from 0.4.32 to 0.4.33 (#658) [9496ec2](https://github.com/mezmo/vrl/commit/9496ec2113597a15adb9184a1d5e956ac1d8f05a) - GitHub
+* **deps**: bump chrono-tz from 0.8.4 to 0.8.5 (#611) [6a13491](https://github.com/mezmo/vrl/commit/6a13491eb356b0851434f4bfb873664f56cf9352) - GitHub
+* **deps**: bump clap from 4.4.11 to 4.4.12 (#609) [fc6ba18](https://github.com/mezmo/vrl/commit/fc6ba18d7fe234193317cd24d7042dd8b508db2a) - GitHub
+* **deps**: bump clap from 4.4.12 to 4.4.13 (#624) [0b0b63c](https://github.com/mezmo/vrl/commit/0b0b63c73ac6bed4448cd324da8482a2f846d624) - GitHub
+* **deps**: bump clap from 4.4.13 to 4.4.14 (#630) [8cb2af4](https://github.com/mezmo/vrl/commit/8cb2af4799cc906095e8919dcfb1ce1dfa269e4b) - GitHub
+* **deps**: bump clap from 4.4.14 to 4.4.16 (#639) [1ead535](https://github.com/mezmo/vrl/commit/1ead535d721206b9fd7c57ae8ae6e4f3c11421b9) - GitHub
+* **deps**: bump clap from 4.4.16 to 4.4.17 (#642) [09405f5](https://github.com/mezmo/vrl/commit/09405f5a401e5a51d79a8b319d1658b8be64cc18) - GitHub
+* **deps**: bump clap from 4.4.17 to 4.4.18 (#644) [624be63](https://github.com/mezmo/vrl/commit/624be638e61eb4e97391e71e2e4123fb96997a77) - GitHub
+* **deps**: bump indexmap from 2.1.0 to 2.2.1 (#663) [47a7195](https://github.com/mezmo/vrl/commit/47a7195e2245e8d6e6008448ea98d1682a9db333) - GitHub
+* **deps**: bump indexmap from 2.2.1 to 2.2.2 (#667) [e67f80c](https://github.com/mezmo/vrl/commit/e67f80cb31d250421e5cd8b9490539aefc57e0be) - GitHub
+* **deps**: bump itertools from 0.12.0 to 0.12.1 (#664) [48feb00](https://github.com/mezmo/vrl/commit/48feb00824c362479b385f9a28c79714ce8544f6) - GitHub
+* **deps**: bump mlua from 0.9.2 to 0.9.4 (#637) [2b39353](https://github.com/mezmo/vrl/commit/2b39353b3236e0aac26314ad47153238c52aa2ff) - GitHub
+* **deps**: bump mlua from 0.9.4 to 0.9.5 (#657) [37b7ea5](https://github.com/mezmo/vrl/commit/37b7ea51e577de7974e7764d8d99a7c036698824) - GitHub
+* **deps**: bump pest from 2.7.5 to 2.7.6 (#625) [b8827d9](https://github.com/mezmo/vrl/commit/b8827d90c5380b80025be5d261b29b98bc892fd0) - GitHub
+* **deps**: bump pest from 2.7.6 to 2.7.7 (#675) [7dbc3c4](https://github.com/mezmo/vrl/commit/7dbc3c4f90216d25e875bbf3ab7476cc45ad0c1d) - GitHub
+* **deps**: bump pest_derive from 2.7.5 to 2.7.6 (#627) [a9ac9e1](https://github.com/mezmo/vrl/commit/a9ac9e1ab254c841cdbfd02719ce93257be143d7) - GitHub
+* **deps**: bump pest_derive from 2.7.6 to 2.7.7 (#683) [d3f7e06](https://github.com/mezmo/vrl/commit/d3f7e06b48cf4a44d184a4055856abca357b2d77) - GitHub
+* **deps**: bump psl from 2.1.18 to 2.1.23 (#682) [40cbdee](https://github.com/mezmo/vrl/commit/40cbdeee6d8916c4fdd199d8e7593cab7716d37f) - GitHub
+* **deps**: bump regex from 1.10.2 to 1.10.3 (#647) [41a9b11](https://github.com/mezmo/vrl/commit/41a9b11d33cb868bced5dd7942a2b8ae9ba64a61) - GitHub
+* **deps**: bump rust_decimal from 1.33.1 to 1.34.0 (#668) [aa679fa](https://github.com/mezmo/vrl/commit/aa679fa4579ce6e18fbb292e028848576b821a1c) - GitHub
+* **deps**: bump rust_decimal from 1.34.0 to 1.34.2 (#670) [a3a6a71](https://github.com/mezmo/vrl/commit/a3a6a71f3b8fd904199074a0aca0cd36f4a3059e) - GitHub
+* **deps**: bump serde from 1.0.193 to 1.0.194 (#621) [4909b9c](https://github.com/mezmo/vrl/commit/4909b9ce6c86edae62bea37e8cf180ad885d2541) - GitHub
+* **deps**: bump serde from 1.0.194 to 1.0.195 (#629) [8f0ac27](https://github.com/mezmo/vrl/commit/8f0ac27729b4761cf6267c233d86d831b59e5819) - GitHub
+* **deps**: bump serde from 1.0.195 to 1.0.196 (#661) [3e9bd19](https://github.com/mezmo/vrl/commit/3e9bd191e1efbc1e51ca976798f5533ab0b398fd) - GitHub
+* **deps**: bump serde_json from 1.0.108 to 1.0.110 (#620) [abf1350](https://github.com/mezmo/vrl/commit/abf135018eddd7f077258608c3be1f2e5f7fc807) - GitHub
+* **deps**: bump serde_json from 1.0.110 to 1.0.111 (#623) [cb90a9a](https://github.com/mezmo/vrl/commit/cb90a9ae828cfc6c1be57e511d709c4c2ef007e6) - GitHub
+* **deps**: bump serde_json from 1.0.111 to 1.0.113 (#662) [4b93cb3](https://github.com/mezmo/vrl/commit/4b93cb32e0e82f3557f0f0295ba77c19adee3f6d) - GitHub
+* **deps**: bump snafu from 0.7.5 to 0.8.0 (#612) [ffe413e](https://github.com/mezmo/vrl/commit/ffe413e5d9a032258dca359886a2edc3edbc40cd) - GitHub
+* **deps**: bump termcolor from 1.4.0 to 1.4.1 (#635) [0265730](https://github.com/mezmo/vrl/commit/02657307961a4d8b91429cea806c7f294f978410) - GitHub
+* **deps**: bump thiserror from 1.0.51 to 1.0.56 (#619) [228ed94](https://github.com/mezmo/vrl/commit/228ed94373353b7198377eb81fb61f9576ccba1c) - GitHub
+* **deps**: bump toml from 0.8.8 to 0.8.10 (#673) [df4f6be](https://github.com/mezmo/vrl/commit/df4f6be2b4704509ca04f7fc62476475c85fff2e) - GitHub
+* **deps**: bump uuid from 1.6.1 to 1.7.0 (#646) [966c92e](https://github.com/mezmo/vrl/commit/966c92e078a885d9a9ce6fe07fed2249af785a5d) - GitHub
+* **dev**: Add benchmark for parse_etld (#677) [a4169c6](https://github.com/mezmo/vrl/commit/a4169c6e320cb37cf0c05526bd3827b043f76e5c) - GitHub
+* **dev**: Add support for `proptest::Arbitrary` to path types (#665) [d54105b](https://github.com/mezmo/vrl/commit/d54105b5aafe93f65f3d33063549a273d78d687d) - GitHub
+* **developing**: Convert `stdlib` feature to newline delimited list (#676) [cfb486f](https://github.com/mezmo/vrl/commit/cfb486f4702146600ebc28090efd8120cc8e33af) - GitHub
+* **releasing**: automated changelog generation (#617) [f0354ba](https://github.com/mezmo/vrl/commit/f0354ba5eb638c556ba5f72ab45140937c1e346e) - GitHub
+* **releasing**: Prepare 0.11.0 release (#685) [25d0b2c](https://github.com/mezmo/vrl/commit/25d0b2c2976068b492effb2fce58914d179e2a66) - GitHub
+* **tests**: fix 2024 year (#618) [27cbe65](https://github.com/mezmo/vrl/commit/27cbe65d7d08271c25fb2d109a45707b130cebc7) - GitHub
+* update publish script to check if there are fragments (#652) [216d355](https://github.com/mezmo/vrl/commit/216d3552b4ef7989e7e95f768048ced027b4f4f1) - GitHub
+
+
+### Features
+
+* **diagnostics**: unused expression result detector (#622) [b30a594](https://github.com/mezmo/vrl/commit/b30a59414cb805c281780cc07914b4fc92d14f4f) - GitHub
+* **stdlib**: add `parse_etld` function (#669) [caf8c79](https://github.com/mezmo/vrl/commit/caf8c79fc1de354d36bac3b0aabee0263cac820e) - GitHub
+* **stdlib**: Add get_vector_timezone function (#671) [cc62e0c](https://github.com/mezmo/vrl/commit/cc62e0cd13e31fc804f7c820db7d69982b053e01) - GitHub
+* **stdlib**: add punycode encoding functions (#672) [114bb3c](https://github.com/mezmo/vrl/commit/114bb3c21e5153b3e78dbdebe59d0453c24e2371) - GitHub
+* **stdlib**: Add replace_with function (#636) [309725b](https://github.com/mezmo/vrl/commit/309725b8bc367e7b601ff4e0cd731e33b3cc2ef9) - GitHub
+
+
+### Miscellaneous
+
+* Merge pull request #62 from mezmo/c-nixon/upstream-0.11 [b349fa1](https://github.com/mezmo/vrl/commit/b349fa12e7937e37e369897041919ea94677b928) - GitHub
+* Merge commit '25d0b2c' into c-nixon/upstream-0.11 [96c4472](https://github.com/mezmo/vrl/commit/96c44725e1f912c7e6804814fc692e5cbd6d0100) - Chris Nixon
+* Merge commit 'b376d2f' into c-nixon/upstream-0.10 [a913650](https://github.com/mezmo/vrl/commit/a9136508565b2e4ed3230f908249c7bb0576370a) - Chris Nixon
+* Add missing VRL tests for `parse_etld` (#684) [920ff59](https://github.com/mezmo/vrl/commit/920ff5905e37e148c12449ad84a17b65e3c43956) - GitHub
+* Optimize path export functions (#681) [3c32569](https://github.com/mezmo/vrl/commit/3c325696beef701641a34dc31d0562f84d8f4a2a) - GitHub
+* Run proptests on paths (#680) [5e956d9](https://github.com/mezmo/vrl/commit/5e956d9353d8c272c72016d6a38bd26f091be879) - GitHub
+* Fix two bugs with exporting paths (#679) [4624add](https://github.com/mezmo/vrl/commit/4624add004eb3f001eeee58020ba06fd8b16bd79) - GitHub
+* ran ./scripts/generate_release_changelog.sh (#654) [6dbc1a7](https://github.com/mezmo/vrl/commit/6dbc1a7fc8dc0bb4412c81602522842825e96f95) - GitHub
+* read grok aliases from file (#194) [a1279c8](https://github.com/mezmo/vrl/commit/a1279c819612611b94f23482a3a722a3c7ec4b2c) - GitHub
+* **redact**: Add redactor option (#640) [47c06a5](https://github.com/mezmo/vrl/commit/47c06a5d58aabfa0f2d0d973bd35ea8660903843) - GitHub
+
 # [0.16.0](https://github.com/mezmo/vrl/compare/v0.15.0...v0.16.0) (2024-07-08)
 
 
