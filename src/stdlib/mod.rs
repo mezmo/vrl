@@ -53,6 +53,7 @@ cfg_if::cfg_if! {
         mod decode_gzip;
         mod decode_mime_q;
         mod decode_percent;
+        mod decode_punycode;
         mod decode_snappy;
         mod decode_zlib;
         mod decode_zstd;
@@ -66,6 +67,7 @@ cfg_if::cfg_if! {
         mod encode_key_value;
         mod encode_logfmt;
         mod encode_percent;
+        mod encode_punycode;
         mod encode_snappy;
         mod encode_zlib;
         mod encode_zstd;
@@ -85,6 +87,7 @@ cfg_if::cfg_if! {
         mod get;
         mod get_env_var;
         mod get_hostname;
+        mod get_timezone_name;
         mod hmac;
         mod includes;
         mod integer;
@@ -164,6 +167,7 @@ cfg_if::cfg_if! {
         mod parse_common_log;
         mod parse_csv;
         mod parse_duration;
+        mod parse_etld;
         mod parse_float;
         mod parse_glog;
         mod parse_grok;
@@ -249,6 +253,7 @@ cfg_if::cfg_if! {
         pub use decode_gzip::DecodeGzip;
         pub use decode_mime_q::DecodeMimeQ;
         pub use decode_percent::DecodePercent;
+        pub use decode_punycode::DecodePunycode;
         pub use decode_snappy::DecodeSnappy;
         pub use decode_zlib::DecodeZlib;
         pub use decode_zstd::DecodeZstd;
@@ -262,6 +267,7 @@ cfg_if::cfg_if! {
         pub use encode_key_value::EncodeKeyValue;
         pub use encode_logfmt::EncodeLogfmt;
         pub use encode_percent::EncodePercent;
+        pub use encode_punycode::EncodePunycode;
         pub use encode_snappy::EncodeSnappy;
         pub use encode_zlib::EncodeZlib;
         pub use encode_zstd::EncodeZstd;
@@ -282,6 +288,8 @@ cfg_if::cfg_if! {
         pub use get::Get;
         pub use get_env_var::GetEnvVar;
         pub use get_hostname::GetHostname;
+        pub use get_timezone_name::GetTimezoneName;
+        pub use get_timezone_name::get_name_for_timezone;
         pub use includes::Includes;
         pub use integer::Integer;
         pub use ip_aton::IpAton;
@@ -357,6 +365,7 @@ cfg_if::cfg_if! {
         pub use parse_csv::ParseCsv;
         pub use parse_duration::ParseDuration;
         pub use parse_float::ParseFloat;
+        pub use parse_etld::ParseEtld;
         pub use parse_glog::ParseGlog;
         pub use parse_grok::ParseGrok;
         pub use parse_groks::ParseGroks;
@@ -446,6 +455,7 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(DecodeBase64),
         Box::new(DecodeGzip),
         Box::new(DecodePercent),
+        Box::new(DecodePunycode),
         Box::new(DecodeMimeQ),
         Box::new(DecodeSnappy),
         Box::new(DecodeZlib),
@@ -460,6 +470,7 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(EncodeKeyValue),
         Box::new(EncodeLogfmt),
         Box::new(EncodePercent),
+        Box::new(EncodePunycode),
         Box::new(EncodeSnappy),
         Box::new(EncodeZlib),
         Box::new(EncodeZstd),
@@ -479,6 +490,7 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(Get),
         Box::new(GetEnvVar),
         Box::new(GetHostname),
+        Box::new(GetTimezoneName),
         Box::new(Hmac),
         Box::new(Includes),
         Box::new(Integer),
@@ -560,6 +572,7 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(ParseCsv),
         Box::new(ParseDuration),
         Box::new(ParseFloat),
+        Box::new(ParseEtld),
         Box::new(ParseGlog),
         Box::new(ParseGrok),
         Box::new(ParseGroks),
