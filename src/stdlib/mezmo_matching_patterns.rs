@@ -45,9 +45,9 @@ fn process_collection(values: impl Iterator<Item = Value>, pattern: &RegexSet) -
 }
 
 #[derive(Clone, Copy, Debug)]
-pub struct MatchingPatterns;
+pub struct MezmoMatchingPatterns;
 
-impl Function for MatchingPatterns {
+impl Function for MezmoMatchingPatterns {
     fn identifier(&self) -> &'static str {
         "mezmo_matching_patterns"
     }
@@ -169,7 +169,7 @@ mod tests {
     use regex::Regex;
 
     test_function![
-        matching_patterns => MatchingPatterns;
+        matching_patterns => MezmoMatchingPatterns;
 
         string_value {
             args: func_args![value: "foobar",
