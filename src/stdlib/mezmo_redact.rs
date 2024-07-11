@@ -2,6 +2,7 @@ use crate::compiler::prelude::*;
 use crate::stdlib::mezmo_patterns::*;
 use base64::engine::Engine;
 use once_cell::sync::Lazy;
+use std::cmp::Ordering;
 use std::collections::{BTreeMap, BTreeSet};
 use std::{
     borrow::Cow,
@@ -89,7 +90,7 @@ impl Function for MezmoRedact {
     ) -> Compiled {
         let value = arguments.required("value");
 
-        let filters = arguments
+        let mut filters = arguments
             .required_array("filters")?
             .into_iter()
             .map(|expr| {
@@ -113,6 +114,13 @@ impl Function for MezmoRedact {
             })
             .collect::<std::result::Result<Vec<FilterWithRedactor>, _>>()?;
 
+        // The phone number pattern may match parts of credit cards (no delimiters)
+        // To reduce the blast radius, move the phone filter to the last item
+        filters.sort_by(|item1, item2| match (&item1.filter, &item2.filter) {
+            (&Filter::PhoneNumber, _) => Ordering::Greater,
+            (_, &Filter::PhoneNumber) => Ordering::Less,
+            _ => Ordering::Equal,
+        });
         Ok(RedactFn { value, filters }.as_expr())
     }
 }
@@ -209,7 +217,6 @@ impl<'a> FilterProcessor<'a> {
         )
     }
 }
-
 #[derive(Clone, Debug)]
 struct FilterWithRedactor {
     filter: Filter,
@@ -569,9 +576,9 @@ mod test {
                 "matches": [0]
             })),
             tdef: TypeDef::bytes().infallible(),
-       }
+        }
 
-       patterns {
+        patterns {
             args: func_args![
                 value: "hello 123456 world",
                 filters: vec![
@@ -586,9 +593,9 @@ mod test {
                 "matches": [0]
             })),
             tdef: TypeDef::bytes().infallible(),
-       }
+        }
 
-       us_social_security_number {
+        us_social_security_number {
             args: func_args![
                 value: "hello 123-12-1234 world",
                 filters: vec!["us_social_security_number"],
@@ -598,18 +605,18 @@ mod test {
                 "matches": [0]
             })),
             tdef: TypeDef::bytes().infallible(),
-       }
+        }
 
-       invalid_filter {
+        invalid_filter {
             args: func_args![
                 value: "hello 123456 world",
                 filters: vec!["not a filter"],
             ],
             want: Err("invalid argument"),
             tdef: TypeDef::bytes().infallible(),
-       }
+        }
 
-       missing_patterns {
+        missing_patterns {
             args: func_args![
                 value: "hello 123456 world",
                 filters: vec![
@@ -620,120 +627,120 @@ mod test {
             ],
             want: Err("invalid argument"),
             tdef: TypeDef::bytes().infallible(),
-       }
+        }
 
-       text_redactor {
-        args: func_args![
-            value: "my id is 123456",
-            filters: vec![btreemap!{
-                "type" => "pattern",
-                "patterns" => vec![Regex::new(r"\d+").unwrap()],
-                "redactor" => btreemap!{"type" => "text", "replacement" => "***"}
-            }],
-        ],
-        want: Ok(value!({
-            "data": "my id is ***",
-            "matches": [0]
-        })),
-        tdef: TypeDef::bytes().infallible(),
-    }
+        text_redactor {
+            args: func_args![
+                value: "my id is 123456",
+                filters: vec![btreemap!{
+                    "type" => "pattern",
+                    "patterns" => vec![Regex::new(r"\d+").unwrap()],
+                    "redactor" => btreemap!{"type" => "text", "replacement" => "***"}
+                }],
+            ],
+            want: Ok(value!({
+                "data": "my id is ***",
+                "matches": [0]
+            })),
+            tdef: TypeDef::bytes().infallible(),
+        }
 
-    sha2 {
-        args: func_args![
-            value: "my id is 123456",
-            filters: vec![btreemap!{
-                "type" => "pattern",
-                "patterns" => vec![Regex::new(r"\d+").unwrap()],
-                "redactor" => "sha2"
-            }],
-        ],
-        want: Ok(value!({
-            "data": "my id is GEtTedW1p6tC094dDKH+3B8P+xSnZz69AmpjaXRd63I=",
-            "matches": [0]
-        })),
-        tdef: TypeDef::bytes().infallible(),
-    }
+        sha2 {
+            args: func_args![
+                value: "my id is 123456",
+                filters: vec![btreemap!{
+                    "type" => "pattern",
+                    "patterns" => vec![Regex::new(r"\d+").unwrap()],
+                    "redactor" => "sha2"
+                }],
+            ],
+            want: Ok(value!({
+                "data": "my id is GEtTedW1p6tC094dDKH+3B8P+xSnZz69AmpjaXRd63I=",
+                "matches": [0]
+            })),
+            tdef: TypeDef::bytes().infallible(),
+        }
 
-    sha3 {
-        args: func_args![
-            value: "my id is 123456",
-            filters: vec![btreemap!{
-                "type" => "pattern",
-                "patterns" => vec![Regex::new(r"\d+").unwrap()],
-                "redactor" => "sha3"
-            }],
-        ],
-        want: Ok(value!({
-            "data": "my id is ZNCdmTDI7PeeUTFnpYjLdUObdizo+bIupZdl8yqnTKGdLx6X3JIqPUlUWUoFBikX+yTR+OcvLtAqWO11NPlNJw==",
-            "matches": [0]
-        })),
-        tdef: TypeDef::bytes().infallible(),
-    }
+        sha3 {
+            args: func_args![
+                value: "my id is 123456",
+                filters: vec![btreemap!{
+                    "type" => "pattern",
+                    "patterns" => vec![Regex::new(r"\d+").unwrap()],
+                    "redactor" => "sha3"
+                }],
+            ],
+            want: Ok(value!({
+                "data": "my id is ZNCdmTDI7PeeUTFnpYjLdUObdizo+bIupZdl8yqnTKGdLx6X3JIqPUlUWUoFBikX+yTR+OcvLtAqWO11NPlNJw==",
+                "matches": [0]
+            })),
+            tdef: TypeDef::bytes().infallible(),
+        }
 
-    sha256_hex {
-        args: func_args![
-            value: "my id is 123456",
-            filters: vec![btreemap!{
-                "type" => "pattern",
-                "patterns" => vec![Regex::new(r"\d+").unwrap()],
-                "redactor" => btreemap!{"type" => "sha2", "variant" => "SHA-256", "encoding" =>
-                "base16"}
-            }],
-        ],
-        want: Ok(value!({
-            "data": "my id is 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
-            "matches": [0]
-        })),
-        tdef: TypeDef::bytes().infallible(),
-    }
+        sha256_hex {
+            args: func_args![
+                value: "my id is 123456",
+                filters: vec![btreemap!{
+                    "type" => "pattern",
+                    "patterns" => vec![Regex::new(r"\d+").unwrap()],
+                    "redactor" => btreemap!{"type" => "sha2", "variant" => "SHA-256", "encoding" =>
+                    "base16"}
+                }],
+            ],
+            want: Ok(value!({
+                "data": "my id is 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+                "matches": [0]
+            })),
+            tdef: TypeDef::bytes().infallible(),
+        }
 
-    invalid_redactor {
-         args: func_args![
-             value: "hello 123456 world",
-             filters: vec![btreemap!{
+        invalid_redactor {
+            args: func_args![
+                value: "hello 123456 world",
+                filters: vec![btreemap!{
                 "type" => "us_social_security_number",
                 "redactor" => "not a redactor"
-             }],
-         ],
-         want: Err("invalid argument"),
-         tdef: TypeDef::bytes().infallible(),
-    }
+                }],
+            ],
+            want: Err("invalid argument"),
+            tdef: TypeDef::bytes().infallible(),
+        }
 
-    invalid_redactor_obj {
-         args: func_args![
-             value: "hello 123456 world",
-             filters: vec![btreemap!{
-                "type" => "us_social_security_number",
-                "redactor" => btreemap!{"type" => "wrongtype"},
-             }],
-         ],
-         want: Err("invalid argument"),
-         tdef: TypeDef::bytes().infallible(),
-    }
+        invalid_redactor_obj {
+            args: func_args![
+                value: "hello 123456 world",
+                filters: vec![btreemap!{
+                    "type" => "us_social_security_number",
+                    "redactor" => btreemap!{"type" => "wrongtype"},
+                }],
+            ],
+            want: Err("invalid argument"),
+            tdef: TypeDef::bytes().infallible(),
+        }
 
-    invalid_redactor_no_type {
-         args: func_args![
-             value: "hello 123456 world",
-             filters: vec![btreemap!{
-                "type" => "us_social_security_number",
-                "redactor" => btreemap!{"key" => "value"},
-             }],
-         ],
-         want: Err("invalid argument"),
-         tdef: TypeDef::bytes().infallible(),
-    }
+        invalid_redactor_no_type {
+            args: func_args![
+                value: "hello 123456 world",
+                filters: vec![btreemap!{
+                    "type" => "us_social_security_number",
+                    "redactor" => btreemap!{"key" => "value"},
+                }],
+            ],
+            want: Err("invalid argument"),
+            tdef: TypeDef::bytes().infallible(),
+        }
 
-    invalid_hash_variant {
-         args: func_args![
-             value: "hello 123456 world",
-             filters: vec![btreemap!{
-                "type" => "us_social_security_number",
-                "redactor" => btreemap!{"type" => "sha2", "variant" => "MD5"}
-             }],
-         ],
-         want: Err("invalid argument"),
-         tdef: TypeDef::bytes().infallible(),
-    }
+        invalid_hash_variant {
+            args: func_args![
+                value: "hello 123456 world",
+                filters: vec![btreemap!{
+                    "type" => "us_social_security_number",
+                    "redactor" => btreemap!{"type" => "sha2", "variant" => "MD5"}
+                }],
+            ],
+            want: Err("invalid argument"),
+            tdef: TypeDef::bytes().infallible(),
+        }
 
         us_social_security_number_additional {
             args: func_args![
@@ -757,7 +764,7 @@ mod test {
                 "matches" => value!([0])
             })),
             tdef: TypeDef::bytes().infallible(),
-       }
+        }
 
         email_address {
             args: func_args![
@@ -822,14 +829,14 @@ mod test {
         credit_card_visa {
             args: func_args![
                 value: vec![
-                    "4012102240330 and 4111000222333444 are valid",
+                    "4012102240330, 4001-2224-3388 1000 and 4111000222333444 are valid",
                     "400011122233 is not valid"
                 ].join("\n"),
                 filters: vec!["credit_card"],
             ],
             want: Ok(Value::from(btreemap!{
                 "data" => vec![
-                    "[REDACTED] and [REDACTED] are valid",
+                    "[REDACTED], [REDACTED] and [REDACTED] are valid",
                     "400011122233 is not valid"
                 ].join("\n"),
                 "matches" => value!([0])
@@ -840,8 +847,8 @@ mod test {
         credit_card_mastercard {
             args: func_args![
                 value: vec![
-                    "Older range like 5100112233445566 and 5222334455667788 will match",
-                    "Newer range: 2288776655443322 and 2700112233445566 should also match",
+                    "Older range like 5100112233445566 and 5222 3344 5566 7788 will match",
+                    "Newer range: 2288 7766-5544 3322 and 2700-1122 3344-5566 should also match",
                     "22887766554433 and 52223344556677 are invalid"
                 ].join("\n"),
                 filters: vec!["credit_card"],
@@ -849,8 +856,8 @@ mod test {
             want: Ok(Value::from(btreemap!{
                 "data" => vec![
                     "Older range like [REDACTED] and [REDACTED] will match",
-                        "Newer range: [REDACTED] and [REDACTED] should also match",
-                        "22887766554433 and 52223344556677 are invalid"
+                    "Newer range: [REDACTED] and [REDACTED] should also match",
+                    "22887766554433 and 52223344556677 are invalid"
                 ].join("\n"),
                 "matches" => value!([0])
             })),
@@ -861,16 +868,18 @@ mod test {
             args: func_args![
                 value: vec![
                     "start with 6011 or 65 and have a total of 16 digits",
-                    "6011000111222333 and 6511122233344477 are valid",
-                    "60110001112223 and 6511122233344 are invalid"
+                    "6011000111222333 and 6511 1222 3334 4477 are valid",
+                    "6440-2210-1110-0000 is also valid",
+                    "6011 0001112 223 and 651-11222 33344 are invalid"
                 ].join("\n"),
                 filters: vec!["credit_card"],
             ],
             want: Ok(Value::from(btreemap!{
                 "data" => vec![
                     "start with 6011 or 65 and have a total of 16 digits",
-                        "[REDACTED] and [REDACTED] are valid",
-                        "60110001112223 and 6511122233344 are invalid"
+                    "[REDACTED] and [REDACTED] are valid",
+                    "[REDACTED] is also valid",
+                    "6011 0001112 223 and 651-11222 33344 are invalid"
                 ].join("\n"),
                 "matches" => value!([0])
             })),
@@ -880,7 +889,7 @@ mod test {
         credit_card_amex {
             args: func_args![
                 value: vec![
-                    "Both 340001112223334 and 371111111122223 are valid",
+                    "Both 3400 011122 23334 and 3711-111111-22223 are valid",
                     "34000111222333 and 3700022233344 are not valid"
                 ].join("\n"),
                 filters: vec!["credit_card"],
@@ -888,7 +897,7 @@ mod test {
             want: Ok(Value::from(btreemap!{
                 "data" => vec![
                     "Both [REDACTED] and [REDACTED] are valid",
-                        "34000111222333 and 3700022233344 are not valid"
+                    "34000111222333 and 3700022233344 are not valid"
                 ].join("\n"),
                 "matches" => value!([0])
             })),
@@ -898,15 +907,15 @@ mod test {
         credit_card_diners {
             args: func_args![
                 value: vec![
-                    "30011122233344, 38900011122233 are valid",
-                    "3011112223334, 380111222333 are not valid"
+                    "3001-1122233344, 3890 001112 2233 are valid",
+                    "3011112223334, 380 111222 33333 are not valid"
                 ].join("\n"),
                 filters: vec!["credit_card"],
             ],
             want: Ok(Value::from(btreemap!{
                 "data" => vec![
                     "[REDACTED], [REDACTED] are valid",
-                        "3011112223334, 380111222333 are not valid"
+                    "3011112223334, 380 111222 33333 are not valid"
                 ].join("\n"),
                 "matches" => value!([0])
             })),
@@ -916,15 +925,35 @@ mod test {
         credit_card_jcb {
             args: func_args![
                 value: vec![
-                    "213100000000011, 180011111111122, 3500011111111122 and 3522244444444411 are valid",
+                    "2131 0000 0000 0111, 1800-1111-1111-1222, 3500 0111-1111-1122 and 3522-2444-4444 4411 are valid",
                     "3500111222333 is not valid"
                 ].join("\n"),
                 filters: vec!["credit_card"],
             ],
             want: Ok(Value::from(btreemap!{
                 "data" => vec![
-                    "[REDACTED], [REDACTED], [REDACTED] and [REDACTED] are valid",
-                    "3500111222333 is not valid"
+                "[REDACTED], [REDACTED], [REDACTED] and [REDACTED] are valid",
+                "3500111222333 is not valid"
+                ].join("\n"),
+                "matches" => value!([0])
+            })),
+            tdef: TypeDef::bytes().infallible(),
+        }
+
+        ipv4_address {
+            args: func_args![
+                value: vec![
+                    "127.0.0.1, 0.0.0.0 are valid addresses",
+                    "192.168.0.1, 255.255.255.255 are also valid addresses",
+                    "257.0.0.1, 255.257.0.0, 128.255.269.0, 0.255.255.280 are not valid"
+                ].join("\n"),
+                filters: vec!["ipv4"],
+            ],
+            want: Ok(Value::from(btreemap!{
+                "data" => vec![
+                    "[REDACTED], [REDACTED] are valid addresses",
+                    "[REDACTED], [REDACTED] are also valid addresses",
+                    "257.0.0.1, 255.257.0.0, 128.255.269.0, 0.255.255.280 are not valid"
                 ].join("\n"),
                 "matches" => value!([0])
             })),
@@ -935,7 +964,7 @@ mod test {
             args: func_args![
                 value: value!({
                     "arr": [
-                        "contains 180011111111122, a JCB credit card",
+                        "contains 1800222233334444, a JCB credit card",
                         {
                             "user": "JB Daniels",
                             "email": "jb_daniels@user.com is the previous email",
@@ -963,6 +992,10 @@ mod test {
                         "patterns" => vec![r"\w+@org.net", r"\w+\d{6}$"]
                     },
                     btreemap!{
+                        "type" => "phone_number",
+                        "redactor" => btreemap!{"type" => "text", "replacement" => "[PHONE_NUMBER]" },
+                    },
+                    btreemap!{
                         "type" => "credit_card",
                         "redactor" => btreemap!{"type" => "text", "replacement" => "[CREDIT_CARD]" },
                     },
@@ -973,10 +1006,6 @@ mod test {
                     btreemap!{
                         "type" => "pattern",
                         "patterns" => vec![r"^Johnson"],
-                    },
-                    btreemap!{
-                        "type" => "phone_number",
-                        "redactor" => btreemap!{"type" => "text", "replacement" => "[PHONE_NUMBER]" },
                     },
                     btreemap!{
                         "type" => "email",
