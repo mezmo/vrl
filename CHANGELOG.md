@@ -1,3 +1,10 @@
+# [0.18.0](https://github.com/mezmo/vrl/compare/v0.17.1...v0.18.0) (2024-07-11)
+
+
+### Features
+
+* **mezmo_redact**: Support delimited credit card matching [ba489d5](https://github.com/mezmo/vrl/commit/ba489d5ddb5a5bb4473044cab6fc95b4aab1f305) - kwabena
+
 ## [0.17.1](https://github.com/mezmo/vrl/compare/v0.17.0...v0.17.1) (2024-07-10)
 
 
