@@ -2,8 +2,8 @@ use crate::compiler::prelude::*;
 use crate::stdlib::string_utils::convert_to_string;
 
 fn contains(value: Value, substring: Value, case_sensitive: bool) -> Resolved {
-    let value = convert_to_string(value, case_sensitive)?;
-    let substring = convert_to_string(substring, case_sensitive)?;
+    let value = convert_to_string(value, !case_sensitive)?;
+    let substring = convert_to_string(substring, !case_sensitive)?;
     Ok(value.contains(&substring).into())
 }
 
@@ -58,12 +58,12 @@ impl Function for Contains {
             Example {
                 title: "case sensitive",
                 source: r#"contains("banana", "AnA")"#,
-                result: Ok(r#"false"#),
+                result: Ok("false"),
             },
             Example {
                 title: "case insensitive",
                 source: r#"contains("banana", "AnA", case_sensitive: false)"#,
-                result: Ok(r#"true"#),
+                result: Ok("true"),
             },
         ]
     }

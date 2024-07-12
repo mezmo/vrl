@@ -101,12 +101,12 @@ impl Function for ParseJson {
     }
 
     fn usage(&self) -> &'static str {
-        indoc! {r#"
+        indoc! {"
             Parses the provided `value` as JSON.
 
             Only JSON types are returned. If you need to convert a `string` into a `timestamp`,
             consider the `parse_timestamp` function.
-        "#}
+        "}
     }
 
     fn parameters(&self) -> &'static [Parameter] {
@@ -320,6 +320,28 @@ mod tests {
         lossy_float_conversion {
             args: func_args![ value: r#"{"num": 9223372036854775808}"#],
             want: Ok(value!({"num": 9.223_372_036_854_776e18})),
+            tdef: type_def(),
+        }
+    ];
+
+    #[cfg(not(feature = "float_roundtrip"))]
+    test_function![
+        parse_json => ParseJson;
+
+        no_roundtrip_float_conversion {
+            args: func_args![ value: r#"{"num": 1626175065.5934923}"#],
+            want: Ok(value!({"num": 1_626_175_065.593_492_5})),
+            tdef: type_def(),
+        }
+    ];
+
+    #[cfg(feature = "float_roundtrip")]
+    test_function![
+        parse_json => ParseJson;
+
+        roundtrip_float_conversion {
+            args: func_args![ value: r#"{"num": 1626175065.5934923}"#],
+            want: Ok(value!({"num": 1_626_175_065.593_492_3})),
             tdef: type_def(),
         }
     ];
