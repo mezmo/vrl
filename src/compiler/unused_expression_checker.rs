@@ -23,7 +23,7 @@ use crate::compiler::parser::{Ident, Node};
 use crate::diagnostic::{Diagnostic, DiagnosticList, Label, Note, Severity};
 use crate::parser::ast::{
     Array, Assignment, AssignmentOp, AssignmentTarget, Block, Container, Expr, FunctionCall,
-    IfStatement, Object, Predicate, QueryTarget, RootExpr, Unary,
+    IfStatement, Object, Predicate, QueryTarget, Return, RootExpr, Unary,
 };
 use crate::parser::template_string::StringSegment;
 use crate::parser::{Literal, Program, Span};
@@ -225,6 +225,7 @@ impl AstVisitor<'_> {
                 state.mark_identifier_used(&variable.node);
             }
             Expr::Abort(_) => {}
+            Expr::Return(r#return) => self.visit_return(r#return, state),
         }
     }
 
@@ -375,6 +376,15 @@ impl AstVisitor<'_> {
         }
     }
 
+    fn visit_return(&self, r#return: &Node<Return>, state: &mut VisitorState) {
+        state.increase_level();
+        let level = state.level;
+        state.expecting_result.insert(level, true);
+        self.visit_node(&r#return.node.expr, state);
+        state.expecting_result.insert(level, false);
+        state.decrease_level();
+    }
+
     /// This function traverses the VRL AST and detects unused results.
     /// An expression might have side-effects, in that case we do not except its result to be used.
     ///
@@ -441,10 +451,10 @@ mod test {
 
     #[test]
     fn unused_variable_in_assignment() {
-        let source = indoc! {r#"
+        let source = indoc! {"
             foo = 5
-        "#};
-        unused_test(source, vec![r#"unused variable `foo`"#.to_string()]);
+        "};
+        unused_test(source, vec!["unused variable `foo`".to_string()]);
     }
 
     #[test]
@@ -531,18 +541,18 @@ mod test {
         "#};
         unused_test(
             source,
-            vec![r#"unused result for function call `random_bool()`"#.to_string()],
+            vec!["unused result for function call `random_bool()`".to_string()],
         );
     }
 
     #[test]
     fn unused_ident_with_path() {
-        let source = indoc! {r#"
+        let source = indoc! {"
             x = {}
             .f1 = x
             y = {}
             y.a = 1
-        "#};
+        "};
         unused_test(source, vec!["unused variable `y`".to_string()]);
     }
 
@@ -569,7 +579,7 @@ mod test {
 
             y = {"foo": 3}.foo
         "#};
-        unused_test(source, vec![r#"unused variable `y`"#.to_string()]);
+        unused_test(source, vec!["unused variable `y`".to_string()]);
     }
 
     #[test]
@@ -597,7 +607,7 @@ mod test {
 
     #[test]
     fn used_in_function_arguments() {
-        let source = indoc! {r#"
+        let source = indoc! {"
             x = {}
             x.foo = 1
             .r = random_int!({x.foo}, x.foo + 1)
@@ -605,10 +615,10 @@ mod test {
             x.bar = 2
             exists(field: x.bar)
             del(x.bar, compact: false)
-        "#};
+        "};
         unused_test(
             source,
-            vec![r#"unused result for function call `exists(field: xbar)`"#.to_string()],
+            vec!["unused result for function call `exists(field: xbar)`".to_string()],
         );
     }
 
@@ -626,7 +636,7 @@ mod test {
 
     #[test]
     fn used_closure_result() {
-        let source = indoc! {r#"
+        let source = indoc! {"
             patterns = [r'foo', r'bar']
             matched = false
             for_each(patterns) -> |_, pattern| {
@@ -635,7 +645,7 @@ mod test {
               }
             }
             matched
-        "#};
+        "};
         // Note that the `value` outside of the closure block is unused but not detected.
         unused_test(source, vec![]);
     }
@@ -655,7 +665,7 @@ mod test {
     fn unused_shadow_variable_not_detected() {
         // TODO: Support variable shadowing. A potential solution is to introduce the following type:
         // type IdentState = HashMap<usize, (bool, Span)>;
-        let source = indoc! {r#"
+        let source = indoc! {"
             x = 1
             x = 2
             {
@@ -668,7 +678,7 @@ mod test {
                 }
                 x
             }
-        "#};
+        "};
         unused_test(source, vec![]);
     }
 
