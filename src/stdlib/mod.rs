@@ -137,6 +137,7 @@ cfg_if::cfg_if! {
         mod mezmo_is_truthy;
         mod mezmo_last_index_of;
         mod mezmo_length;
+        mod mezmo_value_size;
         mod mezmo_matching_patterns;
         mod mezmo_pad_end;
         mod mezmo_pad_start;
@@ -358,6 +359,7 @@ cfg_if::cfg_if! {
         pub use mezmo_to_string::MezmoToString;
         pub use mezmo_trim_end::MezmoTrimEnd;
         pub use mezmo_trim_start::MezmoTrimStart;
+        pub use mezmo_value_size::MezmoValueSize;
         pub use mod_func::Mod;
         pub use now::Now;
         pub use object::Object;
@@ -549,6 +551,7 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(MezmoIsTruthy),
         Box::new(MezmoLastIndexOf),
         Box::new(MezmoLength),
+        Box::new(MezmoValueSize),
         Box::new(MezmoLt),
         Box::new(MezmoLte),
         Box::new(MezmoMatchingPatterns),
