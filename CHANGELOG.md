@@ -1,3 +1,10 @@
+# [0.20.0](https://github.com/mezmo/vrl/compare/v0.19.0...v0.20.0) (2024-09-27)
+
+
+### Features
+
+* Implement value size vrl function [c09c871](https://github.com/mezmo/vrl/commit/c09c8716e63ac88c61ede93f2cf50fefd0e51a3e) - kwabena
+
 # [0.19.0](https://github.com/mezmo/vrl/compare/v0.18.0...v0.19.0) (2024-08-30)
 
 
