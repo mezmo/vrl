@@ -236,6 +236,7 @@ cfg_if::cfg_if! {
         mod unique;
         mod unnest;
         mod upcase;
+        mod uuid_from_friendly_id;
         mod uuid_v4;
         mod uuid_v7;
         mod values;
@@ -436,6 +437,7 @@ cfg_if::cfg_if! {
         pub use unique::Unique;
         pub use unnest::Unnest;
         pub use upcase::Upcase;
+        pub use uuid_from_friendly_id::UuidFromFriendlyId;
         pub use uuid_v4::UuidV4;
         pub use uuid_v7::UuidV7;
         pub use values::Values;
@@ -652,6 +654,7 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(Unique),
         Box::new(Unnest),
         Box::new(Upcase),
+        Box::new(UuidFromFriendlyId),
         Box::new(UuidV4),
         Box::new(UuidV7),
         Box::new(Values),
