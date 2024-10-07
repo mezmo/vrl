@@ -88,7 +88,7 @@ use std::fmt::Debug;
 
 use snafu::Snafu;
 
-pub use borrowed::BorrowedSegment;
+pub use borrowed::{BorrowedSegment, BorrowedTargetPath, BorrowedValuePath};
 pub use concat::PathConcat;
 pub use owned::{OwnedSegment, OwnedTargetPath, OwnedValuePath};
 
@@ -110,8 +110,8 @@ pub enum PathParseError {
 /// Example: `path!("foo", 4, "bar")` is the pre-parsed path of `foo[4].bar`
 #[macro_export]
 macro_rules! path {
-    ($($segment:expr),*) => {{
-           &[$($crate::path::BorrowedSegment::from($segment),)*]
+    ($($segment:expr),*) => { $crate::path::BorrowedValuePath {
+        segments: &[$($crate::path::BorrowedSegment::from($segment),)*],
     }};
 }
 
@@ -119,8 +119,9 @@ macro_rules! path {
 /// This path points at an event (as opposed to metadata).
 #[macro_export]
 macro_rules! event_path {
-    ($($segment:expr),*) => {{
-           ($crate::path::PathPrefix::Event, &[$($crate::path::BorrowedSegment::from($segment),)*])
+    ($($segment:expr),*) => { $crate::path::BorrowedTargetPath {
+        prefix: $crate::path::PathPrefix::Event,
+        path: $crate::path!($($segment),*),
     }};
 }
 
@@ -128,8 +129,9 @@ macro_rules! event_path {
 /// This path points at metadata (as opposed to the event).
 #[macro_export]
 macro_rules! metadata_path {
-    ($($segment:expr),*) => {{
-           ($crate::path::PathPrefix::Metadata, &[$($crate::path::BorrowedSegment::from($segment),)*])
+    ($($segment:expr),*) => { $crate::path::BorrowedTargetPath {
+        prefix: $crate::path::PathPrefix::Metadata,
+        path: $crate::path!($($segment),*),
     }};
 }
 
@@ -225,28 +227,10 @@ pub trait ValuePath<'a>: Clone {
 
     #[allow(clippy::result_unit_err)]
     fn to_owned_value_path(&self) -> Result<OwnedValuePath, ()> {
-        let mut owned_path = OwnedValuePath::root();
-        let mut coalesce = Vec::new();
-        for segment in self.segment_iter() {
-            match segment {
-                BorrowedSegment::Invalid => return Err(()),
-                BorrowedSegment::Index(i) => owned_path.push(OwnedSegment::Index(i)),
-                BorrowedSegment::Field(field) => owned_path.push(OwnedSegment::Field(field.into())),
-                BorrowedSegment::CoalesceField(field) => {
-                    coalesce.push(field.into());
-                }
-                BorrowedSegment::CoalesceEnd(field) => {
-                    coalesce.push(field.into());
-                    tracing::warn!(
-                        internal_log_rate_limit = true,
-                        fields = coalesce.join("|"),
-                        "DEPRECATED: Coalesce fields are deprecated and will be removed in a future version.",
-                    );
-                    owned_path.push(OwnedSegment::Coalesce(std::mem::take(&mut coalesce)));
-                }
-            }
-        }
-        Ok(owned_path)
+        self.segment_iter()
+            .map(OwnedSegment::try_from)
+            .collect::<Result<Vec<OwnedSegment>, ()>>()
+            .map(OwnedValuePath::from)
     }
 }
 
@@ -284,6 +268,7 @@ impl<'a> TargetPath<'a> for &'a OwnedTargetPath {
     }
 }
 
+// This is deprecated but still used in Vector (results in 10 compile errors)
 impl<'a, T: ValuePath<'a>> TargetPath<'a> for (PathPrefix, T) {
     type ValuePath = T;
 
