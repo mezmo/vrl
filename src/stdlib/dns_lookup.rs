@@ -626,6 +626,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "unstable upstream tests using localhost; resolved in upstream v0.16.1"]
     fn test_localhost() {
         let result = execute_dns_lookup(DnsLookupFn {
             value: expr!("localhost"),
@@ -648,6 +649,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "unstable upstream tests using localhost; resolved in upstream v0.16.1"]
     fn test_custom_class_and_type() {
         let result = execute_dns_lookup(DnsLookupFn {
             value: expr!("localhost"),
@@ -704,6 +706,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "unstable upstream tests using localhost; resolved in upstream v0.16.1"]
     fn unknown_options_ignored() {
         let result = execute_dns_lookup(DnsLookupFn {
             value: expr!("localhost"),
@@ -715,6 +718,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "unstable upstream tests using localhost; resolved in upstream v0.16.1"]
     fn invalid_option_type() {
         let result = execute_dns_lookup_with_expected_error(DnsLookupFn {
             value: expr!("localhost"),
@@ -726,6 +730,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "unstable upstream tests using localhost; resolved in upstream v0.16.1"]
     fn negative_int_type() {
         let attempts_val = -5;
         let result = execute_dns_lookup_with_expected_error(DnsLookupFn {
