@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/mezmo/vrl/compare/v2.0.0...v2.0.1) (2024-10-30)
+
+
+### Bug Fixes
+
+* **convert**: return error when conversion exceeds f64 bounds [5abeba2](https://github.com/mezmo/vrl/commit/5abeba2067b065dfbf6dfb0df95b5360ce1f45d5) - Dan Hable [LOG-20860](https://logdna.atlassian.net/browse/LOG-20860)
+
 # [2.0.0](https://github.com/mezmo/vrl/compare/v1.0.0...v2.0.0) (2024-10-18)
 
 
