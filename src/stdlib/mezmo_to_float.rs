@@ -1,3 +1,4 @@
+use crate::compiler::conversion::Conversion;
 use crate::compiler::prelude::*;
 
 fn to_float(value: Value) -> Resolved {
@@ -12,14 +13,10 @@ fn to_float(value: Value) -> Resolved {
         )),
         Bytes(v) => {
             let s = String::from_utf8_lossy(&v);
-            let parsed = s.trim().parse::<f64>().map_err(|e| {
-                <std::string::String as std::convert::Into<ExpressionError>>::into(e.to_string())
-            })?;
-            Ok(NotNan::new(parsed)
-                .map_err(|_| {
-                    <&str as std::convert::Into<ExpressionError>>::into("NaN is not supported")
-                })?
-                .into())
+            let s = s.trim().to_owned();
+            Conversion::Float
+                .convert(s.into())
+                .map_err(|e| e.to_string().into())
         }
         v => Err(format!("unable to coerce {} into float", v.kind()).into()),
     }
