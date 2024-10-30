@@ -159,6 +159,9 @@ impl Conversion {
                 let parsed = s
                     .parse::<f64>()
                     .with_context(|_| FloatParseSnafu { s: s.clone() })?;
+                if parsed.is_infinite() {
+                    return Err(Error::NanFloat {s: format!("Invalid float \"{s}\": number too large to fit in target type") });
+                }
                 let f = NotNan::new(parsed).map_err(|_| Error::NanFloat { s: s.to_string() })?;
                 f.into()
             }
