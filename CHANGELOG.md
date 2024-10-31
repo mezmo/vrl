@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/mezmo/vrl/compare/v2.0.1...v2.0.2) (2024-10-31)
+
+
+### Bug Fixes
+
+* **mezmo**: update mezmo_to_float implementation [eb86d1a](https://github.com/mezmo/vrl/commit/eb86d1a1d65a5ba183eba1cf6bf2edadd3c47ced) - Dan Hable [LOG-20860](https://logdna.atlassian.net/browse/LOG-20860)
+
 ## [2.0.1](https://github.com/mezmo/vrl/compare/v2.0.0...v2.0.1) (2024-10-30)
 
 
