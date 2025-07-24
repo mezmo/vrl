@@ -52,7 +52,7 @@ fn apply_grok_rule(source: &str, grok_rule: &GrokRule) -> Result<Value, Error> {
                     if let Some(ref mut v) = value {
                         value = match apply_filter(v, filter) {
                             Ok(Value::Null) => None,
-                            Ok(v ) if v.is_object() => Some(parse_keys_as_path(v)),
+                            Ok(v) if v.is_object() => Some(parse_keys_as_path(v)),
                             Ok(v) => Some(v),
                             Err(error) => {
                                 warn!(message = "Error applying filter", field = %field, filter = %filter, %error);
@@ -254,8 +254,10 @@ mod tests {
 
     fn test_grok_pattern(tests: Vec<(&str, &str, Result<Value, Error>)>) {
         for (filter, k, v) in tests {
-            let rules = parse_grok_rules(&[filter.to_string()], BTreeMap::new())
-                .expect("couldn't parse rules");
+            let rules =
+                parse_grok_rules(&[filter.to_string()], BTreeMap::new()).unwrap_or_else(|error| {
+                    panic!("failed to parse {k} with filter {filter}: {error}")
+                });
             let parsed = parse_grok(k, &rules);
 
             if v.is_ok() {
@@ -263,10 +265,11 @@ mod tests {
                     parsed.unwrap_or_else(|_| panic!("{filter} does not match {k}")),
                     Value::from(btreemap! {
                         "field" =>  v.unwrap(),
-                    })
+                    }),
+                    "failed to parse {k} with filter {filter}"
                 );
             } else {
-                assert_eq!(parsed, v);
+                assert_eq!(parsed, v, "failed to parse {k} with filter {filter}");
             }
         }
     }
@@ -274,10 +277,10 @@ mod tests {
     fn test_full_grok(tests: Vec<(&str, &str, Result<Value, Error>)>) {
         for (filter, k, v) in tests {
             let rules = parse_grok_rules(&[filter.to_string()], BTreeMap::new())
-                .expect("couldn't parse rules");
+                .unwrap_or_else(|_| panic!("failed to parse {k} with filter {filter}"));
             let parsed = parse_grok(k, &rules);
 
-            assert_eq!(parsed, v);
+            assert_eq!(parsed, v, "failed to parse {k} with filter {filter}");
         }
     }
 
@@ -287,7 +290,7 @@ mod tests {
             parse_grok_rules(&["%{unknown}".to_string()], BTreeMap::new())
                 .unwrap_err()
                 .to_string(),
-            r#"failed to parse grok expression '\A%{unknown}\z': The given pattern definition name "unknown" could not be found in the definition map"#
+            r#"failed to parse grok expression '(?m)\A%{unknown}\z': The given pattern definition name "unknown" could not be found in the definition map"#
         );
     }
 
@@ -657,7 +660,7 @@ mod tests {
                 Ok(Value::Array(vec!["1".into(), "2".into()])),
             ),
             (
-                r#"(?m)%{data:field:array("[]","\\n")}"#,
+                r#"%{data:field:array("[]","\\n")}"#,
                 "[1\n2]",
                 Ok(Value::Array(vec!["1".into(), "2".into()])),
             ),
@@ -788,6 +791,24 @@ mod tests {
                 "key:={valueStr}",
                 Ok(Value::from(btreemap! {
                     "key" => "valueStr"
+                })),
+            ),
+            // ignore space after the delimiter(comma)
+            (
+                r#"%{data::keyvalue}"#,
+                "key1=value1, key2=value2",
+                Ok(Value::from(btreemap! {
+                    "key1" => "value1",
+                    "key2" => "value2",
+                })),
+            ),
+            // allow space as a legit value character, but trim key/values
+            (
+                r#"%{data::keyvalue("="," ")}"#,
+                "key1=value1, key2 = value 2 ",
+                Ok(Value::from(btreemap! {
+                    "key1" => "value1",
+                    "key2" => "value 2",
                 })),
             ),
             (
@@ -928,6 +949,64 @@ mod tests {
                     }
                 })),
             ),
+            // capture all possilbe key-value pairs from the string
+            (
+                "%{data::keyvalue}",
+                r#" , key1=value1 "key2"="value2",key3=value3 "#,
+                Ok(Value::from(btreemap! {
+                    "key1" => "value1",
+                    "key2" => "value2",
+                    "key3" => "value3",
+                })),
+            ),
+            (
+                r#"%{data::keyvalue(": ",",")}"#,
+                r#"client: 217.92.148.44, server: localhost, request: "HEAD http://174.138.82.103:80/sql/sql-admin/ HTTP/1.1", host: "174.138.82.103""#,
+                Ok(Value::from(btreemap! {
+                    "client" => "217.92.148.44",
+                    "host" => "174.138.82.103",
+                    "request" => "HEAD http://174.138.82.103:80/sql/sql-admin/ HTTP/1.1",
+                    "server" => "localhost",
+                })),
+            ),
+            // append values with the same key
+            (
+                r#"%{data::keyvalue}"#,
+                r#"a=1, a=1, a=2"#,
+                Ok(Value::from(btreemap! {
+                    "a" => vec![1, 1, 2]
+                })),
+            ),
+            // trim string values
+            (
+                r#"%{data::keyvalue("="," ")}"#,
+                r#"a= foo"#,
+                Ok(Value::from(btreemap! {
+                    "a" => "foo"
+                })),
+            ),
+            // ignore if key contains spaces
+            (
+                r#"%{data::keyvalue("="," ")}"#,
+                "a key=value",
+                Ok(Value::from(btreemap! {})),
+            ),
+            // parses valid octal numbers (start with 0) as decimals
+            (
+                r#"%{data::keyvalue}"#,
+                "a=07",
+                Ok(Value::from(btreemap! {
+                    "a" => 7
+                })),
+            ),
+            // parses invalid octal numbers (start with 0) as strings
+            (
+                r#"%{data::keyvalue}"#,
+                "a=08",
+                Ok(Value::from(btreemap! {
+                    "a" => "08"
+                })),
+            ),
         ]);
     }
 
@@ -1021,24 +1100,15 @@ mod tests {
     #[test]
     fn parses_with_new_lines() {
         test_full_grok(vec![
+            // the DOTALL mode is enabled by default
             (
-                "(?m)%{data:field}",
+                "%{data:field}",
                 "a\nb",
                 Ok(Value::from(btreemap! {
                     "field" => "a\nb"
                 })),
             ),
-            (
-                "(?m)%{data:line1}\n%{data:line2}",
-                "a\nb",
-                Ok(Value::from(btreemap! {
-                    "line1" => "a",
-                    "line2" => "b"
-                })),
-            ),
-            // no DOTALL mode by default
-            ("%{data:field}", "a\nb", Err(Error::NoMatch)),
-            // (?s) is not supported by the underlying regex engine(onig) - it uses (?m) instead, so we convert it silently
+            // (?s) enables the DOTALL mode
             (
                 "(?s)%{data:field}",
                 "a\nb",
@@ -1046,9 +1116,17 @@ mod tests {
                     "field" => "a\nb"
                 })),
             ),
-            // disable DOTALL mode with (?-s)
+            (
+                "%{data:line1}\n%{data:line2}",
+                "a\nb",
+                Ok(Value::from(btreemap! {
+                    "line1" => "a",
+                    "line2" => "b"
+                })),
+            ),
+            // disable the DOTALL mode with (?-s)
             ("(?s)(?-s)%{data:field}", "a\nb", Err(Error::NoMatch)),
-            // disable and then enable DOTALL mode
+            // disable and then enable the DOTALL mode
             (
                 "(?-s)%{data:field} (?s)%{data:field}",
                 "abc d\ne",
@@ -1106,7 +1184,7 @@ mod tests {
     #[test]
     fn supports_xml_filter() {
         test_grok_pattern(vec![(
-            "(?s)%{data:field:xml}", // (?s) enables DOTALL mode to include newlines
+            "%{data:field:xml}",
             r#"<book category="CHILDREN">
                   <title lang="en">Harry Potter</title>
                   <author>J K. Rowling</author>
