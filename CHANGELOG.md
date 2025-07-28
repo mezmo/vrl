@@ -1,3 +1,45 @@
+## [2.0.3](https://github.com/mezmo/vrl/compare/v2.0.2...v2.0.3) (2025-07-28)
+
+
+### Bug Fixes
+
+* **datadog grok**: enable the DOTALL mode by default (#1022) [e1be30e](https://github.com/mezmo/vrl/commit/e1be30efd924a6611daa3c2342d435e78d7a95ad) - GitHub
+* **Dockerfile**: Match rust version of rust-toolchain.toml [1c1e9b7](https://github.com/mezmo/vrl/commit/1c1e9b7d916cce85d9c07703d1c8fe5a264db1f6) - Darin Spivey
+* **match_datadog_query**: do not panic when attempting to parse invalid paths (#1031) [7e9f7fa](https://github.com/mezmo/vrl/commit/7e9f7fae9700d7bdaac32e4dd4becb9d5b58364e) - GitHub
+* **parse_ruby_hash**: drop initial colon in key parsing (#1050) [30296eb](https://github.com/mezmo/vrl/commit/30296eb62571f38c075fb266ec650342b2638b11) - GitHub
+* **stdlib**: support hyphens in JIT parser (#1025) [ec8523e](https://github.com/mezmo/vrl/commit/ec8523eadd8c822df72bd3e46df1cf1aaa4c6d2e) - GitHub
+
+
+### Chores
+
+* **benches**: remove redundant required feature 'test' (#1023) [2192248](https://github.com/mezmo/vrl/commit/21922484a461a1b7ad09da59f5ae770e8c2cb054) - GitHub
+* **deps**: bump anyhow from 1.0.86 to 1.0.88 (#1034) [4fbcea7](https://github.com/mezmo/vrl/commit/4fbcea7d753a28a6bb246f8ffe4291d73f8fbbd2) - GitHub
+* **deps**: bump anyhow from 1.0.88 to 1.0.89 (#1037) [dcc6c29](https://github.com/mezmo/vrl/commit/dcc6c29b7cc5bf05b2c156c00313994d0e5ddf22) - GitHub
+* **deps**: bump bytes from 1.7.1 to 1.7.2 (#1042) [a8aa30e](https://github.com/mezmo/vrl/commit/a8aa30e492500ddeba0caa5f27ada9b64f108466) - GitHub
+* **deps**: bump chrono-tz from 0.9.0 to 0.10.0 (#1032) [4f4f3b2](https://github.com/mezmo/vrl/commit/4f4f3b2312c5bad133a2139230458853c6446367) - GitHub
+* **deps**: bump clap from 4.5.16 to 4.5.17 (#1018) [b34f081](https://github.com/mezmo/vrl/commit/b34f081d42816aa023d0c8f0e7d45318d88ca931) - GitHub
+* **deps**: bump clap from 4.5.17 to 4.5.18 (#1048) [7528e47](https://github.com/mezmo/vrl/commit/7528e47df014d2c9bdc266d807adcf30e35736fe) - GitHub
+* **deps**: bump iana-time-zone from 0.1.60 to 0.1.61 (#1039) [b6199e3](https://github.com/mezmo/vrl/commit/b6199e363479079d964c3f408acb6c36f0d79322) - GitHub
+* **deps**: bump pest from 2.7.11 to 2.7.12 (#1028) [2fbe3e4](https://github.com/mezmo/vrl/commit/2fbe3e4728301803147d4cf57c3a8aac711d10ea) - GitHub
+* **deps**: bump pest_derive from 2.7.11 to 2.7.12 (#1030) [16b0739](https://github.com/mezmo/vrl/commit/16b0739aec36dc8111212d9672ccce8c480bd5d6) - GitHub
+* **deps**: bump pest_derive from 2.7.12 to 2.7.13 (#1044) [4433fad](https://github.com/mezmo/vrl/commit/4433fad7da81a9c52cfd095209506f44b5a06016) - GitHub
+* **deps**: bump prost from 0.13.2 to 0.13.3 in the prost group (#1046) [b975970](https://github.com/mezmo/vrl/commit/b975970912f6a502912bedac38bfcac69dc5876d) - GitHub
+* **deps**: bump prost-reflect from 0.14.1 to 0.14.2 in the prost group (#1026) [8c428dd](https://github.com/mezmo/vrl/commit/8c428dd882a4087ad191190c53c16bbe64c83a61) - GitHub
+* **deps**: bump serde from 1.0.209 to 1.0.210 (#1027) [559dd71](https://github.com/mezmo/vrl/commit/559dd71d3a58b05b486cb5b32563728cb0458e94) - GitHub
+* **deps**: bump serde_json from 1.0.127 to 1.0.128 (#1019) [cfcef66](https://github.com/mezmo/vrl/commit/cfcef6626e9131fbce5f45e7d05a6d82bc9f7116) - GitHub
+* **deps**: bump snafu from 0.8.4 to 0.8.5 (#1049) [bcd9e67](https://github.com/mezmo/vrl/commit/bcd9e675f7b3f47e60bd7019ed9773d370de7899) - GitHub
+* **deps**: bump thiserror from 1.0.63 to 1.0.64 (#1047) [4f10c91](https://github.com/mezmo/vrl/commit/4f10c91f98e6256c3ca715e29bf875b00fb85a3b) - GitHub
+* **deps**: bump webbrowser from 1.0.1 to 1.0.2 (#1038) [542f135](https://github.com/mezmo/vrl/commit/542f135717ed01fe4d29ab937c9d66b8818cc49b) - GitHub
+* **releasing**: Prepare VRL v0.19.0 (#1058) [4ff13f4](https://github.com/mezmo/vrl/commit/4ff13f47c8b3109c542ed0862eb1a424e2b68872) - GitHub
+
+
+### Miscellaneous
+
+* Merge pull request #88 from mezmo/darinspivey/LOG-22117 [a79a63f](https://github.com/mezmo/vrl/commit/a79a63fe005ca247f01ef76b878d0efac192231a) - GitHub [LOG-22117](https://logdna.atlassian.net/browse/LOG-22117)
+* Merge tag 'v0.19.0' into darinspivey/LOG-22117 [ce1574e](https://github.com/mezmo/vrl/commit/ce1574e161d6886a552521f84fc4a841cf9bf6c2) - Darin Spivey [LOG-22117](https://logdna.atlassian.net/browse/LOG-22117)
+* Fix proposal for parse_xml in case of unique child: (#849) [3ca9f6c](https://github.com/mezmo/vrl/commit/3ca9f6c0b5a0044fa455f23e9d16da46650d03ff) - GitHub
+* **datadog-grok**: extend `keyvalue` filter to match Datadog implementation (#1015) [2352f61](https://github.com/mezmo/vrl/commit/2352f614edf5a684e66265127db0a98db14c222d) - GitHub
+
 ## [2.0.2](https://github.com/mezmo/vrl/compare/v2.0.1...v2.0.2) (2024-10-31)
 
 
