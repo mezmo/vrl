@@ -107,8 +107,6 @@ fn convert_float_ok() {
     assert_eq!(convert_float(max_float), Ok(StubValue::Float(f64::MAX)));
     assert_eq!(convert_float("1"), Ok(StubValue::Float(1.0)));
     assert_eq!(convert_float("1.23"), Ok(StubValue::Float(1.23)));
-    assert_eq!(convert_float("0.0"), Ok(StubValue::Float(0.0)));
-    assert_eq!(convert_float("-0.0"), Ok(StubValue::Float(0.0)));
     assert_eq!(convert_float("-1"), Ok(StubValue::Float(-1.0)));
     assert_eq!(convert_float("-1.23"), Ok(StubValue::Float(-1.23)));
     assert_eq!(convert_float(min_float), Ok(StubValue::Float(f64::MIN)));
@@ -123,4 +121,5 @@ fn convert_float_errors() {
     assert!(convert_float("1.23.4").is_err());
     assert!(convert_float(exceeds_max_float).is_err());
     assert!(convert_float(exceeds_min_float).is_err());
+    assert!(convert_float("0.0").is_err());
 }
