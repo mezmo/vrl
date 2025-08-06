@@ -1,3 +1,71 @@
+# [2.1.0](https://github.com/mezmo/vrl/compare/v2.0.4...v2.1.0) (2025-08-06)
+
+
+### Bug Fixes
+
+* **convert**: Revert PR #1108 "return error when conversion exceeds f64 bounds" (#1179) [f72967c](https://github.com/mezmo/vrl/commit/f72967c2657bd64db09be437d1c0d89d52ad3607) - GitHub
+* **expression checker**: prevent identifier warnings for closures (#1217) [20f2167](https://github.com/mezmo/vrl/commit/20f2167ad29545805b6b535668724fc4bc8f39ae) - GitHub
+* **stdlib**: bump year in failing examples (#1203) [ebee7f3](https://github.com/mezmo/vrl/commit/ebee7f300d9c88819a2e687749133d09ceffec39) - GitHub
+* **stdlib**: fix typo in parse_float and add one test case (#1180) [32633c1](https://github.com/mezmo/vrl/commit/32633c1ad9cf42af44f5d76a9305c93812d8653e) - GitHub
+* **sub**: error instead of panic when subtraction yields NaN (#1186) [f1b7c8c](https://github.com/mezmo/vrl/commit/f1b7c8cd7928991d46aac7cfb166f2e0ba540b98) - GitHub
+* **timestamp conversion**: use `timestamp_nanos_opt` to avoid panics (#979) [bf99507](https://github.com/mezmo/vrl/commit/bf9950704a3fd9de9ccce1c4e38f63d5e76fb034) - GitHub
+
+
+### Chores
+
+* **ci**: allow all dep types (#1174) [5c0750e](https://github.com/mezmo/vrl/commit/5c0750eb6444c7ba7782b5c7f60c3ccfc30b484f) - GitHub
+* **ci**: dependabot weekly schedule (#1170) [23dee35](https://github.com/mezmo/vrl/commit/23dee354b8330bec14ccd20bc61ed6ee31599a11) - GitHub
+* **conversion**: 'to_float' and 'parse_float' should share implementation (#1185) [821f0d0](https://github.com/mezmo/vrl/commit/821f0d01c26382f5c7b14a16971e6b5579f02e0f) - GitHub
+* **deps**: bump bytes from 1.8.0 to 1.9.0 (#1168) [3ea127b](https://github.com/mezmo/vrl/commit/3ea127bac3de68606a1d313584adc3c2da3643de) - GitHub
+* **deps**: bump dockerfile rust@1.83.0 [6a2b34b](https://github.com/mezmo/vrl/commit/6a2b34be54cd0f572db732539897fad88a745b04) - Mike Del Tito [LOG-22137](https://logdna.atlassian.net/browse/LOG-22137)
+* **deps**: bump fastrand from 2.2.0 to 2.3.0 (#1183) [5143884](https://github.com/mezmo/vrl/commit/5143884e6c9dfa64b1f857c475bef892104428be) - GitHub
+* **deps**: bump indexmap from 2.6.0 to 2.7.0 (#1167) [1cfe064](https://github.com/mezmo/vrl/commit/1cfe0641f4cb16dad76b24141d20a099d5ed26bd) - GitHub
+* **deps**: bump itertools from 0.13.0 to 0.14.0 (#1211) [3228ba8](https://github.com/mezmo/vrl/commit/3228ba8a1683695e19ea18bcd0eb22f34bf0a6dc) - GitHub
+* **deps**: bump lalrpop from 0.20.2 to 0.22.0 (#1175) [6804ee5](https://github.com/mezmo/vrl/commit/6804ee544cd928a292455830b5d9b4128ddbed80) - GitHub
+* **deps**: bump ordered-float from 4.5.0 to 4.6.0 (#1195) [719fb53](https://github.com/mezmo/vrl/commit/719fb5315b2667923921ced5b446540cf19afade) - GitHub
+* **deps**: bump proptest from 1.5.0 to 1.6.0 (#1191) [c47ca8d](https://github.com/mezmo/vrl/commit/c47ca8d1bdfa69e0798ea4b944e6eedc9e27062c) - GitHub
+* **deps**: bump quanta from 0.12.4 to 0.12.5 (#1209) [d87cbda](https://github.com/mezmo/vrl/commit/d87cbdaefecf3a6463be45f346efe4583ebf958e) - GitHub
+* **deps**: Bump Rust toolchain to 1.83.0 (#1173) [28362c4](https://github.com/mezmo/vrl/commit/28362c4620325a180fba39eeccf18be807d745b8) - GitHub
+* **deps**: bump rustyline from 14.0.0 to 15.0.0 (#1128) [92c8aef](https://github.com/mezmo/vrl/commit/92c8aefd44f5351980062943133001f142fd1012) - GitHub
+* **deps**: bump tempfile from 3.14.0 to 3.15.0 (#1210) [cc4088d](https://github.com/mezmo/vrl/commit/cc4088d22689a2a047311afd23b8c06d0b3a97e8) - GitHub
+* **deps**: bump the patches group across 1 directory with 15 updates (#1199) [908240c](https://github.com/mezmo/vrl/commit/908240c24b6d7fb74bc8200cf6e7cbc50393722a) - GitHub
+* **deps**: bump the patches group across 1 directory with 5 updates (#1156) [ae19782](https://github.com/mezmo/vrl/commit/ae19782398a78568688357059fde9c41ee7b6e22) - GitHub
+* **deps**: bump the patches group with 15 updates (#1182) [76f68e7](https://github.com/mezmo/vrl/commit/76f68e721c5dbff2f0f60998b4fe0e781209633b) - GitHub
+* **deps**: bump the patches group with 15 updates (#1190) [acae0e7](https://github.com/mezmo/vrl/commit/acae0e735d3fd599060eb2402a62aba719511c57) - GitHub
+* **deps**: bump the patches group with 5 updates (#1165) [16f7857](https://github.com/mezmo/vrl/commit/16f785735ef3d6890d6fcd468fa9ba18062d3533) - GitHub
+* **deps**: bump tokio from 1.38.1 to 1.42.0 (#1166) [cfd1134](https://github.com/mezmo/vrl/commit/cfd1134271c31848188a2c96b1467b676929d72a) - GitHub
+* **deps**: Update all transitive dependencies (#1172) [61005d0](https://github.com/mezmo/vrl/commit/61005d0a68b5ea4d044de98188b6ab1ff11aa473) - GitHub
+* **deps**: Update anstream and hashbrown to fix vulnerabilities reported by `cargo deny` (#1171) [fb118ee](https://github.com/mezmo/vrl/commit/fb118ee6fc20b3e8bcb96acf7ed4cccda40ed785) - GitHub
+* **releasing**:  cherry pick v0.20.1 commits (#1187) [62ac471](https://github.com/mezmo/vrl/commit/62ac471adab5af16b3c7da8400dcf7a6ab0993e3) - GitHub
+* **releasing**: bump VRL version to 0.21.0 (#1219) [c0245e1](https://github.com/mezmo/vrl/commit/c0245e16a4ef23c3306f7ddabde0d8869e754423) - GitHub
+
+
+### Features
+
+* **crc**: add crc hash fn (#1136) [8590030](https://github.com/mezmo/vrl/commit/8590030f8d13f1c2b81010867b1f6dc128e550f0) - GitHub
+* **parse_cbor**: add parse_cbor function (#1152) [7f010fc](https://github.com/mezmo/vrl/commit/7f010fc8b9b2b73b40ab77457e10edcfa7caa383) - GitHub
+* **stdlib**: Add `main` log format to `parse_nginx_log` function (#1202) [4574f8d](https://github.com/mezmo/vrl/commit/4574f8d570e33c68b9609914467c5531ba7e36df) - GitHub
+* **stdlib**: Add `timezone` option for `parse_timestamp` function (#1207) [890c123](https://github.com/mezmo/vrl/commit/890c12366b27999f3eb4d7e01f700212e60a414e) - GitHub
+* **stdlib**: Add `zip` function (#1158) [6c55b02](https://github.com/mezmo/vrl/commit/6c55b029f9199e64c4fe69d9b561f790af3f1586) - GitHub
+* **stdlib**: add encode_charset, decode_charset functions (#1162) [ddcb49e](https://github.com/mezmo/vrl/commit/ddcb49efc6d938e07decc882c77c64936803c711) - GitHub
+* **stdlib**: Add new `object_from_array` function (#1164) [6709de7](https://github.com/mezmo/vrl/commit/6709de7a1ebc4e3beac0f8457454c61e9e007dbb) - GitHub
+* **stdlib**: allow parsing multiple durations at once in `parse_duration` function (#1197) [3c82c74](https://github.com/mezmo/vrl/commit/3c82c7438351b60e860bd73b03503a82d3882dcb) - GitHub
+
+
+### Miscellaneous
+
+* Merge pull request #95 from mezmo/mdeltito/LOG-22137 [853e508](https://github.com/mezmo/vrl/commit/853e508f8c2e8ba7632a9bd75e003435524aba9d) - GitHub [LOG-22137](https://logdna.atlassian.net/browse/LOG-22137) [LOG-22137](https://logdna.atlassian.net/browse/LOG-22137)
+* Merge tag 'v0.21.0' into mdeltito/LOG-22137 [07f4d8e](https://github.com/mezmo/vrl/commit/07f4d8ee5259f21e473ba17e22488fdaeabd49a7) - Mike Del Tito [LOG-22137](https://logdna.atlassian.net/browse/LOG-22137)
+* feat(stdlib) Add new `parse_bytes` function (#1198) [d5fc848](https://github.com/mezmo/vrl/commit/d5fc8488e5eb603f1a7f550820e224d7617dbbd0) - GitHub
+* Bump MSRV to 1.80 (#1204) [bf2a97a](https://github.com/mezmo/vrl/commit/bf2a97aafe8d03d70868956b15fc3b516bc4bf0a) - GitHub
+* Revert "chore(deps): bump lalrpop from 0.20.2 to 0.22.0 (#1175)" (#1178) [c9873ff](https://github.com/mezmo/vrl/commit/c9873ff5bc9bc309476373b108c902e23eb1c3a8) - GitHub
+* **external**: CONTRIBUTING.md enhancements (#1205) [017a4fd](https://github.com/mezmo/vrl/commit/017a4fd92605292c32d66740040ec54134393a61) - GitHub
+* **internal**: Add template for releasing VRL (#1181) [362ff72](https://github.com/mezmo/vrl/commit/362ff72719ac69a4cb4aa042fbb922f404528cde) - GitHub
+* **stdlib**: Add support for `keys` parameter to `object_from_array` (#1176) [4bad088](https://github.com/mezmo/vrl/commit/4bad088fa63661b3e04781b54bb474613024192f) - GitHub
+* **stdlib**: Add support for `null` keys to `object_from_array` (#1177) [7c32fe4](https://github.com/mezmo/vrl/commit/7c32fe4fe5c5dd2df5c9f5c362b1f36520a04f14) - GitHub
+* **stdlib**: Add support for constant parameters to `zip` (#1160) [c8af70c](https://github.com/mezmo/vrl/commit/c8af70c396ccfac66835e1275f9d2619df35f13e) - GitHub
+* **stdlib**: Allow `zip` function to take two array parameters (#1159) [62f0b4f](https://github.com/mezmo/vrl/commit/62f0b4f7ea8164a050bd098341755487fab464e7) - GitHub
+
 ## [2.0.4](https://github.com/mezmo/vrl/compare/v2.0.3...v2.0.4) (2025-08-01)
 
 
