@@ -21,10 +21,13 @@ criterion_group!(
               camelcase,
               ceil,
               chunks,
+              community_id,
               compact,
               contains,
+              crc,
               decode_base16,
               decode_base64,
+              decode_charset,
               decode_percent,
               decode_punycode,
               decrypt,
@@ -34,6 +37,7 @@ criterion_group!(
               downcase,
               encode_base16,
               encode_base64,
+              encode_charset,
               encode_key_value,
               encode_json,
               encode_logfmt,
@@ -93,10 +97,12 @@ criterion_group!(
               // TODO: value is dynamic so we cannot assert equality
               //now,
               object,
+              object_from_array,
               parse_apache_log,
               parse_aws_alb_log,
               parse_aws_cloudwatch_log_subscription_message,
               parse_aws_vpc_flow_log,
+              parse_bytes,
               parse_common_log,
               parse_csv,
               parse_duration,
@@ -169,7 +175,7 @@ criterion_group!(
               //uuidv4,
               upcase,
               values,
-              community_id,
+              zip,
 );
 criterion_main!(benches);
 
@@ -287,6 +293,15 @@ bench_function! {
 }
 
 bench_function! {
+    crc  => vrl::stdlib::Crc;
+
+    literal {
+        args: func_args![value: "foo"],
+        want: Ok(b"2356372769"),
+    }
+}
+
+bench_function! {
     decode_base16 => vrl::stdlib::DecodeBase16;
 
     literal {
@@ -301,6 +316,16 @@ bench_function! {
     literal {
         args: func_args![value: "c29tZSs9c3RyaW5nL3ZhbHVl"],
         want: Ok("some+=string/value"),
+    }
+}
+
+bench_function! {
+    decode_charset => vrl::stdlib::DecodeCharset;
+
+    literal {
+        args: func_args![value: b"\xbe\xc8\xb3\xe7\xc7\xcf\xbc\xbc\xbf\xe4",
+                         from_charset: value!("euc-kr")],
+        want: Ok(value!("안녕하세요")),
     }
 }
 
@@ -375,6 +400,16 @@ bench_function! {
     literal {
         args: func_args![value: "some+=string/value"],
         want: Ok("c29tZSs9c3RyaW5nL3ZhbHVl"),
+    }
+}
+
+bench_function! {
+    encode_charset => vrl::stdlib::EncodeCharset;
+
+    literal {
+        args: func_args![value: value!("안녕하세요"),
+                         to_charset: value!("euc-kr")],
+        want: Ok(value!(b"\xbe\xc8\xb3\xe7\xc7\xcf\xbc\xbc\xbf\xe4")),
     }
 }
 
@@ -1348,6 +1383,23 @@ bench_function! {
 }
 
 bench_function! {
+    object_from_array => vrl::stdlib::ObjectFromArray;
+
+    default {
+        args: func_args![values: value!([["zero",null], ["one",true], ["two","foo"], ["three",3]])],
+        want: Ok(value!({"zero":null, "one":true, "two":"foo", "three":3})),
+    }
+
+    values_and_keys {
+        args: func_args![
+            keys: value!(["zero", "one", "two", "three"]),
+            values: value!([null, true, "foo", 3]),
+        ],
+        want: Ok(value!({"zero":null, "one":true, "two":"foo", "three":3})),
+    }
+}
+
+bench_function! {
     parse_aws_alb_log => vrl::stdlib::ParseAwsAlbLog;
 
     literal {
@@ -1590,6 +1642,15 @@ bench_function! {
             "thread": "3814",
             "timestamp": (DateTime::parse_from_rfc3339("2021-03-01T12:00:19Z").unwrap().with_timezone(&Utc)),
         })),
+    }
+}
+
+bench_function! {
+    parse_bytes => vrl::stdlib::ParseBytes;
+
+    literal {
+        args: func_args![value: "1024KiB", unit: "MiB"],
+        want: Ok(1.0),
     }
 }
 
@@ -1915,6 +1976,22 @@ bench_function! {
             "upstream_response_time": 0.049,
             "upstream_status": 200,
             "req_id": "752178adb17130b291aefd8c386279e7",
+        })),
+    }
+
+    main {
+        args: func_args![
+            value: r#"172.24.0.3 - - [31/Dec/2024:17:32:06 +0000] "GET / HTTP/1.1" 200 615 "-" "curl/8.11.1" "1.2.3.4, 10.10.1.1""#,
+            format: "main"
+        ],
+        want: Ok(value!({
+            "remote_addr": "172.24.0.3",
+            "timestamp": (DateTime::parse_from_rfc3339("2024-12-31T17:32:06Z").unwrap().with_timezone(&Utc)),
+            "request": "GET / HTTP/1.1",
+            "status": 200,
+            "body_bytes_size": 615,
+            "http_user_agent": "curl/8.11.1",
+            "http_x_forwarded_for": "1.2.3.4, 10.10.1.1",
         })),
     }
 
@@ -2931,5 +3008,22 @@ bench_function! {
     default {
         args: func_args![value: "input-string"],
         want: Ok("INPUT_STRING"),
+    }
+}
+
+bench_function! {
+    zip => vrl::stdlib::Zip;
+
+    one_parameter {
+        args: func_args![array_0: value!([["one", "two", "three", "four"], ["one", 2, null, true]])],
+        want: Ok(value!([["one","one"], ["two",2], ["three",null], ["four",true]])),
+    }
+
+    two_parameters {
+        args: func_args![
+            array_0: value!(["one", "two", "three", "four"]),
+            array_1: value!(["one", 2, null, true]),
+        ],
+        want: Ok(value!([["one","one"], ["two",2], ["three",null], ["four",true]])),
     }
 }

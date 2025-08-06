@@ -1,6 +1,6 @@
 [package]
 name = "vrl"
-version = "0.20.0"
+version = "0.21.0"
 authors = ["Vector Contributors <vector@datadoghq.com>"]
 edition = "2021"
 license = "MPL-2.0"
@@ -10,7 +10,7 @@ repository = "https://github.com/vectordotdev/vrl"
 readme = "README.md"
 keywords = ["vector", "datadog", "compiler"]
 categories = ["compilers"]
-rust-version = "1.79" # msrv
+rust-version = "1.81" # msrv
 
 [workspace]
 members = [
@@ -68,8 +68,10 @@ stdlib = [
   "dep:chacha20poly1305",
   "dep:charset",
   "dep:convert_case",
+  "dep:ciborium",
   "dep:cidr-utils",
   "dep:community-id",
+  "dep:crc",
   "dep:crypto_secretbox",
   "dep:csv",
   "dep:ctr",
@@ -82,6 +84,7 @@ stdlib = [
   "dep:hex",
   "dep:hmac",
   "dep:hostname",
+  "dep:humantime",
   "dep:iana-time-zone",
   "dep:idna",
   "dep:indexmap",
@@ -90,6 +93,7 @@ stdlib = [
   "dep:nom",
   "dep:ofb",
   "dep:once_cell",
+  "dep:parse-size",
   "dep:percent-encoding",
   "dep:prost",
   "dep:prost-reflect",
@@ -128,13 +132,16 @@ base62 = { version = "2.0.3", optional = true }
 base64 = { version = "0.22", optional = true }
 bytes = { version = "1", default-features = false, optional = true }
 charset = { version = "0.1", optional = true }
+encoding_rs = { version = "0.8.35", optional = false }
 chrono = { version = "0.4", default-features = false, features = ["clock", "serde", "wasmbind"], optional = true }
 chrono-tz = { version = "0.10", default-features = false, optional = true }
+ciborium = { version = "0.2.2", default-features = false, optional = true }
 cidr-utils = { version = "0.6", optional = true }
 csv = { version = "1", optional = true }
 clap = { version = "4", features = ["derive"], optional = true }
 codespan-reporting = { version = "0.11", optional = true }
 convert_case = { version = "0.6.0", optional = true }
+crc = { version = "3.2.1", optional = true }
 data-encoding = { version = "2", optional = true }
 digest = { version = "0.10", optional = true }
 dyn-clone = { version = "1", default-features = false, optional = true }
@@ -147,7 +154,7 @@ idna = { version = "1.0", optional = true }
 indexmap = { version = "2", default-features = false, features = ["std"], optional = true }
 influxdb-line-protocol = { version = "2.0.0", optional = true }
 indoc = { version = "2", optional = true }
-itertools = { version = "0.13", default-features = false, features = ["use_std"], optional = true }
+itertools = { version = "0.14", default-features = false, features = ["use_std"], optional = true }
 lalrpop-util = { version = "0.22", optional = true }
 mlua = { version = "0.10", default-features = false, features = ["lua54", "send", "vendored"], optional = true }
 nom = { version = "7", default-features = false, features = ["std"], optional = true }
@@ -155,6 +162,7 @@ once_cell = { version = "1", default-features = false, features = ["std"], optio
 ordered-float = { version = "4", default-features = false, optional = true }
 md-5 = { version = "0.10", optional = true }
 paste = { version = "1", default-features = false, optional = true }
+parse-size = { version = "1.1.0",  optional = true }
 peeking_take_while = { version = "1", default-features = false, optional = true }
 percent-encoding = { version = "2", optional = true }
 pest = { version = "2", default-features = false, optional = true, features = ["std"] }
@@ -171,7 +179,7 @@ publicsuffix = { version = "2", optional = true }
 rand = { version = "0.8", optional = true }
 regex = { version = "1", default-features = false, optional = true, features = ["std", "perf", "unicode"] }
 roxmltree = { version = "0.20", optional = true }
-rustyline = { version = "14", default-features = false, optional = true }
+rustyline = { version = "15", default-features = false, optional = true }
 rust_decimal = { version = "1", optional = true }
 seahash = { version = "4", optional = true }
 serde = { version = "1", features = ["derive"], optional = true }
@@ -194,6 +202,7 @@ snafu = { version = "0.8", optional = true }
 webbrowser = { version = "1.0", default-features = false, optional = true }
 woothee = { version = "0.13", optional = true }
 community-id = { version = "0.2", optional = true }
+humantime = { version = "2.1.0", optional = true}
 
 zstd = { version = "0.13", default-features = false, features = ["wasm"], optional = true }
 
@@ -220,7 +229,7 @@ domain = { version = "0.10.3", optional = true, features = ["resolv-sync", "serd
 hostname = { version = "0.4", optional = true }
 grok = { version = "2", optional = true }
 onig = { version = "6", default-features = false, optional = true }
-tokio = { version = "1.38", optional = true, features = ["io-util", "macros", "net", "time", "sync", "rt", "rt-multi-thread"] }
+tokio = { version = "1.42", optional = true, features = ["io-util", "macros", "net", "time", "sync", "rt", "rt-multi-thread"] }
 uuid = { version = "1", features = ["v4", "v7"], optional = true }
 
 # Dependencies used for WASM
