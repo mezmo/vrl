@@ -7,6 +7,7 @@ pub(crate) fn bytes_to_float(bytes: Bytes) -> Resolved {
         .map_err(|e| e.to_string().into())
 }
 
+#[allow(clippy::cast_precision_loss)] //TODO evaluate removal options
 fn to_float(value: Value) -> Resolved {
     use Value::{Boolean, Bytes, Float, Integer, Null, Timestamp};
     match value {
@@ -170,7 +171,8 @@ mod tests {
         }
 
         timestamp {
-             args: func_args![value: Utc.ymd(2014, 7, 8).and_hms_milli(9, 10, 11, 12)],
+             args: func_args![value: Utc.with_ymd_and_hms(2014, 7, 8, 9, 10, 11).unwrap().with_nanosecond(12_000_000).unwrap()],
+
              want: Ok(1_404_810_611.012),
              tdef: TypeDef::float().infallible(),
         }

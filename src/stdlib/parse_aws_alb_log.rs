@@ -129,6 +129,7 @@ fn inner_kind() -> BTreeMap<Field, Kind> {
     ])
 }
 
+#[allow(clippy::too_many_lines)]
 fn parse_log(mut input: &str) -> ExpressionResult<Value> {
     let mut log = BTreeMap::<KeyString, Value>::new();
 
@@ -252,9 +253,10 @@ fn parse_log(mut input: &str) -> ExpressionResult<Value> {
     field_raw!("classification_reason", take_quoted1);
     field_tid!("traceability_id");
 
-    match input.is_empty() {
-        true => Ok(log.into()),
-        false => Err(format!(r#"Log should be fully consumed: "{input}""#).into()),
+    if input.is_empty() {
+        Ok(log.into())
+    } else {
+        Err(format!(r#"Log should be fully consumed: "{input}""#).into())
     }
 }
 
