@@ -7,7 +7,12 @@ fn str_to_cidr(v: &str) -> Result<IpCidr, String> {
     IpCidr::from_str(v).map_err(|err| format!("unable to parse CIDR: {err}"))
 }
 
-fn value_to_cidr(value: &Value) -> Result<IpCidr, function::Error> {
+// Mezmo: Upstream this function was changed to treat invalid CIDR constants as compile-time errors
+// rather than runtime. We do not currently have a mechanism to preemptively validate the CIDR
+// prior to generating config, so this is moved back to a runtime error.
+// Ref: LOG-22157
+// https://github.com/vectordotdev/vrl/commit/898dbaa6be3952830132efd64cbd8d55433c2177
+fn _value_to_cidr(value: &Value) -> Result<IpCidr, function::Error> {
     let str = &value.as_str().ok_or(function::Error::InvalidArgument {
         keyword: "ip_cidr_contains",
         value: value.clone(),
@@ -48,7 +53,7 @@ fn ip_cidr_contains(value: &Value, cidr: &Value) -> Resolved {
     }
 }
 
-fn ip_cidr_contains_constant(value: &Value, cidr_vec: &[IpCidr]) -> Resolved {
+fn _ip_cidr_contains_constant(value: &Value, cidr_vec: &[IpCidr]) -> Resolved {
     let bytes = value.try_bytes_utf8_lossy()?;
     let ip_addr =
         IpAddr::from_str(&bytes).map_err(|err| format!("unable to parse IP address: {err}"))?;
@@ -112,14 +117,7 @@ impl Function for IpCidrContains {
         let cidr = match cidr.resolve_constant(state) {
             None => IpCidrType::Expression(cidr),
             Some(value) => IpCidrType::Constant(match value {
-                Value::Bytes(_) => vec![value_to_cidr(&value)?],
-                Value::Array(vec) => {
-                    let mut output = Vec::with_capacity(vec.len());
-                    for value in vec {
-                        output.push(value_to_cidr(&value)?);
-                    }
-                    output
-                }
+                Value::Bytes(_) | Value::Array(_) => value,
                 _ => {
                     return Err(function::Error::InvalidArgument {
                         keyword: "ip_cidr_contains",
@@ -139,7 +137,7 @@ impl Function for IpCidrContains {
 
 #[derive(Debug, Clone)]
 enum IpCidrType {
-    Constant(Vec<IpCidr>),
+    Constant(Value),
     Expression(Box<dyn Expression>),
 }
 
@@ -154,7 +152,7 @@ impl FunctionExpression for IpCidrContainsFn {
         let value = self.value.resolve(ctx)?;
 
         match &self.cidr {
-            IpCidrType::Constant(cidr_vec) => ip_cidr_contains_constant(&value, cidr_vec),
+            IpCidrType::Constant(cidr) => ip_cidr_contains(&value, cidr),
             IpCidrType::Expression(exp) => {
                 let cidr = exp.resolve(ctx)?;
                 ip_cidr_contains(&value, &cidr)
@@ -236,6 +234,14 @@ mod tests {
                              cidr: vec!["fc00::/7", "2001:4f8:4:ba::/64"],
             ],
             want: Ok(value!(false)),
+            tdef: TypeDef::boolean().fallible(),
+        }
+
+        ipv4_invalid_cidr_const {
+            args: func_args![value: "192.168.10.32",
+                             cidr: "300.0.0.0/16",
+            ],
+            want: Err("unable to parse CIDR: couldn't parse address in network: invalid IP address syntax"),
             tdef: TypeDef::boolean().fallible(),
         }
     ];
