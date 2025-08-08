@@ -203,7 +203,7 @@ mod tests {
                 "source": "some_source",
                 "sourcetype": "some_sourcetype" }"# ],
             want: Ok(value!([{
-                time: (Utc.timestamp(1_426_279_439, 0)),
+                time: (Utc.timestamp_opt(1_426_279_439, 0).unwrap()),
                 event: "abc",
                 index: "main",
                 host: "localhost",
@@ -242,7 +242,7 @@ mod tests {
         time_as_str {
             args: func_args![ value: r#"{"event": "abc", "time": "1426279439"}"# ],
             want: Ok(value!([
-                { event: "abc", time: (Utc.timestamp(1_426_279_439, 0)) },
+                { event: "abc", time: (Utc.timestamp_opt(1_426_279_439, 0).unwrap()) },
             ])),
             tdef: type_def(),
         }

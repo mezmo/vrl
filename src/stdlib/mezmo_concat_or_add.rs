@@ -7,6 +7,8 @@ use crate::compiler::prelude::*;
 #[derive(Clone, Copy, Debug)]
 pub struct MezmoConcatOrAdd;
 
+/// MezmoConcatOrAdd is deprecated, but usage may still exist in configs.
+#[allow(deprecated)]
 impl Function for MezmoConcatOrAdd {
     fn identifier(&self) -> &'static str {
         "mezmo_concat_or_add"
@@ -77,6 +79,7 @@ fn is_numeric(def: &TypeDef) -> bool {
     return def.is_integer() || def.is_float();
 }
 
+#[allow(deprecated)]
 #[cfg(test)]
 mod tests {
     use super::*;

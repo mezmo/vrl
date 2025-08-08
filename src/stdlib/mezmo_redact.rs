@@ -1,24 +1,40 @@
 use crate::compiler::prelude::*;
 use crate::stdlib::mezmo_patterns::*;
 use base64::engine::Engine;
-use once_cell::sync::Lazy;
+use regex::Regex;
 use std::cmp::Ordering;
 use std::collections::{BTreeMap, BTreeSet};
 use std::{
     borrow::Cow,
     convert::{TryFrom, TryInto},
+    sync::OnceLock,
 };
 
-static US_SOCIAL_SECURITY_NUMBER: Lazy<regex::Regex> =
-    Lazy::new(|| regex::Regex::new(US_SOCIAL_SECURITY_NUMBER_PATTERN).unwrap());
-static EMAIL_ADDRESS: Lazy<regex::Regex> =
-    Lazy::new(|| regex::Regex::new(EMAIL_ADDRESS_PATTERN).unwrap());
-static CREDIT_CARD_NUMBER: Lazy<regex::Regex> =
-    Lazy::new(|| regex::Regex::new(CREDIT_CARD_PATTERN).unwrap());
-static IPV4_ADDRESS: Lazy<regex::Regex> =
-    Lazy::new(|| regex::Regex::new(IPV4_ADDRESS_PATTERN).unwrap());
-static PHONE_NUMBER: Lazy<regex::Regex> =
-    Lazy::new(|| regex::Regex::new(PHONE_NUMBER_PATTERN).unwrap());
+static US_SOCIAL_SECURITY_NUMBER: OnceLock<Regex> = OnceLock::new();
+static EMAIL_ADDRESS: OnceLock<Regex> = OnceLock::new();
+static CREDIT_CARD_NUMBER: OnceLock<Regex> = OnceLock::new();
+static IPV4_ADDRESS: OnceLock<Regex> = OnceLock::new();
+static PHONE_NUMBER: OnceLock<Regex> = OnceLock::new();
+
+fn us_social_security_number() -> &'static Regex {
+    US_SOCIAL_SECURITY_NUMBER.get_or_init(|| Regex::new(US_SOCIAL_SECURITY_NUMBER_PATTERN).unwrap())
+}
+
+fn email_address() -> &'static Regex {
+    EMAIL_ADDRESS.get_or_init(|| Regex::new(EMAIL_ADDRESS_PATTERN).unwrap())
+}
+
+fn credit_card_number() -> &'static Regex {
+    CREDIT_CARD_NUMBER.get_or_init(|| Regex::new(CREDIT_CARD_PATTERN).unwrap())
+}
+
+fn ipv4_address() -> &'static Regex {
+    IPV4_ADDRESS.get_or_init(|| Regex::new(IPV4_ADDRESS_PATTERN).unwrap())
+}
+
+fn phone_number() -> &'static Regex {
+    PHONE_NUMBER.get_or_init(|| Regex::new(PHONE_NUMBER_PATTERN).unwrap())
+}
 
 #[derive(Clone, Copy, Debug)]
 pub struct MezmoRedact;
@@ -339,12 +355,12 @@ impl Filter {
                 (res, found_match)
             }
             Filter::UsSocialSecurityNumber => {
-                replace_with_pattern(&US_SOCIAL_SECURITY_NUMBER, input, redactor)
+                replace_with_pattern(us_social_security_number(), input, redactor)
             }
-            Filter::CreditCard => replace_with_pattern(&CREDIT_CARD_NUMBER, input, redactor),
-            Filter::EmailAddress => replace_with_pattern(&EMAIL_ADDRESS, input, redactor),
-            Filter::IPv4Address => replace_with_pattern(&IPV4_ADDRESS, input, redactor),
-            Filter::PhoneNumber => replace_with_pattern(&PHONE_NUMBER, input, redactor),
+            Filter::CreditCard => replace_with_pattern(credit_card_number(), input, redactor),
+            Filter::EmailAddress => replace_with_pattern(email_address(), input, redactor),
+            Filter::IPv4Address => replace_with_pattern(ipv4_address(), input, redactor),
+            Filter::PhoneNumber => replace_with_pattern(phone_number(), input, redactor),
         }
     }
 }
