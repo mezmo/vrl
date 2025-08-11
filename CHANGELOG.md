@@ -1,3 +1,127 @@
+# [3.0.0](https://github.com/mezmo/vrl/compare/v2.1.0...v3.0.0) (2025-08-11)
+
+
+### Bug Fixes
+
+* **ci**: mark `paste` dependency as unmaintained (#1329) [e829c7a](https://github.com/mezmo/vrl/commit/e829c7a4fd584427c547b03e133b23d1c732c1a6) - GitHub
+* **dev**: fix example (#1235) [d1b5e39](https://github.com/mezmo/vrl/commit/d1b5e392ec986e274211cdb944fc1351bef4f61e) - GitHub
+* **dev**: make  optional (#1315) [9e46953](https://github.com/mezmo/vrl/commit/9e46953234eaa5cbf58e30461dd2900eda46a91c) - GitHub
+* **ip_cidr_contains**: mitigate breaking change for cidr validation [8ddcecf](https://github.com/mezmo/vrl/commit/8ddcecfd858cd7a574cb8f1178357a771e7299b9) - Mike Del Tito [LOG-22157](https://logdna.atlassian.net/browse/LOG-22157)
+* **stdlib**: Fix parsing nginx error log delaying request (#1285) [3283181](https://github.com/mezmo/vrl/commit/328318152a84d5fe908542ae538b1d638b51e0cd) - GitHub
+* **stdlib**: human time parse duration error for decimals (#1223) [d4c8490](https://github.com/mezmo/vrl/commit/d4c8490dc4513c042b2f87bd816662e4803054c3) - GitHub
+* **stdlib**: Parsing nginx error log message with comma (#1280) [3def4dd](https://github.com/mezmo/vrl/commit/3def4ddcfb3d6c18fc1253368dee4a49772b95b4) - GitHub
+
+
+### Chores
+
+* **build script**: sort grok pattern file names (#1332) [be5982e](https://github.com/mezmo/vrl/commit/be5982ef20b2da46a0f84b9c38c90639e4eb4597) - GitHub
+* **compiler**: downgrade common abort-infallible error to a warning (#1247) [071972f](https://github.com/mezmo/vrl/commit/071972f1425e559ca30398c746d04a60af15eaeb) - GitHub
+* **deps**: bump base62 from 2.0.3 to 2.2.1 (#1231) [1d7e651](https://github.com/mezmo/vrl/commit/1d7e651d4d981b413729caa5fbf33c0ee2811403) - GitHub
+* **deps**: bump bumpalo from 3.16.0 to 3.17.0 (#1252) [4578a4b](https://github.com/mezmo/vrl/commit/4578a4b78c6f9060b4b647eb5a150dcf178e603d) - GitHub
+* **deps**: bump bytes from 1.9.0 to 1.10.0 (#1262) [caf80cd](https://github.com/mezmo/vrl/commit/caf80cdf5a0f40e1242a326fdef1de8da523c99e) - GitHub
+* **deps**: bump codespan-reporting from 0.11.1 to 0.12.0 (#1357) [314112d](https://github.com/mezmo/vrl/commit/314112db55afb6970a35ae5d853a9a3e4d17fd54) - GitHub
+* **deps**: bump convert_case from 0.6.0 to 0.7.1 (#1255) [c98f2ee](https://github.com/mezmo/vrl/commit/c98f2ee433c67082cb5eacf7b85ba0fb76aa8bca) - GitHub
+* **deps**: bump data-encoding from 2.6.0 to 2.7.0 (#1228) [0e7721e](https://github.com/mezmo/vrl/commit/0e7721e26d463f720da00cd33a661712c776a0b3) - GitHub
+* **deps**: bump data-encoding from 2.7.0 to 2.8.0 (#1264) [5e9db61](https://github.com/mezmo/vrl/commit/5e9db61259ab0b0aa69d005363af57a05976fb63) - GitHub
+* **deps**: bump derive_more from 0.99.18 to 0.99.19 (#1265) [b319f38](https://github.com/mezmo/vrl/commit/b319f385076f2c55277b7a3c10d4d9d84da85fee) - GitHub
+* **deps**: bump either from 1.13.0 to 1.14.0 (#1289) [c81a1dc](https://github.com/mezmo/vrl/commit/c81a1dc95356eeeedae645c6cecb71187248c434) - GitHub
+* **deps**: bump either from 1.14.0 to 1.15.0 (#1326) [8e066b0](https://github.com/mezmo/vrl/commit/8e066b011509d651695d85512a01669b1cd60bc3) - GitHub
+* **deps**: bump event-listener from 5.3.1 to 5.4.0 (#1230) [4b7536d](https://github.com/mezmo/vrl/commit/4b7536d8af4dde5c0e03fad084654f0af6111113) - GitHub
+* **deps**: bump flate2 from 1.0.35 to 1.1.0 (#1308) [2d9e38e](https://github.com/mezmo/vrl/commit/2d9e38ec9bed6b1f367b43a1f8155278b3b6f954) - GitHub
+* **deps**: bump half from 2.4.1 to 2.5.0 (#1346) [e147ab5](https://github.com/mezmo/vrl/commit/e147ab589382e2117579c63ffb3864060089d38b) - GitHub
+* **deps**: bump indexmap from 2.7.1 to 2.8.0 (#1343) [cdd7c13](https://github.com/mezmo/vrl/commit/cdd7c13bea0fb754559aa55302a21168ef2a5e47) - GitHub
+* **deps**: bump lalrpop from 0.20.2 to 0.22.1 (#1254) [9455705](https://github.com/mezmo/vrl/commit/94557051a55f4540d49e17c9d66f0b060d9554bb) - GitHub
+* **deps**: bump linux-raw-sys from 0.4.14 to 0.4.15 (#1229) [8e1897e](https://github.com/mezmo/vrl/commit/8e1897e6f514154fa2e2088a2dbc5b3964bbafed) - GitHub
+* **deps**: bump objc2-encode from 4.0.3 to 4.1.0 (#1227) [445a4bf](https://github.com/mezmo/vrl/commit/445a4bff22edc9cc3c0d1d8a4549a53c49f2c9f6) - GitHub
+* **deps**: bump once_cell from 1.20.3 to 1.21.1 (#1344) [370e98c](https://github.com/mezmo/vrl/commit/370e98c153e89bd7b923dc49555d344c41d9aa7b) - GitHub
+* **deps**: bump ordered-float from 4.6.0 to 5.0.0 (#1291) [c9d47db](https://github.com/mezmo/vrl/commit/c9d47dbcab22eb2f10a126ef3567701c767dabaf) - GitHub
+* **deps**: bump owo-colors from 4.1.0 to 4.2.0 (#1292) [37f4dc7](https://github.com/mezmo/vrl/commit/37f4dc7e88cf6fc81d9b29823cdaaa7cc99dd367) - GitHub
+* **deps**: bump pest from 2.7.15 to 2.8.0 (#1363) [059e5df](https://github.com/mezmo/vrl/commit/059e5dffc819278dfa833849761e723dca4ff200) - GitHub
+* **deps**: bump pest_derive from 2.7.15 to 2.8.0 (#1364) [3010fb5](https://github.com/mezmo/vrl/commit/3010fb50d0feb64901f3d9cdb52e53eac1418ef3) - GitHub
+* **deps**: bump portable-atomic from 1.10.0 to 1.11.0 (#1310) [60d3202](https://github.com/mezmo/vrl/commit/60d32022b9add1d06e35b4efcc0b5b475f24a709) - GitHub
+* **deps**: bump rand and uuid  (#1300) [adba228](https://github.com/mezmo/vrl/commit/adba2283767b38e17f582489b993e37e50c9cae7) - GitHub
+* **deps**: bump rust toolchain to 1.85 (#1316) [2d5e2df](https://github.com/mezmo/vrl/commit/2d5e2dfb28ad22c2f659099f3d7869954f4a6be3) - GitHub
+* **deps**: bump rust_decimal from 1.36.0 to 1.37.1 (#1356) [07cd43a](https://github.com/mezmo/vrl/commit/07cd43a353829851c899f4fed4edb41a002bb8d1) - GitHub
+* **deps**: bump smallvec from 1.13.2 to 1.14.0 (#1273) [f612f3c](https://github.com/mezmo/vrl/commit/f612f3cd8e771c31d11ff79ba2d8a08c9df85f0b) - GitHub
+* **deps**: bump tempfile from 3.15.0 to 3.16.0 (#1251) [10df7db](https://github.com/mezmo/vrl/commit/10df7db5bcb96b14d4375fb887dc8123721c49c2) - GitHub
+* **deps**: bump tempfile from 3.16.0 to 3.17.0 (#1274) [56206ef](https://github.com/mezmo/vrl/commit/56206ef02ec99e55a836c838225871d142790b0c) - GitHub
+* **deps**: bump tempfile from 3.17.1 to 3.18.0 (#1328) [67f7df4](https://github.com/mezmo/vrl/commit/67f7df494bd01a4db81ca23c8f252540e12ab6d1) - GitHub
+* **deps**: bump tempfile from 3.18.0 to 3.19.0 (#1345) [b95eaf5](https://github.com/mezmo/vrl/commit/b95eaf542c38045e0590025db882e43d33b539eb) - GitHub
+* **deps**: bump the patches group across 1 directory with 13 updates (#1365) [a9a4a73](https://github.com/mezmo/vrl/commit/a9a4a73a558c8b03451235ac867c57889d9e99d9) - GitHub
+* **deps**: bump the patches group across 1 directory with 14 updates (#1358) [6223f6c](https://github.com/mezmo/vrl/commit/6223f6c9534612c2d53d9da507d5bdf1f3a3da61) - GitHub
+* **deps**: bump the patches group across 1 directory with 29 updates (#1222) [2ccb98e](https://github.com/mezmo/vrl/commit/2ccb98e471e650b908409eb11a0cae5a0d0bdf21) - GitHub
+* **deps**: bump the patches group across 1 directory with 29 updates (#1331) [59a8e77](https://github.com/mezmo/vrl/commit/59a8e774abe1dbf4beb68c35743bfaf4b45d7ffe) - GitHub
+* **deps**: bump the patches group with 10 updates (#1225) [27ad5fb](https://github.com/mezmo/vrl/commit/27ad5fb7455fb077f99213959baba870baa8fbcf) - GitHub
+* **deps**: bump the patches group with 12 updates (#1261) [6ba6899](https://github.com/mezmo/vrl/commit/6ba68996f5776e1d80a6f858c52218140ff2a76d) - GitHub
+* **deps**: bump the patches group with 12 updates (#1272) [d724b30](https://github.com/mezmo/vrl/commit/d724b3061eb8b569b9cd365fc79d675d87e5998a) - GitHub
+* **deps**: bump the patches group with 19 updates (#1288) [bd8491d](https://github.com/mezmo/vrl/commit/bd8491db516b10961a381d624b1190112e737531) - GitHub
+* **deps**: bump the patches group with 8 updates (#1341) [cda6ad6](https://github.com/mezmo/vrl/commit/cda6ad6251979a3e9c02d626b1e7f96b40a13eae) - GitHub
+* **deps**: bump the patches group with 9 updates (#1250) [8138dd2](https://github.com/mezmo/vrl/commit/8138dd22476cad0161585aa197118f975014d97b) - GitHub
+* **deps**: bump the patches group with 9 updates (#1306) [1146c10](https://github.com/mezmo/vrl/commit/1146c10743db9bad2b16f17bf4b24ba56b44dc30) - GitHub
+* **deps**: bump tokio from 1.42.0 to 1.43.0 (#1232) [b463821](https://github.com/mezmo/vrl/commit/b463821fca3f680bd863ff6e917ecbb0171721c4) - GitHub
+* **deps**: bump tokio from 1.43.0 to 1.44.0 (#1327) [d8380f6](https://github.com/mezmo/vrl/commit/d8380f6038cca5014f27b664afd968d85c9a9f45) - GitHub
+* **deps**: bump typenum from 1.17.0 to 1.18.0 (#1290) [6b8dc74](https://github.com/mezmo/vrl/commit/6b8dc7478c8b26fd3a604c5af7b7f619ceb1eaa7) - GitHub
+* **deps**: bump uuid from 1.11.0 to 1.12.1 (#1233) [69e8ef8](https://github.com/mezmo/vrl/commit/69e8ef8a91905075f031cffb42ec7a0a6393d566) - GitHub
+* **deps**: Disable default features for rust_decimal to avoid unnecessary deps (#1298) [98c1463](https://github.com/mezmo/vrl/commit/98c14635db5e6a0f1cb75cd7769cca8a6c645441) - GitHub
+* **deps**: import paste directly (#1335) [53aa78a](https://github.com/mezmo/vrl/commit/53aa78a0c22617c915a7d84d1825896d10f0c826) - GitHub
+* **dev**: Add bug and feature request templates (#1347) [728f614](https://github.com/mezmo/vrl/commit/728f614bef400bcfa58c8c619be7f01503c1c5b9) - GitHub
+* **dev**: clippy auto-fixes (#1239) [6de4fe7](https://github.com/mezmo/vrl/commit/6de4fe7b8ba2a594e1a1cb1ac58041fbdfb1c716) - GitHub
+* **dev**: clippy fixes (#1234) [31e87fa](https://github.com/mezmo/vrl/commit/31e87fa530e94b44b3e394b4a3221effdf2edd63) - GitHub
+* **dev**: deny clippy::needless_pass_by_value (#1241) [f66533c](https://github.com/mezmo/vrl/commit/f66533cdfff011c81d72059e5244f2e08863a4a7) - GitHub
+* **dev**: enable even more clippy/lint checks (#1256) [9225461](https://github.com/mezmo/vrl/commit/922546150fedeb8dd6513711f963befc743a72b4) - GitHub
+* **dev**: fix deprecations (#1238) [6b82a86](https://github.com/mezmo/vrl/commit/6b82a86daa45b35d2b14147f84bb71760b8645d9) - GitHub
+* **dev**: more clippy fixes (#1236) [942b8ce](https://github.com/mezmo/vrl/commit/942b8cef19f521253f0ceccab361dd2e62b2f7fd) - GitHub
+* **dev**: more clippy fixes (#1259) [f0a0bc2](https://github.com/mezmo/vrl/commit/f0a0bc2cf1e267afd981649edace895f07cfa18e) - GitHub
+* **dev**: more clippy fixes (#1270) [f7da5a8](https://github.com/mezmo/vrl/commit/f7da5a89d7a6aecf1e52fea1fdc75a9921214531) - GitHub
+* **dev**: more tricky clippy fixes (#1237) [198229d](https://github.com/mezmo/vrl/commit/198229d7e02eb5608fde62ee6dd5f614e08ef01e) - GitHub
+* **dev**: revert type to previous names to avoid breaking users (#1271) [acfd9f9](https://github.com/mezmo/vrl/commit/acfd9f95b1e99f2c6cfab8567b347d865efde922) - GitHub
+* **docs**: add test feature to README.md (#1281) [250f793](https://github.com/mezmo/vrl/commit/250f7938edb157ce12071b6eefcef85c6605d830) - GitHub
+* **lib**: delete old unused tests lib (#1269) [7cf854c](https://github.com/mezmo/vrl/commit/7cf854c324188c024f9584244b6ecaf33ef6ba00) - GitHub
+* **parsing**: Make node processing in `parsing::xml` public (#1242) [daa66cd](https://github.com/mezmo/vrl/commit/daa66cd8aca7a31f4491f33abf0863c5f55be0bb) - GitHub
+* **releasing**: add `--no-prompt` support for generate_release_changelog.sh (#1296) [60ea35f](https://github.com/mezmo/vrl/commit/60ea35f3cbf0557b9e9558a8156905fd12ca9e6d) - GitHub
+* **releasing**: Prepare 0.22.0 release (#1283) [fd95f9d](https://github.com/mezmo/vrl/commit/fd95f9d041053dda99afcd01e666d4c8a9d2d449) - GitHub
+* **releasing**: Prepare 0.23.0 release (#1369) [048253d](https://github.com/mezmo/vrl/commit/048253de6a6309a2bc40ac3b9e06cb9cd3f060ea) - GitHub
+* **releasing**: refactoring, small fixes and README.md (#1282) [c48c609](https://github.com/mezmo/vrl/commit/c48c609a9919a4916ab4abe2acce698dce10acc3) - GitHub
+* **releasing**: script for preparing VRL releases (#877) [0f4ed43](https://github.com/mezmo/vrl/commit/0f4ed43ccb0fc13a631421a018b7dbdbd336cd6d) - GitHub
+* Removed unused toml dev dependency (#1319) [8ea498b](https://github.com/mezmo/vrl/commit/8ea498b993f46a4924c5cc37458b3160a1be3bb5) - GitHub
+* Replace once_cell with methods from a Rust standard library (#1260) [b3aca6e](https://github.com/mezmo/vrl/commit/b3aca6ef81dfef7181b637995caec827cd932a16) - GitHub
+* **stdlib**: remove deprecated ellipsis argument from truncate (#1188) [ae472dd](https://github.com/mezmo/vrl/commit/ae472dd9e48442307aa6326bbc23b61749ac93a0) - GitHub
+* **stdlib**: Simplify ip_subnet function code (#1321) [d3ab634](https://github.com/mezmo/vrl/commit/d3ab6343622c55bbb37d05e21eb92c6ace82683d) - GitHub
+* Switch directly to cidr crate (#1320) [3891f30](https://github.com/mezmo/vrl/commit/3891f30eb50fe0e1440ba8eb77932bed19f0c272) - GitHub
+
+
+### Features
+
+* **lz4 encoder/decoder**: add support for Lz4 encode and decode (#1339) [946e503](https://github.com/mezmo/vrl/commit/946e50311d73fcbad15fcc34babd1917f272cb93) - GitHub
+* **snakecase**: add support for excluded boundaries (#1324) [48e5bd6](https://github.com/mezmo/vrl/commit/48e5bd6060d74e667ff8f31843a9d3e28a387a96) - GitHub
+* **stdlib**: add `shannon_entropy` function (#1267) [e8aab48](https://github.com/mezmo/vrl/commit/e8aab484f3b0c2f197689657f863f89d8f8b8c56) - GitHub
+* **stdlib**: add `to_syslog_facility_code` function (#1221) [19873f0](https://github.com/mezmo/vrl/commit/19873f037c61b2e17b70cde2db48ba5320c52caf) - GitHub
+* **stdlib**: ip_cidr_contains now accepts array of CIDR (#1248) [33a7222](https://github.com/mezmo/vrl/commit/33a7222f8ca2f2a7088cf05c447fc41a8b54a454) - GitHub
+
+
+### Miscellaneous
+
+* Merge pull request #98 from mezmo/mdeltito/LOG-22157 [6eeb62f](https://github.com/mezmo/vrl/commit/6eeb62f4c4d8aaff718119d8b492ee4da375da96) - GitHub [LOG-22157](https://logdna.atlassian.net/browse/LOG-22157) [LOG-22157](https://logdna.atlassian.net/browse/LOG-22157)
+* Merge tag 'v0.23.0' into mdeltito/LOG-22157 [d38f5a7](https://github.com/mezmo/vrl/commit/d38f5a75cf9945b02efaf1c3c6f3f4c0f26e941a) - Mike Del Tito [LOG-22157](https://logdna.atlassian.net/browse/LOG-22157)
+* Revert "performance(stdlib): Use zlib-rs for much faster zlib decoding/encodi…" (#1366) [a6e9603](https://github.com/mezmo/vrl/commit/a6e96033c5e873e7d3db165ec764e83f3ba8d624) - GitHub
+* Revert "chore(deps): bump rand and uuid  (#1300)" (#1351) [7020ba2](https://github.com/mezmo/vrl/commit/7020ba22191554fbc8acd5875350a6b9b3c2ce42) - GitHub
+* Revert "chore(deps): bump ordered-float from 4.6.0 to 5.0.0 (#1291)" (#1338) [759b7d1](https://github.com/mezmo/vrl/commit/759b7d17449ee41a2c0b932b5a3b0d13a411445e) - GitHub
+* fix!(slice): array type def (#1246) [7612a8b](https://github.com/mezmo/vrl/commit/7612a8b9c3c6d6c8206833bf904f2c566a75a0eb) - GitHub
+* **encode_proto**: When encoding values into string fields, attempt to convert them automatically (#1304) [6b6e874](https://github.com/mezmo/vrl/commit/6b6e874916ccff87a85a94c40f217c5008a415ef) - GitHub
+* **protobuf**: Optimise converting to protobuf (#1294) [bd22634](https://github.com/mezmo/vrl/commit/bd22634e80e7a64e3b1b84cadf2dc176d070bc1e) - GitHub
+* **stdlib,value**: Faster JSON parsing (#1249) [c286404](https://github.com/mezmo/vrl/commit/c286404006b73b6ad0e06400e9d093d5c1b383bf) - GitHub
+* **stdlib**: Avoid allocation for some VRL functions (#1277) [7b5e92e](https://github.com/mezmo/vrl/commit/7b5e92ef7190f78f754913131eb0867d45dc6f55) - GitHub
+* **stdlib**: Optimise ip_cidr_contains when cidr is constant (#1286) [898dbaa](https://github.com/mezmo/vrl/commit/898dbaa6be3952830132efd64cbd8d55433c2177) - GitHub
+* **stdlib**: Optimise is_nullish (#1284) [16966ee](https://github.com/mezmo/vrl/commit/16966ee7aceba2a16694cc81aaa29a6cca234c4e) - GitHub
+* **stdlib**: Switch to much faster ua-parser (#1317) [602ca7e](https://github.com/mezmo/vrl/commit/602ca7ea60779cbb94d03f8060cea64f9443dd13) - GitHub
+* **stdlib**: Update user agent data for parse_user_agent (#1299) [f19399c](https://github.com/mezmo/vrl/commit/f19399c3ab49f998950ad2c3e172a2d5d5236e1d) - GitHub
+* **stdlib**: Use zlib-rs for much faster zlib decoding/encoding (#1301) [d2ab928](https://github.com/mezmo/vrl/commit/d2ab928a59a61f07b17bed0e2b72e58d478f1900) - GitHub
+
+
+### **BREAKING CHANGES**
+
+* **stdlib:** remove deprecated ellipsis argument from truncate (#1188)
+
 # [2.1.0](https://github.com/mezmo/vrl/compare/v2.0.4...v2.1.0) (2025-08-06)
 
 
