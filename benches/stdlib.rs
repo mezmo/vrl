@@ -1,5 +1,3 @@
-#![allow(deprecated)]
-
 use chrono::{DateTime, Datelike, TimeZone, Utc};
 use criterion::{criterion_group, criterion_main, Criterion};
 use regex::Regex;
@@ -145,6 +143,7 @@ criterion_group!(
               sha1,
               sha2,
               sha3,
+              shannon_entropy,
               sieve,
               slice,
               split,
@@ -161,6 +160,7 @@ criterion_group!(
               to_int,
               to_regex,
               to_string,
+              to_syslog_facility_code,
               to_syslog_facility,
               to_syslog_level,
               to_syslog_severity,
@@ -744,6 +744,11 @@ bench_function! {
 
     ipv4 {
         args: func_args![cidr: "192.168.0.0/16", value: "192.168.10.32"],
+        want: Ok(true),
+    }
+
+    ipv4_array {
+        args: func_args![cidr: value!(["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]), value: "192.168.10.32"],
         want: Ok(true),
     }
 
@@ -2532,6 +2537,25 @@ bench_function! {
 }
 
 bench_function! {
+    shannon_entropy => vrl::stdlib::ShannonEntropy;
+
+    default {
+        args: func_args![value: value!("Supercalifragilisticexpialidocious")],
+        want: Ok(value!(3.736_987_930_635_821)),
+    }
+
+    codepoint_segmentation {
+        args: func_args![value: value!("Supercalifragilisticexpialidocious"), segmentation: value!("codepoint")],
+        want: Ok(value!(3.736_987_930_635_821)),
+    }
+
+    grapheme_segmentation {
+        args: func_args![value: value!("test123%456.فوائد.net."), segmentation: value!("grapheme")],
+        want: Ok(value!(3.936_260_027_531_526_3)),
+    }
+}
+
+bench_function! {
     sieve => vrl::stdlib::Sieve;
 
     regex {
@@ -2836,6 +2860,15 @@ bench_function! {
     literal {
         args: func_args![value: value!(23)],
         want: Ok(value!("local7")),
+    }
+}
+
+bench_function! {
+    to_syslog_facility_code => vrl::stdlib::ToSyslogFacilityCode;
+
+    literal {
+        args: func_args![value: value!("local7")],
+        want: Ok(value!(23)),
     }
 }
 

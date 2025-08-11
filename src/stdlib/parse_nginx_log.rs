@@ -6,7 +6,7 @@ use std::collections::BTreeMap;
 use super::log_util;
 
 fn parse_nginx_log(
-    bytes: Value,
+    bytes: &Value,
     timestamp_format: Option<Value>,
     format: &Bytes,
     ctx: &Context,
@@ -18,7 +18,7 @@ fn parse_nginx_log(
     };
     let regex = regex_for_format(format.as_ref());
     let captures = regex.captures(&message).ok_or("failed parsing log line")?;
-    log_util::log_fields(regex, &captures, &timestamp_format, ctx.timezone())
+    log_util::log_fields(regex, &captures, &timestamp_format, *ctx.timezone())
         .map(rename_referrer)
         .map_err(Into::into)
 }
@@ -121,9 +121,7 @@ fn regex_for_format(format: &[u8]) -> &Regex {
 
 fn time_format_for_format(format: &[u8]) -> String {
     match format {
-        b"combined" => "%d/%b/%Y:%T %z".to_owned(),
-        b"ingress_upstreaminfo" => "%d/%b/%Y:%T %z".to_owned(),
-        b"main" => "%d/%b/%Y:%T %z".to_owned(),
+        b"combined" | b"ingress_upstreaminfo" | b"main" => "%d/%b/%Y:%T %z".to_owned(),
         b"error" => "%Y/%m/%d %H:%M:%S".to_owned(),
         _ => unreachable!(),
     }
@@ -155,7 +153,7 @@ impl FunctionExpression for ParseNginxLogFn {
             .transpose()?;
         let format = &self.format;
 
-        parse_nginx_log(bytes, timestamp_format, format, ctx)
+        parse_nginx_log(&bytes, timestamp_format, format, ctx)
     }
 
     fn type_def(&self, _: &state::TypeState) -> TypeDef {
@@ -667,6 +665,49 @@ mod tests {
                 "server" => "test.local",
                 "request" => "GET / HTTP/2.0",
                 "host" => "127.0.0.1:8080",
+            }),
+            tdef: TypeDef::object(kind_error()).fallible(),
+        }
+
+        error_rate_delaying {
+            args: func_args![
+                value: r#"2022/05/30 20:56:22 [error] 7164#7164: *38068741 delaying requests, excess: 50.416, by zone "api_access_token", client: 10.244.0.0, server: test.local, request: "GET / HTTP/2.0", host: "127.0.0.1:8080""#,
+                format: "error"
+            ],
+            want: Ok(btreemap! {
+                "timestamp" => Value::Timestamp(DateTime::parse_from_rfc3339("2022-05-30T20:56:22Z").unwrap().into()),
+                "severity" => "error",
+                "pid" => 7164,
+                "tid" => 7164,
+                "cid" => 38_068_741,
+                "message" => "delaying requests",
+                "excess" => 50.416,
+                "zone" => "api_access_token",
+                "client" => "10.244.0.0",
+                "server" => "test.local",
+                "request" => "GET / HTTP/2.0",
+                "host" => "127.0.0.1:8080",
+            }),
+            tdef: TypeDef::object(kind_error()).fallible(),
+        }
+
+        error_message_with_comma {
+            args: func_args![
+                value: r#"2022/05/30 20:56:22 [info] 3134#0: *99247 epoll_wait() reported that client prematurely closed connection, so upstream connection is closed too (104: Connection reset by peer) while reading upstream, client: 10.244.0.0, server: example.org, request: "GET / HTTP/1.1", upstream: "fastcgi://unix:/run/php-fpm/php8.3-fpm.sock:", host: "example:8080""#,
+                format: "error"
+            ],
+            want: Ok(btreemap! {
+                "timestamp" => Value::Timestamp(DateTime::parse_from_rfc3339("2022-05-30T20:56:22Z").unwrap().into()),
+                "severity" => "info",
+                "pid" => 3134,
+                "tid" => 0,
+                "cid" => 99_247,
+                "message" => "epoll_wait() reported that client prematurely closed connection, so upstream connection is closed too (104: Connection reset by peer) while reading upstream",
+                "client" => "10.244.0.0",
+                "server" => "example.org",
+                "request" => "GET / HTTP/1.1",
+                "host" => "example:8080",
+                "upstream" => "fastcgi://unix:/run/php-fpm/php8.3-fpm.sock:",
             }),
             tdef: TypeDef::object(kind_error()).fallible(),
         }

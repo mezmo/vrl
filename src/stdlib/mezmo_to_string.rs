@@ -124,7 +124,7 @@ mod tests {
         }
 
         timestamp {
-            args: func_args![value: Utc.ymd(2021, 1, 1).and_hms_milli(5, 12, 0, 0)],
+            args: func_args![value: Utc.with_ymd_and_hms(2021, 1, 1, 5, 12, 0).unwrap()],
             want: Ok("2021-01-01T05:12:00Z"),
             tdef: TypeDef::bytes().infallible(),
         }

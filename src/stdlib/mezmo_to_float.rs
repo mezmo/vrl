@@ -9,7 +9,7 @@ fn to_float(value: Value) -> Resolved {
         Boolean(v) => Ok(NotNan::new(if v { 1.0 } else { 0.0 }).unwrap().into()),
         Null => Ok(NotNan::new(0.0).unwrap().into()),
         Timestamp(v) => Ok(Value::from_f64_or_zero(
-            v.timestamp_nanos() as f64 / 1_000_000_000_f64,
+            (v.timestamp_nanos_opt().unwrap_or(0)) as f64 / 1_000_000_000_f64,
         )),
         Bytes(v) => {
             let s = String::from_utf8_lossy(&v);

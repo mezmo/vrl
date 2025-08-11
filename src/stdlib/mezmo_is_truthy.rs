@@ -133,7 +133,7 @@ mod tests {
         }
 
         timestamp {
-             args: func_args![value: Utc.ymd(2014, 7, 8).and_hms_milli(9, 10, 11, 12)],
+             args: func_args![value: Utc.with_ymd_and_hms(2014, 7, 8, 9, 10, 11).unwrap().with_nanosecond(12_000_000).unwrap()],
              want: Ok(true),
              tdef: TypeDef::boolean().infallible(),
         }
