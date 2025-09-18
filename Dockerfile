@@ -1,4 +1,4 @@
-FROM rust:1.83.0 AS base
+FROM rust:1.88.0 AS base
 
 WORKDIR /opt/app
 
