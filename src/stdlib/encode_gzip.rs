@@ -100,10 +100,9 @@ impl FunctionExpression for EncodeGzipFn {
 
     fn type_def(&self, state: &state::TypeState) -> TypeDef {
         let is_compression_level_valid_constant = if let Some(level) = &self.compression_level {
-            if let Some(Value::Integer(level)) = level.resolve_constant(state) {
-                level <= i64::from(MAX_COMPRESSION_LEVEL)
-            } else {
-                false
+            match level.resolve_constant(state) {
+                Some(Value::Integer(level)) => level <= i64::from(MAX_COMPRESSION_LEVEL),
+                _ => false,
             }
         } else {
             true
@@ -115,19 +114,15 @@ impl FunctionExpression for EncodeGzipFn {
 
 #[cfg(test)]
 mod test {
-    use base64::Engine;
-
     use crate::value;
 
     use super::*;
 
-    fn decode_base64(text: &str) -> Vec<u8> {
-        let engine = base64::engine::GeneralPurpose::new(
-            &base64::alphabet::STANDARD,
-            base64::engine::general_purpose::GeneralPurposeConfig::new(),
-        );
-
-        engine.decode(text).expect("Cannot decode from Base64")
+    fn encode(text: &str, level: flate2::Compression) -> Vec<u8> {
+        let mut encoder = GzEncoder::new(text.as_bytes(), level);
+        let mut output = vec![];
+        encoder.read_to_end(&mut output).unwrap();
+        output
     }
 
     test_function![
@@ -135,15 +130,16 @@ mod test {
 
         with_defaults {
             args: func_args![value: value!("you_have_successfully_decoded_me.congratulations.you_are_breathtaking.")],
-            want: Ok(value!(decode_base64("H4sIAAAAAAAA/w3LgQ3AIAgEwI1ciVD8qqmVRKAJ29cBLjWo8weyEIHZHXMmVYhWVHpRRFfb7DHZhy4reQBv0LXB3p2fsVr5AXeBkepGAAAA").as_bytes())),
+            want: Ok(value!(encode("you_have_successfully_decoded_me.congratulations.you_are_breathtaking.", flate2::Compression::default()).as_bytes())),
             tdef: TypeDef::bytes().infallible(),
         }
 
         with_custom_compression_level {
             args: func_args![value: value!("you_have_successfully_decoded_me.congratulations.you_are_breathtaking."), compression_level: 9],
-            want: Ok(value!(decode_base64("H4sIAAAAAAAC/w3LgQ3AIAgEwI1ciVD8qqmVRKAJ29cBLjWo8weyEIHZHXMmVYhWVHpRRFfb7DHZhy4reQBv0LXB3p2fsVr5AXeBkepGAAAA").as_bytes())),
+            want: Ok(value!(encode("you_have_successfully_decoded_me.congratulations.you_are_breathtaking.", flate2::Compression::new(9)).as_bytes())),
             tdef: TypeDef::bytes().infallible(),
         }
+
         invalid_constant_compression {
             args: func_args![value: value!("test"), compression_level: 11],
             want: Err("compression level must be <= 10"),

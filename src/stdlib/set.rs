@@ -18,7 +18,7 @@ fn set(path: Value, mut value: Value, data: Value) -> Resolved {
                             "path segment must be either string or integer, not {}",
                             value.kind()
                         )
-                        .into())
+                        .into());
                     }
                 };
 
@@ -32,7 +32,7 @@ fn set(path: Value, mut value: Value, data: Value) -> Resolved {
                 got: value.kind(),
                 expected: Kind::array(Collection::any()) | Kind::bytes(),
             }
-            .into())
+            .into());
         }
     };
     value.insert(&path, data);
@@ -157,11 +157,11 @@ impl FunctionExpression for SetFn {
 
         if value_td.is_array() {
             td = td.or_array(Collection::any());
-        };
+        }
 
         if value_td.is_object() {
             td = td.or_object(Collection::any());
-        };
+        }
 
         td
     }

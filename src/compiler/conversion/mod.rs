@@ -9,7 +9,7 @@ use chrono::{DateTime, LocalResult, ParseError as ChronoParseError, TimeZone as 
 use ordered_float::NotNan;
 use snafu::{ResultExt, Snafu};
 
-use super::datetime::{datetime_to_utc, TimeZone};
+use super::datetime::{TimeZone, datetime_to_utc};
 
 #[cfg(test)]
 mod tests;
@@ -121,18 +121,22 @@ impl Conversion {
             (Some("float"), None) => Ok(Self::Float),
             (Some("bool" | "boolean"), None) => Ok(Self::Boolean),
             (Some("timestamp"), None) => Ok(Self::Timestamp(tz)),
-            (Some("timestamp"), Some(fmt)) => {
-                // DateTime<Utc> can only convert timestamps without
-                // time zones, and DateTime<FixedOffset> can only
-                // convert with tone zones, so this has to distinguish
-                // between the two types of formats.
-                if format_has_zone(fmt) {
-                    Ok(Self::TimestampTzFmt(fmt.into()))
-                } else {
-                    Ok(Self::TimestampFmt(fmt.into(), tz))
-                }
-            }
+            (Some("timestamp"), Some(fmt)) => Ok(Self::timestamp(fmt, tz)),
             _ => Err(ConversionError::UnknownConversion { name: s.into() }),
+        }
+    }
+
+    /// Convert the string into timestamp
+    #[must_use]
+    pub fn timestamp(fmt: &str, tz: TimeZone) -> Self {
+        // DateTime<Utc> can only convert timestamps without
+        // time zones, and DateTime<FixedOffset> can only
+        // convert with tone zones, so this has to distinguish
+        // between the two types of formats.
+        if format_has_zone(fmt) {
+            Self::TimestampTzFmt(fmt.into())
+        } else {
+            Self::TimestampFmt(fmt.into(), tz)
         }
     }
 

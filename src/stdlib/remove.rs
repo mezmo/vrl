@@ -18,7 +18,7 @@ fn remove(path: Value, compact: Value, mut value: Value) -> Resolved {
                             "path segment must be either string or integer, not {}",
                             value.kind()
                         )
-                        .into())
+                        .into());
                     }
                 };
 
@@ -32,7 +32,7 @@ fn remove(path: Value, compact: Value, mut value: Value) -> Resolved {
                 got: value.kind(),
                 expected: Kind::array(Collection::any()),
             }
-            .into())
+            .into());
         }
     };
     let compact = compact.try_boolean()?;
@@ -183,11 +183,11 @@ impl FunctionExpression for RemoveFn {
 
         if value_td.is_array() {
             td = td.or_array(Collection::any());
-        };
+        }
 
         if value_td.is_object() {
             td = td.or_object(Collection::any());
-        };
+        }
 
         td
     }

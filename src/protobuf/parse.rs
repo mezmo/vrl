@@ -25,8 +25,7 @@ pub fn proto_to_value(
                 let kind = field_descriptor.kind();
                 let enum_desc = kind.as_enum().ok_or_else(|| {
                     format!(
-                        "Internal error while parsing protobuf enum. Field descriptor: {:?}",
-                        field_descriptor
+                        "Internal error while parsing protobuf enum. Field descriptor: {field_descriptor:?}"
                     )
                 })?;
                 Value::from(
@@ -64,8 +63,7 @@ pub fn proto_to_value(
                 let kind = field_descriptor.kind();
                 let message_desc = kind.as_message().ok_or_else(|| {
                     format!(
-                        "Internal error while parsing protobuf field descriptor: {:?}",
-                        field_descriptor
+                        "Internal error while parsing protobuf field descriptor: {field_descriptor:?}"
                     )
                 })?;
                 Value::from(
@@ -75,8 +73,7 @@ pub fn proto_to_value(
                                 kv.0.as_str()
                                     .ok_or_else(|| {
                                         format!(
-                                            "Internal error while parsing protobuf map. Field descriptor: {:?}",
-                                            field_descriptor
+                                            "Internal error while parsing protobuf map. Field descriptor: {field_descriptor:?}"
                                         )
                                     })?
                                     .into(),
@@ -97,7 +94,7 @@ pub(crate) fn parse_proto(descriptor: &MessageDescriptor, value: Value) -> Resol
     let bytes = value.try_bytes()?;
 
     let dynamic_message = DynamicMessage::decode(descriptor.clone(), bytes)
-        .map_err(|error| format!("Error parsing protobuf: {:?}", error))?;
+        .map_err(|error| format!("Error parsing protobuf: {error:?}"))?;
     Ok(proto_to_value(
         &prost_reflect::Value::Message(dynamic_message),
         None,
@@ -122,9 +119,9 @@ mod tests {
 
     #[test]
     fn test_parse_files() {
-        let path = test_data_dir().join("test_protobuf.desc");
-        let descriptor = get_message_descriptor(&path, "test_protobuf.Person").unwrap();
-        let encoded_value = value!(read_pb_file("person_someone.pb"));
+        let path = test_data_dir().join("test_protobuf/v1/test_protobuf.desc");
+        let descriptor = get_message_descriptor(&path, "test_protobuf.v1.Person").unwrap();
+        let encoded_value = value!(read_pb_file("test_protobuf/v1/input/person_someone.pb"));
         let parsed_value = parse_proto(&descriptor, encoded_value);
         assert!(
             parsed_value.is_ok(),
@@ -132,15 +129,15 @@ mod tests {
             parsed_value.unwrap_err()
         );
         let parsed_value = parsed_value.unwrap();
-        let value = value!({ name: "someone", phones: [{number: "123456"}] });
+        let value = value!({ name: "Someone", phones: [{number: "123-456"}] });
         assert_eq!(value, parsed_value)
     }
 
     #[test]
     fn test_parse_proto3() {
-        let path = test_data_dir().join("test_protobuf3.desc");
-        let descriptor = get_message_descriptor(&path, "test_protobuf3.Person").unwrap();
-        let encoded_value = value!(read_pb_file("person_someone3.pb"));
+        let path = test_data_dir().join("test_protobuf3/v1/test_protobuf3.desc");
+        let descriptor = get_message_descriptor(&path, "test_protobuf3.v1.Person").unwrap();
+        let encoded_value = value!(read_pb_file("test_protobuf3/v1/input/person_someone.pb"));
         let parsed_value = parse_proto(&descriptor, encoded_value);
         assert!(
             parsed_value.is_ok(),
@@ -148,7 +145,8 @@ mod tests {
             parsed_value.unwrap_err()
         );
         let parsed_value = parsed_value.unwrap();
-        let value = value!({ data: {data_phone: "HOME"}, name: "someone", phones: [{number: "1234", type: "MOBILE"}] });
+        let value = value!({ name: "Someone",
+                                    phones: [{number: "123-456", type: "PHONE_TYPE_MOBILE"}] });
         assert_eq!(value, parsed_value)
     }
 }

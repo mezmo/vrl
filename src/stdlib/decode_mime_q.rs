@@ -1,13 +1,12 @@
 use charset::Charset;
-use data_encoding::BASE64_MIME;
 use nom::{
+    IResult, Parser,
     branch::alt,
     bytes::complete::{tag, take_until, take_until1},
     combinator::{map, map_opt, opt, success},
     error::{ContextError, ParseError},
     multi::fold_many1,
     sequence::{delimited, pair, separated_pair},
-    IResult,
 };
 
 use crate::compiler::prelude::*;
@@ -99,11 +98,12 @@ fn decode_mime_q(bytes: &Value) -> Resolved {
             map_opt(parse_internal_q, |word| word.decode_word().map(Ok).ok()),
             success(Ok(String::new())),
         )),
-    ))(input)
+    ))
+    .parse(input)
     .map_err(|e| match e {
         nom::Err::Error(e) | nom::Err::Failure(e) => {
             // Create a descriptive error message if possible.
-            nom::error::convert_error(input, e)
+            nom_language::error::convert_error(input, e)
         }
         nom::Err::Incomplete(_) => e.to_string(),
     })?;
@@ -123,7 +123,8 @@ fn parse_delimited_q<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
     pair(
         take_until("=?"),
         delimited(tag("=?"), parse_internal_q, tag("?=")),
-    )(input)
+    )
+    .parse(input)
 }
 
 /// Parses inside of encoded word into (charset, encoding, encoded text)
@@ -145,7 +146,8 @@ fn parse_internal_q<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
             encoding,
             input,
         },
-    )(input)
+    )
+    .parse(input)
 }
 
 struct EncodedWord<'a> {
@@ -160,8 +162,8 @@ impl EncodedWord<'_> {
 
         // Decode
         let decoded = match self.encoding {
-            "B" | "b" => BASE64_MIME
-                .decode(self.input.as_bytes())
+            "B" | "b" => base64_simd::STANDARD
+                .decode_to_vec(self.input.as_bytes())
                 .map_err(|_| "Unable to decode base64 value")?,
             "Q" | "q" => {
                 // The quoted_printable module does a trim_end on the input, so if
@@ -173,7 +175,7 @@ impl EncodedWord<'_> {
                     quoted_printable::decode(trimmed, quoted_printable::ParseMode::Robust);
                 if let Ok(ref mut d) = result {
                     if to_decode.len() != trimmed.len() {
-                        d.extend_from_slice(to_decode[trimmed.len()..].as_bytes());
+                        d.extend_from_slice(&to_decode.as_bytes()[trimmed.len()..]);
                     }
                 }
                 result.map_err(|_| "Unable to decode quoted_printable value")?
@@ -192,7 +194,7 @@ impl EncodedWord<'_> {
 
 #[cfg(test)]
 mod test {
-    use nom::error::VerboseError;
+    use nom_language::error::VerboseError;
 
     use crate::value;
 
