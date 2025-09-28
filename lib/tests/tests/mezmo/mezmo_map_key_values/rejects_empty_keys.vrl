@@ -1,0 +1,23 @@
+# result: {
+#   " a ": "A",
+#   " b ": "B",
+#   "c": "C"
+# }
+
+mezmo_map_key_values({
+  " a ": "a",
+  " b ": "b",
+  "c": "c",
+}) -> |key, value| {
+  new_key = if key == s' a ' {
+    s' '
+  } else if key == s' b ' {
+    s''
+  } else {
+    key
+  }
+
+  [new_key, upcase(string(value))]
+}
+
+

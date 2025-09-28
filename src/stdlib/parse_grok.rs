@@ -165,6 +165,7 @@ impl Function for ParseGrok {
     }
 
     #[cfg(not(target_arch = "wasm32"))]
+    #[allow(unused_mut)]
     fn compile(
         &self,
         state: &state::TypeState,
@@ -203,6 +204,7 @@ impl Function for ParseGrok {
     }
 }
 
+#[allow(unused_mut)]
 fn grok_with_mezmo_patterns() -> grok::Grok {
     let mut grok = grok::Grok::with_default_patterns();
     for &(key, value) in MEZMO_PATTERNS {

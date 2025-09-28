@@ -1,0 +1,9 @@
+# result: { "foo": "FIRST" }
+
+mezmo_map_key_values({
+  "foo": "first",
+  "FOO": "second",
+  "Foo": "third"
+}) -> |key, value| {
+  [downcase(key), upcase(string(value))]
+}

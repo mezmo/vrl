@@ -1,0 +1,5 @@
+# result: ["HELLO", "WORLD", "FOO", "BAR"]
+
+mezmo_map_key_values(["helLO", "WORLD", "foo", "Bar"]) -> |key, value| {
+  [key, upcase(string(value))]
+}
