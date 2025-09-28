@@ -1,0 +1,5 @@
+# result: { "a": 1, "b": {} }
+
+mezmo_map_key_values({ "a": 1, "b": {} }, -1) -> |key, value| { 
+  [key, parse_timestamp!(string!(value.c), format: s'%v %R %:z')] 
+}

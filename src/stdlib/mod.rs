@@ -120,6 +120,7 @@ cfg_if::cfg_if! {
         mod mezmo_length;
         mod mezmo_value_size;
         mod mezmo_matching_patterns;
+        mod mezmo_map_key_values;
         mod mezmo_pad_end;
         mod mezmo_pad_start;
         mod mezmo_parse_float;
@@ -344,6 +345,7 @@ cfg_if::cfg_if! {
         pub use mezmo_last_index_of::MezmoLastIndexOf;
         pub use mezmo_length::MezmoLength;
         pub use mezmo_matching_patterns::MezmoMatchingPatterns;
+        pub use mezmo_map_key_values::MezmoMapKeyValues;
         pub use mezmo_pad_end::MezmoPadEnd;
         pub use mezmo_pad_start::MezmoPadStart;
         pub use mezmo_parse_float::MezmoParseFloat;
@@ -580,6 +582,7 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(MezmoLt),
         Box::new(MezmoLte),
         Box::new(MezmoMatchingPatterns),
+        Box::new(MezmoMapKeyValues),
         Box::new(MezmoMultiply),
         Box::new(MezmoPadEnd),
         Box::new(MezmoPadStart),

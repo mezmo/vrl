@@ -1,0 +1,27 @@
+# result: {
+#   "a": 2,
+#   "nested": {
+#     "B": 2
+#   },
+#   "str": "VAL", 
+#   "list": ["foo", "bar"]
+# }
+
+mezmo_map_key_values({
+  "A": 1,
+  "nested": {
+    "B": 2
+  },
+  "STR": "val",
+  "LIST": ["foo", "bar"]
+}) -> |key, value| {
+  new_key = if is_string(key) { downcase(key) } else { key }
+  new_value = if is_integer(value) { 
+    int!(value) * 2 
+  } else if is_string(value) {
+    upcase(string!(value))
+  } else { 
+    value 
+  }
+  [new_key, new_value]
+}

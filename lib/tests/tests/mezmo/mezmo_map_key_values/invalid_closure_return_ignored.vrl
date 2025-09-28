@@ -1,0 +1,23 @@
+# result:
+#
+# error[E122]: type mismatch in closure return type
+#   ┌─ :4:20
+#   │
+# 4 │       }) -> |key, value| {
+#   │ ╭────────────────────────^
+#   │ │ ╭──────────────────────'
+#   │ │ │ ╭────────────────────'
+# 5 │ │ │ │   "not_an_array"
+# 6 │ │ │ │ }
+#   │ ╰─│─│─^ block returns invalid value type
+#   │   ╰─│─' expected: [string or integer, any]
+#   │     ╰─' received: string
+#   │
+#   = see language documentation at https://vrl.dev
+#   = try your code in the VRL REPL, learn more at https://vrl.dev/examples
+
+mezmo_map_key_values({
+  "test": "value"
+}) -> |key, value| {
+  "not_an_array"
+}

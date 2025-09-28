@@ -1,0 +1,21 @@
+# result: [
+#   {"age": 60, "name": "JOHN"},
+#   {"age": 50, "name": "JANE"}
+# ]
+
+mezmo_map_key_values([
+  {"Name": "john", "Age": 30},
+  {"Name": "jane", "Age": 25}
+], max_depth: 1) -> |key, value| {
+  new_key = if is_string(key) { downcase(string!(key)) } else { key }
+  new_value = if is_string(value) {
+    upcase(string!(value))
+  } else if is_integer(value) {
+    int!(value) * 2
+  } else if is_float(value) {
+    float!(value) * 2
+  } else {
+    value
+  }
+  [new_key, new_value]
+}
