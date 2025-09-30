@@ -1,3 +1,10 @@
+# [3.2.0](https://github.com/mezmo/vrl/compare/v3.1.0...v3.2.0) (2025-09-30)
+
+
+### Features
+
+* **mezmo_map_key_values**: Implement mezmo map key values function [9e94aa7](https://github.com/mezmo/vrl/commit/9e94aa7a759d7a6751e2d11748df8fbbd8486280) - kwabena
+
 # [3.1.0](https://github.com/mezmo/vrl/compare/v3.0.0...v3.1.0) (2025-09-25)
 
 
