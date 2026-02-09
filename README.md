@@ -7,6 +7,8 @@
 VRL is a scripting language for processing observability data (logs, metrics, traces). Although VRL was originally
 created for use in [Vector], it was designed to be generic and re-usable in many contexts.
 
+VRL is maintained by
+Datadog's [Community Open Source Engineering team](https://opensource.datadoghq.com/about/#the-community-open-source-engineering-team).
 
 ## Features
 
@@ -41,6 +43,7 @@ Unsupported functions:
 - `log`
 - `get_hostname`
 - `reverse_dns`
+- `http_request`
 
 
 

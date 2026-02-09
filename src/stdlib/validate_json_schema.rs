@@ -12,18 +12,16 @@ static EXAMPLE_JSON_SCHEMA_EXPR: LazyLock<&str> = LazyLock::new(|| {
         .to_string();
 
     Box::leak(
-        format!(
-            r#"validate_json_schema!(s'{{ "productUser": "invalidEmail" }}', "{path}", false)"#
-        )
-        .into_boxed_str(),
+        format!(r#"validate_json_schema!(s'{{ "productUser": "foo@bar.com" }}', "{path}", false)"#)
+            .into_boxed_str(),
     )
 });
 
 static EXAMPLES: LazyLock<Vec<Example>> = LazyLock::new(|| {
     vec![Example {
-        title: "payload contains invalid email format",
+        title: "valid payload",
         source: &EXAMPLE_JSON_SCHEMA_EXPR,
-        result: Ok("false"),
+        result: Ok("true"),
     }]
 });
 
@@ -69,24 +67,21 @@ impl Function for ValidateJsonSchema {
         arguments: ArgumentList,
     ) -> Compiled {
         let value = arguments.required("value");
-        let schema_file = arguments.required_literal("schema_definition", state)?;
+        let schema_definition = arguments.required_literal("schema_definition", state)?;
         let ignore_unknown_formats = arguments
             .optional("ignore_unknown_formats")
             .unwrap_or(expr!(false));
 
-        let schema_file_str = schema_file
+        let schema_file_str = schema_definition
             .try_bytes_utf8_lossy()
             .expect("schema definition file must be a string");
 
-        let path = std::path::Path::new(schema_file_str.as_ref());
-        let schema_definition =
-            non_wasm::get_json_schema_definition(path).expect("JSON schema not found");
+        let schema_file_path = std::path::Path::new(schema_file_str.as_ref());
 
         Ok(ValidateJsonSchemaFn {
             value,
-            schema_definition,
+            schema_path: PathBuf::from(schema_file_path),
             ignore_unknown_formats,
-            schema_path: PathBuf::from(path), // Add cache key
         }
         .as_expr())
     }
@@ -107,6 +102,7 @@ mod non_wasm {
     use super::{
         Context, Expression, FunctionExpression, Resolved, TypeDef, VrlValueConvert, state,
     };
+    use crate::prelude::ExpressionError;
     use crate::stdlib::json_utils::bom::StripBomFromUTF8;
     use crate::value;
     use jsonschema;
@@ -122,9 +118,8 @@ mod non_wasm {
     #[derive(Debug, Clone)]
     pub(super) struct ValidateJsonSchemaFn {
         pub(super) value: Box<dyn Expression>,
-        pub(super) schema_definition: serde_json::Value,
+        pub(super) schema_path: PathBuf, // Path to the schema file, also used as cache key
         pub(super) ignore_unknown_formats: Box<dyn Expression>,
-        pub(super) schema_path: PathBuf, // Path to the schema file, used for caching
     }
 
     impl FunctionExpression for ValidateJsonSchemaFn {
@@ -138,7 +133,7 @@ mod non_wasm {
 
             // Quick empty check
             if bytes.is_empty() {
-                return Ok(value!(false)); // Empty JSON is typically invalid
+                return Err(ExpressionError::from("Empty JSON value")); // Empty JSON is typically invalid
             }
 
             // Fast path: check if it's valid JSON first (cheaper than full parsing)
@@ -147,13 +142,33 @@ mod non_wasm {
             } else {
                 serde_json::from_slice(stripped_bytes).map_err(|e| format!("Invalid JSON: {e}"))?
             };
-            let schema_validator = get_or_compile_schema(
-                &self.schema_definition,
-                &self.schema_path,
-                ignore_unknown_formats,
-            )?;
 
-            Ok(value!(schema_validator.is_valid(&json_value)))
+            let schema_validator =
+                get_or_compile_schema(&self.schema_path, ignore_unknown_formats)?;
+
+            let validation_errors = schema_validator
+                .iter_errors(&json_value)
+                .map(|e| {
+                    format!(
+                        "{} at {}",
+                        e,
+                        if e.instance_path.as_str().is_empty() {
+                            "/"
+                        } else {
+                            e.instance_path.as_str()
+                        }
+                    )
+                })
+                .collect::<Vec<String>>()
+                .join(", ");
+
+            if validation_errors.is_empty() {
+                Ok(value!(true))
+            } else {
+                Err(ExpressionError::from(format!(
+                    "JSON schema validation failed: {validation_errors}"
+                )))
+            }
         }
 
         fn type_def(&self, _: &state::TypeState) -> TypeDef {
@@ -183,7 +198,6 @@ mod non_wasm {
     }
 
     pub(super) fn get_or_compile_schema(
-        schema_definition: &serde_json::Value,
         schema_path: &Path,
         ignore_unknown_formats: bool,
     ) -> Result<Arc<jsonschema::Validator>, String> {
@@ -203,11 +217,14 @@ mod non_wasm {
             return Ok(schema.clone());
         }
 
+        let schema_definition = get_json_schema_definition(schema_path)
+            .map_err(|e| format!("JSON schema not found: {e}"))?;
+
         // Compile schema
         let compiled_schema = jsonschema::options()
             .should_validate_formats(true)
             .should_ignore_unknown_formats(ignore_unknown_formats)
-            .build(schema_definition)
+            .build(&schema_definition)
             .map_err(|e| format!("Failed to compile schema: {e}"))?;
 
         let compiled_schema = Arc::new(compiled_schema);
@@ -251,7 +268,7 @@ mod tests {
                 value: value!("{\"productUser\":\"invalid-email\"}"),
                 schema_definition: test_data_dir().join("validate_json_schema/schema_with_email_format.json").to_str().unwrap().to_owned(),
                 ignore_unknown_formats: false],
-            want: Ok(value!(false)),
+            want: Err("JSON schema validation failed: \"invalid-email\" is not a \"email\" at /productUser"),
             tdef: TypeDef::boolean().fallible(),
         }
 
@@ -269,7 +286,7 @@ mod tests {
                 value: value!(""),
                 schema_definition: test_data_dir().join("validate_json_schema/schema_with_email_format.json").to_str().unwrap().to_owned(),
                 ignore_unknown_formats: false],
-            want: Ok(value!(false)),
+            want: Err("Empty JSON value"),
             tdef: TypeDef::boolean().fallible(),
         }
 
