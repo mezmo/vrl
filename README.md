@@ -7,6 +7,7 @@
 VRL is a scripting language for processing observability data (logs, metrics, traces). Although VRL was originally
 created for use in [Vector], it was designed to be generic and re-usable in many contexts.
 
+All Hail!
 
 ## Features
 
