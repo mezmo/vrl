@@ -3,6 +3,7 @@ pub use wasm_unsupported_function::WasmUnsupportedFunction;
 
 use crate::compiler::Function;
 
+mod ip_utils;
 mod json_utils;
 mod string_utils;
 mod util;
@@ -35,6 +36,7 @@ cfg_if::cfg_if! {
         mod decode_zlib;
         mod decode_zstd;
         mod decrypt;
+        mod decrypt_ip;
         mod del;
         mod dns_lookup;
         mod downcase;
@@ -53,6 +55,7 @@ cfg_if::cfg_if! {
         mod encode_zlib;
         mod encode_zstd;
         mod encrypt;
+        mod encrypt_ip;
         mod ends_with;
         mod exists;
         mod filter;
@@ -71,6 +74,7 @@ cfg_if::cfg_if! {
         mod get_timezone_name;
         mod haversine;
         mod hmac;
+        mod http_request;
         mod includes;
         mod integer;
         mod ip_aton;
@@ -179,6 +183,7 @@ cfg_if::cfg_if! {
         mod parse_url;
         mod parse_user_agent;
         mod parse_xml;
+        mod pop;
         mod push;
         mod random_bool;
         mod random_bytes;
@@ -230,6 +235,7 @@ cfg_if::cfg_if! {
         mod uuid_v7;
         mod values;
         mod validate_json_schema;
+        mod xxhash;
         mod zip;
 
         // -----------------------------------------------------------------------------
@@ -257,6 +263,7 @@ cfg_if::cfg_if! {
         pub use decode_zlib::DecodeZlib;
         pub use decode_zstd::DecodeZstd;
         pub use decrypt::Decrypt;
+        pub use decrypt_ip::DecryptIp;
         pub use del::Del;
         pub use dns_lookup::DnsLookup;
         pub use downcase::Downcase;
@@ -280,6 +287,7 @@ cfg_if::cfg_if! {
         pub use encode_zlib::EncodeZlib;
         pub use encode_zstd::EncodeZstd;
         pub use encrypt::Encrypt;
+        pub use encrypt_ip::EncryptIp;
         pub use ends_with::EndsWith;
         pub use exists::Exists;
         pub use filter::Filter;
@@ -298,6 +306,7 @@ cfg_if::cfg_if! {
         pub use get_hostname::GetHostname;
         pub use get_timezone_name::GetTimezoneName;
         pub use get_timezone_name::get_name_for_timezone;
+        pub use http_request::HttpRequest;
         pub use haversine::Haversine;
         pub use includes::Includes;
         pub use integer::Integer;
@@ -404,6 +413,7 @@ cfg_if::cfg_if! {
         pub use parse_url::ParseUrl;
         pub use parse_user_agent::ParseUserAgent;
         pub use parse_xml::ParseXml;
+        pub use pop::Pop;
         pub use push::Push;
         pub use r#match::Match;
         pub use random_bool::RandomBool;
@@ -458,6 +468,7 @@ cfg_if::cfg_if! {
         pub use self::md5::Md5;
         pub use self::seahash::Seahash;
         pub use self::sha1::Sha1;
+        pub use self::xxhash::Xxhash;
         pub use self::crc::Crc;
     }
 }
@@ -492,6 +503,7 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(DecodeZlib),
         Box::new(DecodeZstd),
         Box::new(Decrypt),
+        Box::new(DecryptIp),
         Box::new(Del),
         Box::new(DnsLookup),
         Box::new(Downcase),
@@ -510,6 +522,7 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(EncodeZlib),
         Box::new(EncodeZstd),
         Box::new(Encrypt),
+        Box::new(EncryptIp),
         Box::new(EndsWith),
         Box::new(Exists),
         Box::new(Filter),
@@ -527,6 +540,7 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(GetHostname),
         Box::new(GetTimezoneName),
         Box::new(Haversine),
+        Box::new(HttpRequest),
         Box::new(Hmac),
         Box::new(Includes),
         Box::new(Integer),
@@ -642,6 +656,7 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(ParseUserAgent),
         Box::new(ParseXml),
         Box::new(Pascalcase),
+        Box::new(Pop),
         Box::new(Push),
         Box::new(RandomBool),
         Box::new(RandomBytes),
@@ -695,6 +710,7 @@ pub fn all() -> Vec<Box<dyn Function>> {
         Box::new(UuidV7),
         Box::new(Values),
         Box::new(ValidateJsonSchema),
+        Box::new(Xxhash),
         Box::new(Zip),
     ]
 }

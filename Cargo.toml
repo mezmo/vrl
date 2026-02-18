@@ -1,6 +1,6 @@
 [package]
 name = "vrl"
-version = "0.26.0"
+version = "0.27.0"
 authors = ["Vector Contributors <vector@datadoghq.com>"]
 edition = "2024"
 license = "MPL-2.0"
@@ -10,7 +10,7 @@ repository = "https://github.com/vectordotdev/vrl"
 readme = "README.md"
 keywords = ["vector", "datadog", "compiler"]
 categories = ["compilers"]
-rust-version = "1.85" # msrv
+rust-version = "1.88" # msrv
 
 [workspace]
 members = [
@@ -90,6 +90,7 @@ stdlib = [
   "dep:idna",
   "dep:indexmap",
   "dep:influxdb-line-protocol",
+  "dep:ipcrypt-rs",
   "dep:md-5",
   "dep:nom",
   "dep:ofb",
@@ -118,6 +119,7 @@ stdlib = [
   "dep:utf8-width",
   "dep:uuid",
   "dep:woothee",
+  "dep:xxhash-rust",
   "dep:zstd",
   "dep:encoding_rs"
 ]
@@ -201,6 +203,11 @@ url = { version = "2", optional = true }
 snafu = { version = "0.8", optional = true }
 webbrowser = { version = "1.0", default-features = false, optional = true }
 woothee = { version = "0.13", optional = true }
+xxhash-rust = { version = "0.8", optional = true, features = [
+  "xxh3",
+  "xxh32",
+  "xxh64",
+] }
 community-id = { version = "0.2", optional = true }
 
 zstd = { version = "0.13", default-features = false, features = ["wasm"], optional = true }
@@ -210,6 +217,7 @@ aes = { version = "0.8", optional = true }
 aes-siv = { version = "0.7.0", optional = true }
 chacha20poly1305 = { version = "0.10", optional = true }
 crypto_secretbox = { version = "0.1", features = ["salsa20"], optional = true }
+ipcrypt-rs = { version = "0.9.4", optional = true, default-features = false }
 
 # Cryptography - Block Modes
 ctr = { version = "0.9", optional = true }
@@ -224,12 +232,17 @@ unicode-segmentation = "1.12.0"
 lz4_flex = "0.11.5"
 nom-language = { version = "0.1.0", default-features = false }
 
+# HTTP support.
+reqwest = { version = "0.12", default-features = false, features = ["http2", "rustls-tls-native-roots"] }
+reqwest-middleware = { version = "0.4", default-features = false }
+reqwest-retry = { version = "0.7", default-features = false }
+
 # Dependencies used for non-WASM
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 dns-lookup = { version = "2", optional = true }
 domain = { version = "0.11.0", optional = true, features = ["resolv-sync", "serde"] }
 hostname = { version = "0.4", optional = true }
-grok = { version = "2.1", optional = true }
+grok = { version = "2.4", optional = true }
 onig = { version = "6", default-features = false, optional = true }
 tokio = { version = "1.45", optional = true, features = ["io-util", "macros", "net", "time", "sync", "rt", "rt-multi-thread"] }
 uuid = { version = "1", features = ["v4", "v7"], optional = true }
