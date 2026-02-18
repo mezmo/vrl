@@ -1,3 +1,54 @@
+# [3.3.0](https://github.com/mezmo/vrl/compare/v3.2.0...v3.3.0) (2026-02-18)
+
+
+### Bug Fixes
+
+* **stdlib**: Fix `http_request` ability to run from CLI (#1510) [11b1eec](https://github.com/mezmo/vrl/commit/11b1eeceaf257fd863d4e9efd50fd0e329792f6a) - GitHub
+
+
+### Chores
+
+* **admin**: add CODEOWNERS file (#1469) [40d3f6d](https://github.com/mezmo/vrl/commit/40d3f6dfa395ef5dd306432e6cfd03af9966da00) - GitHub
+* **datadog_search**: Export `build_matcher` as a method on `QueryNode` (#1467) [cd210dc](https://github.com/mezmo/vrl/commit/cd210dc3e09b522ed14fd5fab9f486327967d0cf) - GitHub
+* **deps**: bump dns-lookup from 2.0.4 to 3.0.0 (#1494) [79c6ef9](https://github.com/mezmo/vrl/commit/79c6ef96b44352491238849dd1b6e0e6f2e55689) - GitHub
+* **deps**: bump fancy-regex from 0.15.0 to 0.16.1 (#1490) [2b7ace3](https://github.com/mezmo/vrl/commit/2b7ace3847cb0115f2a442afc7fecad76e06f78d) - GitHub
+* **deps**: bump grok from 2.1.0 to 2.4.0 (#1489) [92894de](https://github.com/mezmo/vrl/commit/92894deee88a759f65f45b774a8c8c444b7aa6a3) - GitHub
+* **deps**: bump hyper from 1.6.0 to 1.7.0 (#1488) [31d52b0](https://github.com/mezmo/vrl/commit/31d52b0cc1988099b2d93c018103c496a3516a1e) - GitHub
+* **deps**: bump mlua from 0.10.5 to 0.11.1 (#1465) [3696775](https://github.com/mezmo/vrl/commit/3696775fcf4c26f96186f3e72069483442fc58ee) - GitHub
+* **deps**: bump mlua from 0.10.5 to 0.11.3 (#1496) [093d3c1](https://github.com/mezmo/vrl/commit/093d3c107991fb6b6890edb1320a8763eb856430) - GitHub
+* **deps**: bump referencing from 0.32.0 to 0.32.1 (#1495) [6fb767a](https://github.com/mezmo/vrl/commit/6fb767a97016bf02b98772c41153550f159e04b0) - GitHub
+* **deps**: bump tempfile from 3.20.0 to 3.21.0 (#1492) [93277ed](https://github.com/mezmo/vrl/commit/93277ed81ae10b14449e7e6de92fa3dd84944f05) - GitHub
+* **deps**: bump the patches group across 1 directory with 45 updates (#1498) [3d23401](https://github.com/mezmo/vrl/commit/3d23401557c91cde03b7bf497edeef4b9880c765) - GitHub
+* **deps**: bump the prost group with 4 updates (#1493) [52b56e6](https://github.com/mezmo/vrl/commit/52b56e65064dc122b074c90c84466d0dbae7e677) - GitHub
+* **deps**: bump tracing-subscriber from 0.3.19 to 0.3.20 (#1487) [ff56680](https://github.com/mezmo/vrl/commit/ff56680d36c71d0236ed7fbf3265d4c6f58d4494) - GitHub
+* **deps**: change version from 0.26.0 with 0.27.0 [9f04e58](https://github.com/mezmo/vrl/commit/9f04e58820277676a814cbae2669fb94aa604c86) - Pavlos Rontidis
+* **deps**: unpin grok patch version (#1500) [e8ccdfd](https://github.com/mezmo/vrl/commit/e8ccdfd70968093ca2081240b952aa4501db0624) - GitHub
+* **dev**: add proto conversions options - support json names (#1485) [c538bab](https://github.com/mezmo/vrl/commit/c538bab90156f29604da2cd52ff60bd7fececca6) - GitHub
+* **dev**: bump Rust to 1.89 (#1484) [29aa723](https://github.com/mezmo/vrl/commit/29aa72368662ba764d9e45c6fc2c5d63a83c5ac3) - GitHub
+* **dev**: simplify proto exports (#1486) [2703fad](https://github.com/mezmo/vrl/commit/2703fad09e3f88e50d086c2571100b267f27539b) - GitHub
+* **protobuf**: add 'get_message_descriptor_from_bytes' util (#1477) [77b47df](https://github.com/mezmo/vrl/commit/77b47df5968f38204d8e3e4a58ce6da4ffe12a34) - GitHub
+* **releasing**: generate changelog [2602e4d](https://github.com/mezmo/vrl/commit/2602e4df06627f57ad53268e8105645363083604) - Pavlos Rontidis
+
+
+### Features
+
+* **stdlib**: add `http_request` function (#1360) [ee5fd66](https://github.com/mezmo/vrl/commit/ee5fd667c0910ddb2621224dd2c14d15db1a6c24) - GitHub
+* **stdlib**: add array pop() function (#1501) [c15b40d](https://github.com/mezmo/vrl/commit/c15b40da216ecb067fc2231b724cdfcb2d94222f) - GitHub
+* **stdlib**: Add flag to ignore new fields when parsing AWS LB logs (#1482) [9357361](https://github.com/mezmo/vrl/commit/93573615a3f5bebf7ed02a60b93a6c2f99f557f9) - GitHub
+* **stdlib**: add IP encryption and decryption functions (#1506) [5ac8e8b](https://github.com/mezmo/vrl/commit/5ac8e8b9241557f0f58b2ffcd2fe5ebdb2a7f902) - GitHub
+* **stdlib**: Add new xxhash function (#1473) [b0a4de2](https://github.com/mezmo/vrl/commit/b0a4de2555453f794d9f841a7700bb4bed081fb3) - GitHub
+
+
+### Miscellaneous
+
+* Merge pull request #118 from mezmo/pciampini/LOG-23165 [2beeb9a](https://github.com/mezmo/vrl/commit/2beeb9a978d80866e17b3add69f4701393314881) - GitHub [LOG-23165](https://logdna.atlassian.net/browse/LOG-23165)
+* Merge tag 'v0.27.0' into pciampini/LOG-23165 [16f34c2](https://github.com/mezmo/vrl/commit/16f34c215518666a1d696581b4ac02e1429a2d48) - Phil Ciampini [LOG-23165](https://logdna.atlassian.net/browse/LOG-23165)
+* fix http_request tests with add'l body param (#1508) [3616e5b](https://github.com/mezmo/vrl/commit/3616e5be60fab3a31e039377e39e43d9c11f5c76) - GitHub
+* Fix http_request headers param optional flag (#1499) [bfaeb6d](https://github.com/mezmo/vrl/commit/bfaeb6dbb2918057b4519ee4b778dacbb66c3f41) - GitHub
+* feat(stdlib) Capture error messages from `validate_json_schema` (#1483) [d58f327](https://github.com/mezmo/vrl/commit/d58f327bef554b935317f087fb26f24f14a6092e) - GitHub
+* **fix stdlib**: Fix `validate_json_schema` to prevent compile-time panics (#1476) [a5706e8](https://github.com/mezmo/vrl/commit/a5706e81ff1dd798540831d4e2680b9ad90eb728) - GitHub
+* **stdlib**: Add optional request `body` param to `http_request` (#1502) [25bcae6](https://github.com/mezmo/vrl/commit/25bcae6bf1ce40c0b4413756e906fa462a585a33) - GitHub
+
 # [3.2.0](https://github.com/mezmo/vrl/compare/v3.1.0...v3.2.0) (2025-09-30)
 
 
