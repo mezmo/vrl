@@ -1446,6 +1446,48 @@
 
 <!-- changelog start -->
 
+## [0.28.1 (2025-11-07)]
+
+### Fixes
+
+- Fixed an issue where `split_path`, `basename`, `dirname` had not been added to VRL's standard
+  library and, therefore, appeared to be missing and were inaccessible in the `0.28.0` release.
+
+  authors: thomasqueirozb (https://github.com/vectordotdev/vrl/pull/1553)
+
+
+## [0.28.0 (2025-11-03)]
+
+### Breaking Changes & Upgrade Guide
+
+- The return value of the `find` function has been changed to `null` instead of `-1` if there is no match.
+
+  authors: titaneric (https://github.com/vectordotdev/vrl/pull/1514)
+
+### New Features
+
+- Introduced the `basename` function to get the last component of a path.
+
+  author: titaneric (https://github.com/vectordotdev/vrl/pull/1531)
+- Introduced the `dirname` function to get the directory component of a path.
+
+  author: titaneric (https://github.com/vectordotdev/vrl/pull/1532)
+- Introduced the `split_path` function to split a path into its components.
+
+  author: titaneric (https://github.com/vectordotdev/vrl/pull/1533)
+
+### Enhancements
+
+- Added optional `http_proxy` and `https_proxy` parameters to `http_request` for setting the proxies used for a request. (https://github.com/vectordotdev/vrl/pull/1534)
+- Added support for encoding a VRL `Integer` into a protobuf `double` when using `encode_proto`
+
+  authors: thomasqueirozb (https://github.com/vectordotdev/vrl/pull/1545)
+
+### Fixes
+
+- Fixed `parse_glog` to accept space-padded thread-id. (https://github.com/vectordotdev/vrl/pull/1515)
+
+
 ## [0.27.0 (2025-09-18)]
 
 ### Breaking Changes & Upgrade Guide
