@@ -1,3 +1,50 @@
+# [3.4.0](https://github.com/mezmo/vrl/compare/v3.3.0...v3.4.0) (2026-03-02)
+
+
+### Bug Fixes
+
+* **stdlib**: Add missing functions from 0.28 release (#1553) [1f0d8a5](https://github.com/mezmo/vrl/commit/1f0d8a50df5c5cc8a45454bf992261a332013f59) - GitHub
+* **stdlib**: fix glog parser to accept padded thread_id (#1515) [a7b6c42](https://github.com/mezmo/vrl/commit/a7b6c42ee800985acdebda383931b74820b2b940) - GitHub
+* **tests**: Always print diagnostics on test failure (#1555) [bd10ca0](https://github.com/mezmo/vrl/commit/bd10ca0f57f31cd4db1490450b2a3ad63e727b54) - GitHub
+
+
+### Chores
+
+* **ci**: bump actions/checkout from 4 to 5 (#1528) [1935d58](https://github.com/mezmo/vrl/commit/1935d58824efaf5b6f0dc134dc8453ec14067fe6) - GitHub
+* **deps**: bump indexmap from 2.10.0 to 2.11.4 (#1522) [8f74633](https://github.com/mezmo/vrl/commit/8f746339509be5a13b4b823ab64c14774e6b5457) - GitHub
+* **deps**: bump mlua from 0.10.5 to 0.11.4 (#1527) [7719831](https://github.com/mezmo/vrl/commit/7719831dc00b2be883335ac981ed74dd5c2d45e7) - GitHub
+* **deps**: bump rayon from 1.10.0 to 1.11.0 (#1525) [8dbc349](https://github.com/mezmo/vrl/commit/8dbc3492d28a12b47149e3d974a0c3d2fd1b6f70) - GitHub
+* **deps**: bump rust_decimal from 1.37.2 to 1.38.0 (#1524) [a483ac2](https://github.com/mezmo/vrl/commit/a483ac28f32bf9e0a46c5337130b655135e2112c) - GitHub
+* **deps**: bump security-framework-sys from 2.14.0 to 2.15.0 (#1523) [2a078e0](https://github.com/mezmo/vrl/commit/2a078e0345fbabda26c56a5caf20f8b92a577f58) - GitHub
+* **deps**: bump the patches group across 1 directory with 72 updates (#1530) [6991c4e](https://github.com/mezmo/vrl/commit/6991c4e345f2083505d40323162bd49d1b5d1e47) - GitHub
+* **deps**: bump the prost group with 4 updates (#1519) [d56e663](https://github.com/mezmo/vrl/commit/d56e663f9c6ea17345a803311e7a3db4df51d823) - GitHub
+* **deps**: bump tinyvec from 1.9.0 to 1.10.0 (#1526) [7e5d410](https://github.com/mezmo/vrl/commit/7e5d4100706b6f86a13ef877757fba510e0995dd) - GitHub
+* **deps**: Make the `clap` dependency optional (#1549) [20cf037](https://github.com/mezmo/vrl/commit/20cf037681a5957ca6080fc7b4001e628c3cfae0) - GitHub
+* **deps**: Update `dd-rust-license-tool` to v1.0.4 (#1546) [bb082de](https://github.com/mezmo/vrl/commit/bb082de946df6d99ebce07d9ae443c7c03f87ad7) - GitHub
+* **dev**: update rust toolchain to 1.90 (#1517) [81a8e0c](https://github.com/mezmo/vrl/commit/81a8e0c4ca5bdb4818a86ac234034a9158809afd) - GitHub
+* **protobuf encoding**: support JSON field names option (#1529) [1559ff0](https://github.com/mezmo/vrl/commit/1559ff0c5b809a5189b7e9da1e0bb984f6930028) - GitHub
+* **releasing**: improve release/create_release_pull_request.py script (#1551) [8ba2c11](https://github.com/mezmo/vrl/commit/8ba2c116f61c100981fce86aa7f18aae00d9c1bf) - GitHub
+* **releasing**: Prepare 0.27.0 release (#1512) [560dac8](https://github.com/mezmo/vrl/commit/560dac8b6b494d722fa9a57d98ed2e7e36ee75f6) - GitHub
+* **releasing**: Prepare 0.28.0 release (#1550) [d6cae02](https://github.com/mezmo/vrl/commit/d6cae023d596fdc73bf19501498e2db962fe1d54) - GitHub
+* **releasing**: Prepare 0.28.1 release (#1556) [bddc786](https://github.com/mezmo/vrl/commit/bddc7868c707651beef4c875f857b505f5e1a695) - GitHub
+* **stdlib**: create macro to keep exports and stdlib in sync (#1554) [f5b33e6](https://github.com/mezmo/vrl/commit/f5b33e6d822089f3179fef7b3f505ecf44fe3545) - GitHub
+
+
+### Features
+
+* **stdlib**: add `dirname` VRL function matched with `dirname` command (#1532) [73698e9](https://github.com/mezmo/vrl/commit/73698e9781d19b90fef9aa17589113bd8c39e572) - GitHub
+* **stdlib**: add new `split_path` VRL function to split the given path into multiple components (#1533) [dbfeee5](https://github.com/mezmo/vrl/commit/dbfeee575e0527f46264667339f37a795362099e) - GitHub
+* **stdlib**: add new VRL function `basename` to get last component of the path  (#1531) [f815b49](https://github.com/mezmo/vrl/commit/f815b4923b11841340230e7d1c3a817a459de66b) - GitHub
+* **vrl**: return null instead of -1 when not find in `find` function (#1514) [77add13](https://github.com/mezmo/vrl/commit/77add1371e6587f69f20541140985a5b3a9b343f) - GitHub
+
+
+### Miscellaneous
+
+* Merge pull request #121 from mezmo/pciampini/LOG-23167 [2846065](https://github.com/mezmo/vrl/commit/2846065cbf628097e44a2373e08ace184abffa43) - GitHub [LOG-23167](https://logdna.atlassian.net/browse/LOG-23167)
+* Merge upstream tag 'v0.28.1' into pciampini/LOG-23167 [64e1637](https://github.com/mezmo/vrl/commit/64e1637604fcc3153bbae2bce9189a5a671c3ffd) - Phil Ciampini [LOG-23167](https://logdna.atlassian.net/browse/LOG-23167)
+* **protobuf encoding**: support int to double conversion (#1545) [90ea34f](https://github.com/mezmo/vrl/commit/90ea34f09903e3ee85f9b3e4813f44992f6e7c68) - GitHub
+* **stdlib**: Add optional `http_proxy` and `https_proxy` params to `http_request` (#1534) [7cd278c](https://github.com/mezmo/vrl/commit/7cd278cf62ed813a96d637533cf5957a3c420e06) - GitHub
+
 # [3.3.0](https://github.com/mezmo/vrl/compare/v3.2.0...v3.3.0) (2026-02-18)
 
 
