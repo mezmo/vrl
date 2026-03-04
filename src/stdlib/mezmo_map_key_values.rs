@@ -160,17 +160,17 @@ impl Function for MezmoMapKeyValues {
 
     fn examples(&self) -> &'static [Example] {
         &[
-            Example {
+            example! {
                 title: "rename keys and values",
                 source: r#"mezmo_map_key_values({ "Foo": "bar" }) -> |key, value| { [ downcase(key), upcase(value) ] }"#,
                 result: Ok(r#"{ "foo": "BAR" }"#),
             },
-            Example {
+            example! {
                 title: "infinite recursion",
-                source: r#"mezmo_map_key_values({ 
-                    "a": { "b": 1 }, 
+                source: r#"mezmo_map_key_values({
+                    "a": { "b": 1 },
                     "c": [ { "d": 2 }, "x", ["nested arr"] ],
-                    "labels": [ "prod" ] 
+                    "labels": [ "prod" ]
                 }, max_depth: -1) -> |key, value| {
                     new_key = key
                     new_value = if is_integer(value) { int!(value) + 1 } else if is_string(value) { upcase(string!(value)) } else { value }
@@ -180,10 +180,10 @@ impl Function for MezmoMapKeyValues {
                     r#"{ "a": { "b": 2 }, "c": [ { "d": 3 }, "X", ["NESTED ARR"] ], "labels": ["PROD"] }"#,
                 ),
             },
-            Example {
+            example! {
                 title: "limit recursion to one level",
-                source: r#"mezmo_map_key_values({ 
-                    "a": { "b": 1 }, 
+                source: r#"mezmo_map_key_values({
+                    "a": { "b": 1 },
                     "c": [ { "d": 2 }, "x", ["not updated"] ],
                     "labels": [ "prod" ]
                 }, max_depth: 1) -> |key, value| {
@@ -234,7 +234,7 @@ impl Function for MezmoMapKeyValues {
                 output: Output::Array {
                     elements: vec![Kind::integer().or_bytes(), Kind::any()],
                 },
-                example: Example {
+                example: example! {
                     title: "rename keys and values",
                     source: r#"mezmo_map_key_values({ "Foo": "bar" }) -> |key, value| { [ downcase(key), upcase(value) ] }"#,
                     result: Ok(r#"{ "foo": "BAR" }"#),

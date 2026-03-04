@@ -58,12 +58,12 @@ impl Function for MezmoPadEnd {
 
     fn examples(&self) -> &'static [Example] {
         &[
-            Example {
+            example! {
                 title: "basic",
                 source: "mezmo_pad_end(\"abc\", 6)",
                 result: Ok("abc   "),
             },
-            Example {
+            example! {
                 title: "with_value",
                 source: "mezmo_pad_end(\"abc\", 6, \"def\")",
                 result: Ok("abcdef"),

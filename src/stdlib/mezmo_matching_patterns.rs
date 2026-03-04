@@ -69,22 +69,22 @@ impl Function for MezmoMatchingPatterns {
 
     fn examples(&self) -> &'static [Example] {
         &[
-            Example {
+            example! {
                 title: "match on string",
                 source: r#"matching_patterns("foobar", patterns: [r'\w+', r'\d+', r'\pL+', r'foo', r'bar', r'barfoo', r'foobar'])"#,
                 result: Ok("[[0, 2, 3, 4, 6]"),
             },
-            Example {
+            example! {
                 title: "match on object",
                 source: r#"matching_patterns({"name": "jon doe", "department": "sales", "notes": {"entry" => "foobar works"}}, patterns: [r'\w+', r'\d+', r'\pL+', r'foo', r'bar', r'barfoo', r'foobar'])"#,
                 result: Ok("[[0, 2, 3, 4, 6]"),
             },
-            Example {
+            example! {
                 title: "match on object",
                 source: r#"matching_patterns(["something", "strange", {"notes": {"entry" => "foobar works"}}], patterns: [r'\w+', r'\d+', r'\pL+', r'foo', r'bar', r'barfoo', r'foobar'])"#,
                 result: Ok("[[0, 2, 3, 4, 6]"),
             },
-            Example {
+            example! {
                 title: "no match",
                 source: r#"match_any("My name is John Doe", patterns: [r'\d+', r'Jane'])"#,
                 result: Ok("[]"),

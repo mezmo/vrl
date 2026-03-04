@@ -83,22 +83,22 @@ impl Function for MezmoAddTsComponents {
 
     fn examples(&self) -> &'static [Example] {
         &[
-            Example {
+            example! {
                 title: "add months",
                 source: r#"mezmo_add_ts_components(t'2021-02-10T23:32:00+00:00', months: 2)"#,
                 result: Ok(r#"2021-04-10T23:32:00+00:00"#),
             },
-            Example {
+            example! {
                 title: "add months and days",
                 source: r#"mezmo_add_ts_components(t'2021-02-10T23:32:00+00:00', months: 2, days: 6)"#,
                 result: Ok(r#"2021-04-1623:32:00+00:00"#),
             },
-            Example {
+            example! {
                 title: "add years, months, days, hours, minutes, seconds and milliseconds",
                 source: r#"mezmo_add_ts_components(t'2021-02-10T23:32:00+00:00', years: 3, months: 2, days: 6, hours: 4, minutes: 10, seconds: 5, milliseconds: 200)"#,
                 result: Ok(r#"2024-04-17T03:42:05.200+00:00"#),
             },
-            Example {
+            example! {
                 title: "subtract years, months and days",
                 source: r#"mezmo_add_ts_components(t'2021-02-10T23:32:00+00:00', years: -5, months: -2, days: -6)"#,
                 result: Ok(r#"2015-12-04T23:32:00+00:00"#),

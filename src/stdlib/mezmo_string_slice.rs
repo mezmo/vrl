@@ -23,11 +23,7 @@ fn string_slice(s: Cow<'_, str>, index_start: i64, index_end: Option<i64>) -> Va
 fn normalize_index(index: i64, len: usize) -> usize {
     if index < 0 {
         let index = -index as usize;
-        if len > index {
-            len - index
-        } else {
-            0
-        }
+        if len > index { len - index } else { 0 }
     } else {
         std::cmp::min(index as usize, len)
     }
@@ -69,12 +65,12 @@ impl Function for MezmoStringSlice {
 
     fn examples(&self) -> &'static [Example] {
         &[
-            Example {
+            example! {
                 title: "basic",
                 source: "mezmo_string_slice(\"abc\", 1)",
                 result: Ok("bc"),
             },
-            Example {
+            example! {
                 title: "bounds",
                 source: "mezmo_string_slice(\"abc\", 1, 2)",
                 result: Ok("b"),
