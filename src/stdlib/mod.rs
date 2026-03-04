@@ -119,7 +119,6 @@ cfg_if::cfg_if! {
         mod mezmo_arithmetic_operation;
         mod mezmo_char_at;
         mod mezmo_concat_or_add_fallible;
-        mod mezmo_concat_or_add;
         mod mezmo_index_of;
         mod mezmo_is_truthy;
         mod mezmo_last_index_of;

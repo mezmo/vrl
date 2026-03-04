@@ -27,7 +27,7 @@ impl Function for MezmoLength {
     }
 
     fn examples(&self) -> &'static [Example] {
-        &[Example {
+        &[example! {
             title: "Characters",
             source: r#"mezmo_length("ñandú")"#,
             result: Ok("5"),

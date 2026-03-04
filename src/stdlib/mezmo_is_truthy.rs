@@ -30,22 +30,22 @@ impl Function for MezmoIsTruthy {
 
     fn examples(&self) -> &'static [Example] {
         &[
-            Example {
+            example! {
                 title: "integer",
                 source: "mezmo_is_truthy(5)",
                 result: Ok("true"),
             },
-            Example {
+            example! {
                 title: "float",
                 source: "mezmo_is_truthy(5.6)",
                 result: Ok("true"),
             },
-            Example {
+            example! {
                 title: "integer",
                 source: "mezmo_is_truthy(0)",
                 result: Ok("false"),
             },
-            Example {
+            example! {
                 title: "true",
                 source: "mezmo_is_truthy(true)",
                 result: Ok("true"),
@@ -85,7 +85,7 @@ impl FunctionExpression for MezmoIsTruthyFn {
 mod tests {
     use super::*;
     use crate::value;
-    use chrono::{prelude::*, TimeZone};
+    use chrono::{TimeZone, prelude::*};
 
     test_function![
         is_truthy => MezmoIsTruthy;

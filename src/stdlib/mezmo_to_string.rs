@@ -37,7 +37,7 @@ impl Function for MezmoToString {
     }
 
     fn examples(&self) -> &'static [Example] {
-        &[Example {
+        &[example! {
             title: "float",
             source: "mezmo_to_string(5.6)",
             result: Ok("5.6"),

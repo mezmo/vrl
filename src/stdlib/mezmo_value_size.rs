@@ -45,12 +45,12 @@ impl Function for MezmoValueSize {
 
     fn examples(&self) -> &'static [Example] {
         &[
-            Example {
+            example! {
                 title: "metrics for string",
                 source: r#"mezmo_value_size("foobar")"#,
                 result: Ok("{count: 1, bytes: 14, chars: 10}"),
             },
-            Example {
+            example! {
                 title: "metrics for object",
                 source: r#"mezmo_value_size({"name": "jon doe", "department": "sales", "notes": {"entry" => "foobar works"}}, field_metrics: true)"#,
                 result: Ok("{count: 1, bytes: 14, chars: 12}"),

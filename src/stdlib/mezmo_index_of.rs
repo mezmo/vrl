@@ -23,7 +23,7 @@ fn index_of(value: Cow<'_, str>, search_value: Cow<'_, str>, position: i64) -> V
     match value.as_ref()[byte_position..].find(search_value.as_ref()) {
         Some(found_byte_index) => {
             let found_byte_index = found_byte_index + byte_position; // Absolute index within string
-                                                                     // Convert the byte index in the string to the character index in the string
+            // Convert the byte index in the string to the character index in the string
             let found = value
                 .char_indices()
                 .enumerate()
@@ -76,12 +76,12 @@ impl Function for MezmoIndexOf {
 
     fn examples(&self) -> &'static [Example] {
         &[
-            Example {
+            example! {
                 title: "basic",
                 source: "mezmo_index_of(\"abc\", \"bc\")",
                 result: Ok("1"),
             },
-            Example {
+            example! {
                 title: "position",
                 source: "mezmo_index_of(\"abcdefabcdef\", \"abc\", 6)",
                 result: Ok("6"),

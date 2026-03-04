@@ -41,7 +41,7 @@ impl Function for MezmoCharAt {
     }
 
     fn examples(&self) -> &'static [Example] {
-        &[Example {
+        &[example! {
             title: "basic",
             source: "mezmo_char_at(\"abc\", 0)",
             result: Ok("a"),

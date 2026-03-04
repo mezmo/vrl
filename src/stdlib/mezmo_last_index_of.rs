@@ -84,12 +84,12 @@ impl Function for MezmoLastIndexOf {
 
     fn examples(&self) -> &'static [Example] {
         &[
-            Example {
+            example! {
                 title: "basic",
                 source: "mezmo_last_index_of(\"abcabc\", \"bc\")",
                 result: Ok("4"),
             },
-            Example {
+            example! {
                 title: "position",
                 source: "mezmo_last_index_of(\"abcabc\", \"bc\", 3)",
                 result: Ok("1"),
