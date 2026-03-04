@@ -1,3 +1,31 @@
+# [3.5.0](https://github.com/mezmo/vrl/compare/v3.4.0...v3.5.0) (2026-03-04)
+
+
+### Bug Fixes
+
+* **datadog search**: Fix improper handling of conjunctions by the datadog query parser (#1542) [5eafcc0](https://github.com/mezmo/vrl/commit/5eafcc03be7fd864e51fe86dfc719e941de8e432) - GitHub
+* **stdlib**: merge: make `to` a required argument (#1563) [d19c4d0](https://github.com/mezmo/vrl/commit/d19c4d06c3cbf93d5c44d70dac96c288d2937de4) - GitHub
+* **tests**: update macros and includes to deal with upstream changes [88dd8b4](https://github.com/mezmo/vrl/commit/88dd8b464a05aa8b00da4e09a046f4ff977f38b9) - Phil Ciampini [LOG-23169](https://logdna.atlassian.net/browse/LOG-23169)
+
+
+### Chores
+
+* **releasing**: Prepare 0.29.0 release (#1581) [195f1ed](https://github.com/mezmo/vrl/commit/195f1ed6a334978a8b5d318030b606a902973351) - GitHub
+* **tests**: mock implementations for examples and tests (#1574) [52672fb](https://github.com/mezmo/vrl/commit/52672fb8d405ebdf60ce8537a22deaca375fbb8b) - GitHub
+
+
+### Features
+
+* **rfc**: automatic documentation generation (#1544) [d18a4d7](https://github.com/mezmo/vrl/commit/d18a4d7d818ea3ed6a0fa5eec0359746fd9cf945) - GitHub
+* **tests**: Add failed test summary with source locations (#1557) [65c02d7](https://github.com/mezmo/vrl/commit/65c02d753b882ade440537535166e139016234f5) - GitHub
+
+
+### Miscellaneous
+
+* Merge pull request #124 from mezmo/pciampini/LOG-23169 [8f6cfad](https://github.com/mezmo/vrl/commit/8f6cfad052a9019f0bb728dfa11e75ae3cf3cc7c) - GitHub [LOG-23169](https://logdna.atlassian.net/browse/LOG-23169)
+* Merge upstream tag 'v0.29.0' [ab48c54](https://github.com/mezmo/vrl/commit/ab48c54f94b20b71e64e719b7ee153caccff7ba9) - Phil Ciampini
+* fix(stdlib) jsonschema dependency update to fix stackoverflow on empty $ref (#1577) [ccb6e75](https://github.com/mezmo/vrl/commit/ccb6e750d45bb76c9ebf7e843064f2b58711c6cd) - GitHub
+
 # [3.4.0](https://github.com/mezmo/vrl/compare/v3.3.0...v3.4.0) (2026-03-02)
 
 
