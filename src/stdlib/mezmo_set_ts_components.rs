@@ -138,17 +138,17 @@ impl Function for MezmoSetTsComponents {
 
     fn examples(&self) -> &'static [Example] {
         &[
-            Example {
+            example! {
                 title: "set months",
                 source: r#"mezmo_set_ts_components(t'2021-02-10T23:32:00+00:00', months: 6)"#,
                 result: Ok(r#"2021-06-10T23:32:00+00:00"#),
             },
-            Example {
+            example! {
                 title: "set months and days",
                 source: r#"mezmo_set_ts_components(t'2021-02-10T23:32:00+00:00', months: 3, days: 6)"#,
                 result: Ok(r#"2021-03-0623:32:00+00:00"#),
             },
-            Example {
+            example! {
                 title: "set years, months, days, hours, minutes, seconds and milliseconds",
                 source: r#"mezmo_set_ts_components(t'2021-02-10T23:32:00+00:00', years: 2000, months: 10, days: 4, hours: 4, minutes: 10, seconds: 55, milliseconds: 200)"#,
                 result: Ok(r#"2000-10-04T04:10:55.200+00:00"#),

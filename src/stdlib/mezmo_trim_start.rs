@@ -18,7 +18,7 @@ impl Function for MezmoTrimStart {
     }
 
     fn examples(&self) -> &'static [Example] {
-        &[Example {
+        &[example! {
             title: "basic",
             source: "mezmo_trim_start(\"    abc\")",
             result: Ok("abc"),

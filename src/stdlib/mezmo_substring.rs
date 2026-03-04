@@ -63,17 +63,17 @@ impl Function for MezmoSubstring {
 
     fn examples(&self) -> &'static [Example] {
         &[
-            Example {
+            example! {
                 title: "basic",
                 source: "mezmo_substring(\"abc\", 1)",
                 result: Ok("bc"),
             },
-            Example {
+            example! {
                 title: "bounds",
                 source: "mezmo_substring(\"abc\", 1, 2)",
                 result: Ok("b"),
             },
-            Example {
+            example! {
                 title: "flipped_bounds",
                 source: "mezmo_substring(\"abc\", 2, 1)",
                 result: Ok("b"),

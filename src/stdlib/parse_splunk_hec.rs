@@ -147,7 +147,7 @@ impl Function for ParseSplunkHec {
     }
 
     fn examples(&self) -> &'static [Example] {
-        &[Example {
+        &[example! {
             title: "valid",
             source: r#"parse_splunk_hec!(s'{ "event": "event1" }')"#,
             result: Ok(r#"[{ "event": "event1" }]"#),

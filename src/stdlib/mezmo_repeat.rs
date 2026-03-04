@@ -29,7 +29,7 @@ impl Function for MezmoRepeat {
     }
 
     fn examples(&self) -> &'static [Example] {
-        &[Example {
+        &[example! {
             title: "basic",
             source: "mezmo_repeat(\"abc\", 3)",
             result: Ok("abcabcabc"),

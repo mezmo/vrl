@@ -61,34 +61,34 @@ impl Function for MezmoRedact {
 
     fn examples(&self) -> &'static [Example] {
         &[
-            Example {
+            example! {
                 title: "regex",
                 source: r#"redact("my id is 123456", filters: [r'\d+'])"#,
                 result: Ok(r#"my id is [REDACTED]"#),
             },
-            Example {
+            example! {
                 title: "us_social_security_number",
                 source: r#"redact({ "name": "John Doe", "ssn": "123-12-1234"}, filters: ["us_social_security_number"])"#,
                 result: Ok(r#"{ "name": "John Doe", "ssn": "[REDACTED]" }"#),
             },
-            Example {
+            example! {
                 title: "text redactor",
                 source: r#"redact("my id is 123456", filters: [{ "type": "pattern", "patterns": [r'\d+'], "redactor": {"type": "text", "replacement": "***"}}])"#,
                 result: Ok(r#"my id is ***"#),
             },
-            Example {
+            example! {
                 title: "sha2",
                 source: r#"redact("my id is 123456", filters: [{ "type": "pattern", "patterns": [r'\d+'], "redactor": "sha2" }])"#,
                 result: Ok(r#"my id is GEtTedW1p6tC094dDKH+3B8P+xSnZz69AmpjaXRd63I="#),
             },
-            Example {
+            example! {
                 title: "sha3",
                 source: r#"redact("my id is 123456", filters: [{ "type": "pattern", "patterns", [r'\d+'], redactor: "sha3" }])"#,
                 result: Ok(
                     r#"my id is ZNCdmTDI7PeeUTFnpYjLdUObdizo+bIupZdl8yqnTKGdLx6X3JIqPUlUWUoFBikX+yTR+OcvLtAqWO11NPlNJw=="#,
                 ),
             },
-            Example {
+            example! {
                 title: "sha256 hex",
                 source: r#"redact("my id is 123456", filters: [{ "type": "pattern", "patterns": [r'\d+'], redactor: {"type": "sha2", "variant": "SHA-256", "encoding": "base16"} }])"#,
                 result: Ok(
@@ -391,7 +391,7 @@ fn replace_with_pattern<'t>(
 }
 
 /// The recipe for redacting the matched filters.
-#[derive(Debug, Default, Clone, PartialEq, Eq)]
+#[derive(Debug, Default, Clone)]
 enum Redactor {
     #[default]
     Full,
@@ -506,7 +506,7 @@ impl regex::Replacer for &Redactor {
         self.replace_str(&caps[0], dst);
     }
 
-    fn no_expansion(&mut self) -> Option<Cow<str>> {
+    fn no_expansion(&mut self) -> Option<Cow<'_, str>> {
         match self {
             Redactor::Full => Some(REDACTED.into()),
             Redactor::Text(s) => Some(s.into()),
