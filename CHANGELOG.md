@@ -1,3 +1,15 @@
+## [3.5.1](https://github.com/mezmo/vrl/compare/v3.5.0...v3.5.1) (2026-03-24)
+
+
+### Bug Fixes
+
+* **ci**: add stage and trigger for fork PRs [17f13d5](https://github.com/mezmo/vrl/commit/17f13d56d274cc478315d66969ac2825fe8fa7b5) - Mike Del Tito [LOG-23477](https://logdna.atlassian.net/browse/LOG-23477)
+
+
+### Miscellaneous
+
+* Merge pull request #126 from mezmo/mdeltito/public-jenkins [7656962](https://github.com/mezmo/vrl/commit/76569622698d6a3d6747feca27baf3d9608df534) - GitHub
+
 # [3.5.0](https://github.com/mezmo/vrl/compare/v3.4.0...v3.5.0) (2026-03-04)
 
 
