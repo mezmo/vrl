@@ -3,6 +3,7 @@ def PROJECT_NAME = "vrl"
 def DEFAULT_BRANCH = "main"
 def CURRENT_BRANCH = [env.CHANGE_BRANCH, env.BRANCH_NAME]?.find{branch -> branch != null}
 def DRY_RUN = CURRENT_BRANCH != DEFAULT_BRANCH
+def TRIGGER_PATTERN = '.*@logdnabot.*'
 
 pipeline {
     agent {
@@ -21,6 +22,7 @@ pipeline {
             // Cron hours are in GMT, so this is roughly 12-3am EST, depending on DST
             env.BRANCH_NAME == DEFAULT_BRANCH ? "H H(5-6) * * * % SANITY_BUILD=true" : ""
         )
+        issueCommentTrigger(TRIGGER_PATTERN)
     }
 
     options {
@@ -65,6 +67,18 @@ pipeline {
     }
 
     stages {
+        stage('Validate PR Source') {
+            when {
+                expression { env.CHANGE_FORK }
+                not {
+                    triggeredBy 'issueCommentCause'
+                }
+            }
+            steps {
+                error("A maintainer needs to approve this PR for CI by commenting")
+            }
+        }
+
         stage("Test") {
             when {
                 beforeAgent true
