@@ -103,6 +103,10 @@ impl Function for ShannonEntropy {
         "shannon_entropy"
     }
 
+    fn usage(&self) -> &'static str {
+        "Generates [Shannon entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) from given string. It can generate it based on string bytes, codepoints, or graphemes."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -121,17 +125,22 @@ impl Function for ShannonEntropy {
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
-                title: "shannon_entropy simple",
+                title: "Simple byte segmentation example",
                 source: r#"floor(shannon_entropy("vector.dev"), precision: 4)"#,
                 result: Ok("2.9219"),
             },
             example! {
-                title: "shannon_entropy UTF-8 wrong segmentation",
+                title: "UTF-8 string with bytes segmentation",
                 source: r#"floor(shannon_entropy("test123%456.فوائد.net."), precision: 4)"#,
                 result: Ok("4.0784"),
             },
             example! {
-                title: "shannon_entropy UTF-8 grapheme segmentation",
+                title: "UTF-8 string with grapheme segmentation",
+                source: r#"floor(shannon_entropy("test123%456.فوائد.net.", segmentation: "grapheme"), precision: 4)"#,
+                result: Ok("3.9362"),
+            },
+            example! {
+                title: "UTF-8 emoji (7 Unicode scalar values) with grapheme segmentation",
                 source: r#"shannon_entropy("👨‍👩‍👧‍👦", segmentation: "grapheme")"#,
                 result: Ok("0.0"),
             },

@@ -8,6 +8,7 @@ const MILLISECONDS_IN_MINUTE: u32 = 60 * MILLISECONDS_IN_SECOND;
 const MILLISECONDS_IN_HOUR: u32 = 3600 * MILLISECONDS_IN_SECOND;
 const MILLISECONDS_IN_DAY: u32 = 24 * MILLISECONDS_IN_HOUR;
 
+#[allow(clippy::too_many_arguments)]
 fn add_ts_components(
     ts: Value,
     years: Option<Value>,
@@ -34,6 +35,10 @@ pub struct MezmoAddTsComponents;
 impl Function for MezmoAddTsComponents {
     fn identifier(&self) -> &'static str {
         "mezmo_add_ts_components"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Adds the given number of years, months, days, hours, minutes, seconds, and/or milliseconds to a timestamp and returns the resulting timestamp. Negative values subtract the corresponding component."
     }
 
     fn parameters(&self) -> &'static [Parameter] {
@@ -85,23 +90,23 @@ impl Function for MezmoAddTsComponents {
         &[
             example! {
                 title: "add months",
-                source: r#"mezmo_add_ts_components(t'2021-02-10T23:32:00+00:00', months: 2)"#,
-                result: Ok(r#"2021-04-10T23:32:00+00:00"#),
+                source: r"mezmo_add_ts_components(t'2021-02-10T23:32:00+00:00', months: 2)",
+                result: Ok(r"2021-04-10T23:32:00+00:00"),
             },
             example! {
                 title: "add months and days",
-                source: r#"mezmo_add_ts_components(t'2021-02-10T23:32:00+00:00', months: 2, days: 6)"#,
-                result: Ok(r#"2021-04-1623:32:00+00:00"#),
+                source: r"mezmo_add_ts_components(t'2021-02-10T23:32:00+00:00', months: 2, days: 6)",
+                result: Ok(r"2021-04-1623:32:00+00:00"),
             },
             example! {
                 title: "add years, months, days, hours, minutes, seconds and milliseconds",
-                source: r#"mezmo_add_ts_components(t'2021-02-10T23:32:00+00:00', years: 3, months: 2, days: 6, hours: 4, minutes: 10, seconds: 5, milliseconds: 200)"#,
-                result: Ok(r#"2024-04-17T03:42:05.200+00:00"#),
+                source: r"mezmo_add_ts_components(t'2021-02-10T23:32:00+00:00', years: 3, months: 2, days: 6, hours: 4, minutes: 10, seconds: 5, milliseconds: 200)",
+                result: Ok(r"2024-04-17T03:42:05.200+00:00"),
             },
             example! {
                 title: "subtract years, months and days",
-                source: r#"mezmo_add_ts_components(t'2021-02-10T23:32:00+00:00', years: -5, months: -2, days: -6)"#,
-                result: Ok(r#"2015-12-04T23:32:00+00:00"#),
+                source: r"mezmo_add_ts_components(t'2021-02-10T23:32:00+00:00', years: -5, months: -2, days: -6)",
+                result: Ok(r"2015-12-04T23:32:00+00:00"),
             },
         ]
     }
@@ -203,6 +208,7 @@ impl FunctionExpression for MezmoAddTsComponentsFn {
     }
 }
 
+#[allow(clippy::result_large_err)]
 fn timezone_component_or_default(val: Option<Value>) -> Result<i64, ValueError> {
     match val {
         Some(expr) => expr.try_integer(),
@@ -212,11 +218,8 @@ fn timezone_component_or_default(val: Option<Value>) -> Result<i64, ValueError> 
 
 fn total_months(years: Option<Value>, months: Option<Value>) -> Result<i64, ExpressionError> {
     let years = timezone_component_or_default(years)?;
-    let years = match years.checked_mul(MONTHS_IN_A_YEAR as i64) {
-        Some(val) => val,
-        None => {
-            return Err(ERROR_INVALID_TIME_COMPONENTS.into());
-        }
+    let Some(years) = years.checked_mul(i64::from(MONTHS_IN_A_YEAR)) else {
+        return Err(ERROR_INVALID_TIME_COMPONENTS.into());
     };
     let months = timezone_component_or_default(months)?;
     match years.checked_add(months) {
@@ -257,8 +260,8 @@ fn total_milliseconds(
     seconds: Option<Value>,
     milliseconds: Option<Value>,
 ) -> Result<i64, ExpressionError> {
-    let mut total = 0 as i64;
-    let values = vec![
+    let mut total = 0_i64;
+    let values = [
         to_milliseconds(timezone_component_or_default(days)?, MILLISECONDS_IN_DAY)?,
         to_milliseconds(timezone_component_or_default(hours)?, MILLISECONDS_IN_HOUR)?,
         to_milliseconds(
@@ -272,7 +275,7 @@ fn total_milliseconds(
         timezone_component_or_default(milliseconds)?,
     ];
 
-    for val in values.iter() {
+    for val in &values {
         total = match total.checked_add(*val) {
             Some(new_val) => new_val,
             None => {
@@ -285,11 +288,9 @@ fn total_milliseconds(
 }
 
 fn to_milliseconds(val: i64, multiplier: u32) -> Result<i64, ExpressionError> {
-    match val.checked_mul(multiplier as i64) {
+    match val.checked_mul(i64::from(multiplier)) {
         Some(val) => Ok(val),
-        None => {
-            return Err(ERROR_INVALID_TIME_COMPONENTS.into());
-        }
+        None => Err(ERROR_INVALID_TIME_COMPONENTS.into()),
     }
 }
 
@@ -308,6 +309,7 @@ fn add_milliseconds<T: TimeZone>(
 }
 
 #[cfg(test)]
+#[allow(clippy::zero_prefixed_literal)]
 mod tests {
     use super::*;
     use crate::value;

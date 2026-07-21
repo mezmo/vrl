@@ -20,6 +20,10 @@ impl Function for IpToIpv6 {
         "ip_to_ipv6"
     }
 
+    fn usage(&self) -> &'static str {
+        "Converts the `ip` to an IPv6 address."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",
@@ -30,9 +34,9 @@ impl Function for IpToIpv6 {
 
     fn examples(&self) -> &'static [Example] {
         &[example! {
-            title: "valid IPv4",
-            source: r#"ip_to_ipv6!("192.168.0.1")"#,
-            result: Ok("::ffff:192.168.0.1"),
+            title: "IPv4 to IPv6",
+            source: r#"ip_to_ipv6!("192.168.10.32")"#,
+            result: Ok("::ffff:192.168.10.32"),
         }]
     }
 

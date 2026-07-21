@@ -1,18 +1,24 @@
 use crate::compiler::prelude::*;
 use std::borrow::Cow;
 
+#[allow(
+    clippy::needless_pass_by_value,
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss,
+    clippy::unnecessary_wraps
+)]
 fn string_at(s: Cow<'_, str>, index: i64) -> Resolved {
     if index >= 0 {
         Ok(s.chars()
             .nth(index as usize)
             .map(|c| c.to_string())
-            .unwrap_or(String::new())
+            .unwrap_or_default()
             .into())
     } else {
         Ok(s.chars()
             .nth_back((-(index + 1)) as usize)
             .map(|c| c.to_string())
-            .unwrap_or(String::new())
+            .unwrap_or_default()
             .into())
     }
 }
@@ -21,7 +27,7 @@ fn string_at(s: Cow<'_, str>, index: i64) -> Resolved {
 /// but indexes out of range, including out of range negative indexes, return an
 /// emtpy string.
 ///
-/// Behaves like the JavaScript's String.prototype.at() method except for not
+/// Behaves like the JavaScript's `String.prototype.at()` method except for not
 /// returning an error for out of range indexes. In this case an empty string is
 /// returned.
 #[derive(Clone, Copy, Debug)]
@@ -30,6 +36,10 @@ pub struct MezmoStringAt;
 impl Function for MezmoStringAt {
     fn identifier(&self) -> &'static str {
         "mezmo_string_at"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Returns the character at the given zero-based `index` of a string. A negative index counts back from the end of the string; an out-of-range index returns an empty string."
     }
 
     fn parameters(&self) -> &'static [Parameter] {

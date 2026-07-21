@@ -24,6 +24,10 @@ impl Function for Join {
         "join"
     }
 
+    fn usage(&self) -> &'static str {
+        "Joins each string in the `value` array into a single string, with items optionally separated from one another by a `separator`."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -52,11 +56,18 @@ impl Function for Join {
     }
 
     fn examples(&self) -> &'static [Example] {
-        &[example! {
-            title: "join",
-            source: r#"join!(["a","b","c"], ",")"#,
-            result: Ok("a,b,c"),
-        }]
+        &[
+            example! {
+                title: "Join array (no separator)",
+                source: r#"join!(["bring", "us", "together"])"#,
+                result: Ok("bringustogether"),
+            },
+            example! {
+                title: "Join array (comma separator)",
+                source: r#"join!(["sources", "transforms", "sinks"], separator: ", ")"#,
+                result: Ok("sources, transforms, sinks"),
+            },
+        ]
     }
 }
 

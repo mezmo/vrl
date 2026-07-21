@@ -13,19 +13,23 @@ pub(crate) fn to_string(value: Value) -> String {
             let bytes = to_string::to_string(value).unwrap_or_else(|_| Value::from(""));
             match bytes {
                 Bytes(v) => std::str::from_utf8(&v).unwrap_or("").into(),
-                _ => "".into(),
+                _ => String::new(),
             }
         }
     }
 }
 
-/// Infallible counterpart of ToString
+/// Infallible counterpart of `ToString`
 #[derive(Clone, Copy, Debug)]
 pub struct MezmoToString;
 
 impl Function for MezmoToString {
     fn identifier(&self) -> &'static str {
         "mezmo_to_string"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Converts `value` into its string representation. Arrays render as \"[Array]\", objects as \"[Object]\", and null as \"null\". This conversion is infallible."
     }
 
     fn parameters(&self) -> &'static [Parameter] {

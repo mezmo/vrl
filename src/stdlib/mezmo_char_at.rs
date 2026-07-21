@@ -1,12 +1,17 @@
 use crate::compiler::prelude::*;
 use std::borrow::Cow;
 
+#[allow(
+    clippy::needless_pass_by_value,
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss
+)]
 fn char_at(s: Cow<'_, str>, index: i64) -> Value {
     if index >= 0 {
         s.chars()
             .nth(index as usize)
             .map(|c| c.to_string())
-            .unwrap_or(String::new())
+            .unwrap_or_default()
             .into()
     } else {
         String::new().into()
@@ -16,13 +21,17 @@ fn char_at(s: Cow<'_, str>, index: i64) -> Value {
 /// Returns the char at the given index as a string. Negative and out of range
 /// indexes return an empty string.
 ///
-/// Behaves like the JavaScript's String.prototype.charAt() method.
+/// Behaves like the JavaScript's `String.prototype.charAt()` method.
 #[derive(Clone, Copy, Debug)]
 pub struct MezmoCharAt;
 
 impl Function for MezmoCharAt {
     fn identifier(&self) -> &'static str {
         "mezmo_char_at"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Returns the character at the given zero-based `index` of a string. A negative index returns an empty string, as does an index that is out of range."
     }
 
     fn parameters(&self) -> &'static [Parameter] {

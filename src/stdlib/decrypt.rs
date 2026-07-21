@@ -116,6 +116,47 @@ impl Function for Decrypt {
         "decrypt"
     }
 
+    fn usage(&self) -> &'static str {
+        indoc! {"
+            Decrypts a string with a symmetric encryption algorithm.
+
+            Supported Algorithms:
+
+            * AES-256-CFB (key = 32 bytes, iv = 16 bytes)
+            * AES-192-CFB (key = 24 bytes, iv = 16 bytes)
+            * AES-128-CFB (key = 16 bytes, iv = 16 bytes)
+            * AES-256-OFB (key = 32 bytes, iv = 16 bytes)
+            * AES-192-OFB  (key = 24 bytes, iv = 16 bytes)
+            * AES-128-OFB (key = 16 bytes, iv = 16 bytes)
+            * AES-128-SIV (key = 32 bytes, iv = 16 bytes)
+            * AES-256-SIV (key = 64 bytes, iv = 16 bytes)
+            * Deprecated - AES-256-CTR (key = 32 bytes, iv = 16 bytes)
+            * Deprecated - AES-192-CTR (key = 24 bytes, iv = 16 bytes)
+            * Deprecated - AES-128-CTR (key = 16 bytes, iv = 16 bytes)
+            * AES-256-CTR-LE (key = 32 bytes, iv = 16 bytes)
+            * AES-192-CTR-LE (key = 24 bytes, iv = 16 bytes)
+            * AES-128-CTR-LE (key = 16 bytes, iv = 16 bytes)
+            * AES-256-CTR-BE (key = 32 bytes, iv = 16 bytes)
+            * AES-192-CTR-BE (key = 24 bytes, iv = 16 bytes)
+            * AES-128-CTR-BE (key = 16 bytes, iv = 16 bytes)
+            * AES-256-CBC-PKCS7 (key = 32 bytes, iv = 16 bytes)
+            * AES-192-CBC-PKCS7 (key = 24 bytes, iv = 16 bytes)
+            * AES-128-CBC-PKCS7 (key = 16 bytes, iv = 16 bytes)
+            * AES-256-CBC-ANSIX923 (key = 32 bytes, iv = 16 bytes)
+            * AES-192-CBC-ANSIX923 (key = 24 bytes, iv = 16 bytes)
+            * AES-128-CBC-ANSIX923 (key = 16 bytes, iv = 16 bytes)
+            * AES-256-CBC-ISO7816 (key = 32 bytes, iv = 16 bytes)
+            * AES-192-CBC-ISO7816 (key = 24 bytes, iv = 16 bytes)
+            * AES-128-CBC-ISO7816 (key = 16 bytes, iv = 16 bytes)
+            * AES-256-CBC-ISO10126 (key = 32 bytes, iv = 16 bytes)
+            * AES-192-CBC-ISO10126 (key = 24 bytes, iv = 16 bytes)
+            * AES-128-CBC-ISO10126 (key = 16 bytes, iv = 16 bytes)
+            * CHACHA20-POLY1305 (key = 32 bytes, iv = 12 bytes)
+            * XCHACHA20-POLY1305 (key = 32 bytes, iv = 24 bytes)
+            * XSALSA20-POLY1305 (key = 32 bytes, iv = 24 bytes)
+        "}
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -142,11 +183,18 @@ impl Function for Decrypt {
     }
 
     fn examples(&self) -> &'static [Example] {
-        &[example! {
-            title: "decrypt AES-256-CFB",
-            source: r#"decrypt!(decode_base64!("c/dIOA=="), "AES-256-CFB", key: "01234567890123456789012345678912", iv: "0123456789012345")"#,
-            result: Ok("data"),
-        }]
+        &[
+            example! {
+                title: "Decrypt value using AES-256-CFB",
+                source: r#"decrypt!(decode_base64!("c/dIOA=="), "AES-256-CFB", key: "01234567890123456789012345678912", iv: "0123456789012345")"#,
+                result: Ok("data"),
+            },
+            example! {
+                title: "Decrypt value using AES-128-CBC-PKCS7",
+                source: r#"decrypt!(decode_base64!("5fLGcu1VHdzsPcGNDio7asLqE1P43QrVfPfmP4i4zOU="), "AES-128-CBC-PKCS7", key: "16_byte_keyxxxxx", iv: decode_base64!("fVEIRkIiczCRWNxaarsyxA=="))"#,
+                result: Ok("super_secret_message"),
+            },
+        ]
     }
 
     fn compile(

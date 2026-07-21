@@ -3,6 +3,7 @@ use std::borrow::Cow;
 use crate::compiler::prelude::*;
 use substring::Substring;
 
+#[allow(clippy::needless_pass_by_value)]
 fn substring(s: Cow<'_, str>, index_start: i64, index_end: Option<i64>) -> Value {
     let len = s.chars().count();
     let index_start = normalize_index(index_start, len);
@@ -17,6 +18,7 @@ fn substring(s: Cow<'_, str>, index_start: i64, index_end: Option<i64>) -> Value
     }
 }
 
+#[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
 fn normalize_index(index: i64, len: usize) -> usize {
     if index < 0 {
         0
@@ -32,13 +34,17 @@ fn normalize_index(index: i64, len: usize) -> usize {
 /// the length. If the start index is larger than the end index the indexes are
 /// flipped.
 ///
-/// Behaves like the JavaScript's String.prototype.substring() method.
+/// Behaves like the JavaScript's `String.prototype.substring()` method.
 #[derive(Clone, Copy, Debug)]
 pub struct MezmoSubstring;
 
 impl Function for MezmoSubstring {
     fn identifier(&self) -> &'static str {
         "mezmo_substring"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Returns the substring of `value` between the `start` and `end` character indices. Indices are clamped to the string bounds, and if `start` is greater than `end` the two are swapped."
     }
 
     fn parameters(&self) -> &'static [Parameter] {

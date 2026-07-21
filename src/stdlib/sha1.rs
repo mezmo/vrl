@@ -14,6 +14,10 @@ impl Function for Sha1 {
         "sha1"
     }
 
+    fn usage(&self) -> &'static str {
+        "Calculates a [SHA-1](https://en.wikipedia.org/wiki/SHA-1) hash of the `value`."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",
@@ -24,9 +28,9 @@ impl Function for Sha1 {
 
     fn examples(&self) -> &'static [Example] {
         &[example! {
-            title: "sha1",
-            source: r#"sha1("foobar")"#,
-            result: Ok("8843d7f92416211de9ebb963ff4ce28125932878"),
+            title: "Calculate sha1 hash",
+            source: r#"sha1("foo")"#,
+            result: Ok("0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33"),
         }]
     }
 

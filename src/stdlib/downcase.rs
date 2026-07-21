@@ -12,6 +12,10 @@ impl Function for Downcase {
         "downcase"
     }
 
+    fn usage(&self) -> &'static str {
+        "Downcases the `value` string, where downcase is defined according to the Unicode Derived Core Property Lowercase."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",
@@ -32,11 +36,18 @@ impl Function for Downcase {
     }
 
     fn examples(&self) -> &'static [Example] {
-        &[example! {
-            title: "downcase",
-            source: r#"downcase("FOO 2 BAR")"#,
-            result: Ok("foo 2 bar"),
-        }]
+        &[
+            example! {
+                title: "Downcase a string",
+                source: r#"downcase("Hello, World!")"#,
+                result: Ok("hello, world!"),
+            },
+            example! {
+                title: "Downcase with number",
+                source: r#"downcase("FOO 2 BAR")"#,
+                result: Ok("foo 2 bar"),
+            },
+        ]
     }
 }
 

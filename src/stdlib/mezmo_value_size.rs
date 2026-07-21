@@ -9,7 +9,7 @@ const BASE_BTREE_SIZE: usize = 8;
 // Implementation borrows from usage_metrics computation in vector source
 // See: https://github.com/answerbook/vector/blob/c6c061b225008047b508f8215226b508f7686549/lib/vector-core/src/usage_metrics/mod.rs#L557
 fn value_size(value: &Value) -> usize {
-    let res = match value {
+    match value {
         Value::Bytes(v) => v.len(),
         Value::Boolean(_) => 1,
         Value::Timestamp(_) | Value::Integer(_) | Value::Float(_) => 8,
@@ -22,9 +22,7 @@ fn value_size(value: &Value) -> usize {
         }
         Value::Array(v) => BASE_ARRAY_SIZE + v.iter().map(value_size).sum::<usize>(),
         Value::Null => 0, // No value, just the type definition
-    };
-
-    res
+    }
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -33,6 +31,10 @@ pub struct MezmoValueSize;
 impl Function for MezmoValueSize {
     fn identifier(&self) -> &'static str {
         "mezmo_value_size"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Returns the computed size in bytes of `value`, matching the size calculation used by Mezmo usage metrics, including a base overhead for arrays and objects."
     }
 
     fn parameters(&self) -> &'static [Parameter] {

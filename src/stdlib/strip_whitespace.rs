@@ -8,6 +8,10 @@ impl Function for StripWhitespace {
         "strip_whitespace"
     }
 
+    fn usage(&self) -> &'static str {
+        "Strips whitespace from the start and end of `value`, where whitespace is defined by the [Unicode `White_Space` property](https://en.wikipedia.org/wiki/Unicode_character_property#Whitespace)."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",
@@ -19,17 +23,22 @@ impl Function for StripWhitespace {
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
-                title: "start whitespace",
+                title: "Strip whitespace",
+                source: r#"strip_whitespace("  A sentence.  ")"#,
+                result: Ok("A sentence."),
+            },
+            example! {
+                title: "Start whitespace",
                 source: r#"strip_whitespace("  foobar")"#,
                 result: Ok("foobar"),
             },
             example! {
-                title: "end whitespace",
+                title: "End whitespace",
                 source: r#"strip_whitespace("foo bar  ")"#,
                 result: Ok("foo bar"),
             },
             example! {
-                title: "newlines",
+                title: "Newlines",
                 source: r#"strip_whitespace("\n\nfoo bar\n  ")"#,
                 result: Ok("foo bar"),
             },

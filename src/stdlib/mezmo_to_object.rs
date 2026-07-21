@@ -18,6 +18,10 @@ impl Function for MezmoToObject {
         "mezmo_to_object"
     }
 
+    fn usage(&self) -> &'static str {
+        "Returns `value` if it is an object, otherwise returns an error. Equivalent to the standard `object` function but always fallible."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",

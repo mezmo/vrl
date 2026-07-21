@@ -3,6 +3,7 @@ use std::borrow::Cow;
 use crate::compiler::prelude::*;
 use substring::Substring;
 
+#[allow(clippy::needless_pass_by_value)]
 fn string_slice(s: Cow<'_, str>, index_start: i64, index_end: Option<i64>) -> Value {
     let len = s.chars().count();
 
@@ -20,10 +21,11 @@ fn string_slice(s: Cow<'_, str>, index_start: i64, index_end: Option<i64>) -> Va
     }
 }
 
+#[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
 fn normalize_index(index: i64, len: usize) -> usize {
     if index < 0 {
         let index = -index as usize;
-        if len > index { len - index } else { 0 }
+        len.saturating_sub(index)
     } else {
         std::cmp::min(index as usize, len)
     }
@@ -34,13 +36,17 @@ fn normalize_index(index: i64, len: usize) -> usize {
 /// of the string. Unlike substring this does not flip the start and end indexes
 /// if end is less than start.
 ///
-/// Behaves like the JavaScript's String.prototype.slice() method.
+/// Behaves like the JavaScript's `String.prototype.slice()` method.
 #[derive(Clone, Copy, Debug)]
 pub struct MezmoStringSlice;
 
 impl Function for MezmoStringSlice {
     fn identifier(&self) -> &'static str {
         "mezmo_string_slice"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Returns the substring of `value` between the `start` and `end` character indices. Negative indices count back from the end of the string, and out-of-range indices are clamped to the string bounds."
     }
 
     fn parameters(&self) -> &'static [Parameter] {

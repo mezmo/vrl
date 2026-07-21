@@ -37,6 +37,10 @@ impl Function for Split {
         "split"
     }
 
+    fn usage(&self) -> &'static str {
+        "Splits the `value` string using `pattern`."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -60,17 +64,22 @@ impl Function for Split {
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
-                title: "split string",
+                title: "Split a string (no limit)",
+                source: r#"split("apples and pears and bananas", " and ")"#,
+                result: Ok(r#"["apples", "pears", "bananas"]"#),
+            },
+            example! {
+                title: "Split a string (with a limit)",
+                source: r#"split("apples and pears and bananas", " and ", limit: 2)"#,
+                result: Ok(r#"["apples", "pears and bananas"]"#),
+            },
+            example! {
+                title: "Split string",
                 source: r#"split("foobar", "b")"#,
                 result: Ok(r#"["foo", "ar"]"#),
             },
             example! {
-                title: "split once",
-                source: r#"split("foobarbaz", "ba", 2)"#,
-                result: Ok(r#"["foo", "rbaz"]"#),
-            },
-            example! {
-                title: "split regex",
+                title: "Split regex",
                 source: r#"split("barbaz", r'ba')"#,
                 result: Ok(r#"["", "r", "z"]"#),
             },

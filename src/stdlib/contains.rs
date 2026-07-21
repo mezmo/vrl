@@ -15,6 +15,10 @@ impl Function for Contains {
         "contains"
     }
 
+    fn usage(&self) -> &'static str {
+        "Determines whether the `value` string contains the specified `substring`."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -56,12 +60,12 @@ impl Function for Contains {
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
-                title: "case sensitive",
+                title: "String contains with default parameters (case sensitive)",
                 source: r#"contains("banana", "AnA")"#,
                 result: Ok("false"),
             },
             example! {
-                title: "case insensitive",
+                title: "String contains (case insensitive)",
                 source: r#"contains("banana", "AnA", case_sensitive: false)"#,
                 result: Ok("true"),
             },

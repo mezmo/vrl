@@ -77,6 +77,10 @@ impl Function for Haversine {
         "haversine"
     }
 
+    fn usage(&self) -> &'static str {
+        "Calculates [haversine](https://en.wikipedia.org/wiki/Haversine_formula) distance and bearing between two points."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -143,7 +147,7 @@ impl Function for Haversine {
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
-                title: "haversine",
+                title: "Haversine in kilometers",
                 source: "haversine(0.0, 0.0, 10.0, 10.0)",
                 result: Ok(indoc!(
                     r#"{
@@ -153,7 +157,7 @@ impl Function for Haversine {
                 )),
             },
             example! {
-                title: "haversine in miles",
+                title: "Haversine in miles",
                 source: r#"haversine(0.0, 0.0, 10.0, 10.0, measurement_unit: "miles")"#,
                 result: Ok(indoc!(
                     r#"{

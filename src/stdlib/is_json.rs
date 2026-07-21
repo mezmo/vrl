@@ -51,6 +51,10 @@ impl Function for IsJson {
         "is_json"
     }
 
+    fn usage(&self) -> &'static str {
+        "Check if the string is a valid JSON document."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -69,23 +73,28 @@ impl Function for IsJson {
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
-                title: "object",
+                title: "Valid JSON object",
                 source: r#"is_json("{}")"#,
                 result: Ok("true"),
             },
             example! {
-                title: "string",
-                source: r#"is_json(s'"test"')"#,
-                result: Ok("true"),
-            },
-            example! {
-                title: "invalid",
-                source: r#"is_json("}{")"#,
+                title: "Non-valid value",
+                source: r#"is_json("{")"#,
                 result: Ok("false"),
             },
             example! {
-                title: "exact_variant",
+                title: "Exact variant",
                 source: r#"is_json("{}", variant: "object")"#,
+                result: Ok("true"),
+            },
+            example! {
+                title: "Non-valid exact variant",
+                source: r#"is_json("{}", variant: "array")"#,
+                result: Ok("false"),
+            },
+            example! {
+                title: "Valid JSON string",
+                source: r#"is_json(s'"test"')"#,
                 result: Ok("true"),
             },
         ]

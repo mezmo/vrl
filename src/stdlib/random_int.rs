@@ -31,6 +31,10 @@ impl Function for RandomInt {
         "random_int"
     }
 
+    fn usage(&self) -> &'static str {
+        "Returns a random integer between [min, max)."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -48,7 +52,7 @@ impl Function for RandomInt {
 
     fn examples(&self) -> &'static [Example] {
         &[example! {
-            title: "generate a random int from 0 to 10",
+            title: "Random integer from 0 to 10, not including 10",
             source: "
 				i = random_int(0, 10)
 				i >= 0 && i < 10

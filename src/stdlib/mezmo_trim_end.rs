@@ -9,6 +9,10 @@ impl Function for MezmoTrimEnd {
         "mezmo_trim_end"
     }
 
+    fn usage(&self) -> &'static str {
+        "Returns `value` with trailing whitespace removed."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",

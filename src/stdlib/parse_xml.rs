@@ -9,13 +9,17 @@ impl Function for ParseXml {
         "parse_xml"
     }
 
+    fn usage(&self) -> &'static str {
+        "Parses the `value` as XML."
+    }
+
     fn examples(&self) -> &'static [Example] {
         &[example! {
-            title: "parse XML",
+            title: "Parse XML",
             source: indoc! {r#"
-				value = s'<book category="CHILDREN"><title lang="en">Harry Potter</title><author>J K. Rowling</author><year>2005</year></book>';
+                value = s'<book category="CHILDREN"><title lang="en">Harry Potter</title><author>J K. Rowling</author><year>2005</year></book>';
 
-				parse_xml!(value, text_key: "value", parse_number: false)
+                parse_xml!(value, text_key: "value", parse_number: false)
             "#},
             result: Ok(
                 r#"{ "book": { "@category": "CHILDREN", "author": "J K. Rowling", "title": { "@lang": "en", "value": "Harry Potter" }, "year": "2005" } }"#,

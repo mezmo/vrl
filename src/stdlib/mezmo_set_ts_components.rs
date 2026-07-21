@@ -4,6 +4,7 @@ use std::fmt::Display;
 
 const ONE_MILLISECOND_IN_NANOSECONDS: u32 = 1_000_000;
 
+#[allow(clippy::too_many_arguments)]
 fn set_ts_components(
     ts: Value,
     years: Option<Value>,
@@ -91,6 +92,10 @@ impl Function for MezmoSetTsComponents {
         "mezmo_set_ts_components"
     }
 
+    fn usage(&self) -> &'static str {
+        "Sets the given year, month, day, hour, minute, second, and/or millisecond components of a timestamp and returns the resulting timestamp, leaving unspecified components unchanged."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -140,18 +145,18 @@ impl Function for MezmoSetTsComponents {
         &[
             example! {
                 title: "set months",
-                source: r#"mezmo_set_ts_components(t'2021-02-10T23:32:00+00:00', months: 6)"#,
-                result: Ok(r#"2021-06-10T23:32:00+00:00"#),
+                source: r"mezmo_set_ts_components(t'2021-02-10T23:32:00+00:00', months: 6)",
+                result: Ok(r"2021-06-10T23:32:00+00:00"),
             },
             example! {
                 title: "set months and days",
-                source: r#"mezmo_set_ts_components(t'2021-02-10T23:32:00+00:00', months: 3, days: 6)"#,
-                result: Ok(r#"2021-03-0623:32:00+00:00"#),
+                source: r"mezmo_set_ts_components(t'2021-02-10T23:32:00+00:00', months: 3, days: 6)",
+                result: Ok(r"2021-03-0623:32:00+00:00"),
             },
             example! {
                 title: "set years, months, days, hours, minutes, seconds and milliseconds",
-                source: r#"mezmo_set_ts_components(t'2021-02-10T23:32:00+00:00', years: 2000, months: 10, days: 4, hours: 4, minutes: 10, seconds: 55, milliseconds: 200)"#,
-                result: Ok(r#"2000-10-04T04:10:55.200+00:00"#),
+                source: r"mezmo_set_ts_components(t'2021-02-10T23:32:00+00:00', years: 2000, months: 10, days: 4, hours: 4, minutes: 10, seconds: 55, milliseconds: 200)",
+                result: Ok(r"2000-10-04T04:10:55.200+00:00"),
             },
         ]
     }
@@ -269,16 +274,12 @@ where
         }
     };
     let error_message = match max_allowed {
-        Some(max) => format!("{} must be between {} and {}", arg_name, min_allowed, max),
-        None => format!(
-            "{} must be greater than or equal to {}",
-            arg_name, min_allowed
-        ),
+        Some(max) => format!("{arg_name} must be between {min_allowed} and {max}"),
+        None => format!("{arg_name} must be greater than or equal to {min_allowed}"),
     };
 
-    let val = match T::try_from(val) {
-        Ok(new_val) => new_val,
-        Err(_) => return Err(error_message.into()),
+    let Ok(val) = T::try_from(val) else {
+        return Err(error_message.into());
     };
 
     let is_valid = match max_allowed {
@@ -293,6 +294,7 @@ where
 }
 
 #[cfg(test)]
+#[allow(clippy::zero_prefixed_literal)]
 mod tests {
     use super::*;
     use crate::value;

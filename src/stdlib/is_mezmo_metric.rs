@@ -11,6 +11,10 @@ impl Function for IsMezmoMetric {
         "is_mezmo_metric"
     }
 
+    fn usage(&self) -> &'static str {
+        "Returns `true` if `value` is a valid Mezmo metric object, otherwise `false`. Used to check whether an event conforms to the Mezmo internal metric schema, including a value object with a recognized type such as counter, gauge, histogram, or summary."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",
@@ -72,7 +76,7 @@ fn validate_metric(value: &Value) -> Result<Value, ExpressionError> {
 
     if !value
         .get(path!("name"))
-        .ok_or_else(|| "field \"name\" not found")?
+        .ok_or("field \"name\" not found")?
         .is_bytes()
     {
         return Err("expected field \"name\" to contain a string".into());
@@ -80,9 +84,9 @@ fn validate_metric(value: &Value) -> Result<Value, ExpressionError> {
 
     let kind = value
         .get(path!("kind"))
-        .ok_or_else(|| "field \"kind\" not found")?
+        .ok_or("field \"kind\" not found")?
         .as_str()
-        .ok_or_else(|| "expected field \"kind\" to contain a string")?;
+        .ok_or("expected field \"kind\" to contain a string")?;
 
     if kind != "absolute" && kind != "incremental" {
         return Err("expected field \"kind\" to be either \"absolute\" or \"incremental\"".into());
@@ -91,21 +95,21 @@ fn validate_metric(value: &Value) -> Result<Value, ExpressionError> {
     validate_metric_value(
         value
             .get(path!("value"))
-            .ok_or_else(|| "field \"value\" not found")?,
+            .ok_or("field \"value\" not found")?,
     )?;
 
     // Optional fields
 
-    if let Some(namespace) = value.get(path!("namespace")) {
-        if !namespace.is_bytes() {
-            return Err("expected field \"namespace\" to contain a string".into());
-        }
+    if let Some(namespace) = value.get(path!("namespace"))
+        && !namespace.is_bytes()
+    {
+        return Err("expected field \"namespace\" to contain a string".into());
     }
 
     if let Some(tags) = value.get(path!("tags")) {
         let tags = tags
             .as_object()
-            .ok_or_else(|| "expected field \"tags\" to contain an array")?;
+            .ok_or("expected field \"tags\" to contain an array")?;
 
         for (i, tag) in tags.values().enumerate() {
             if !tag.is_bytes() {
@@ -123,13 +127,13 @@ fn validate_metric(value: &Value) -> Result<Value, ExpressionError> {
 fn validate_metric_value(value: &Value) -> Result<Value, ExpressionError> {
     let value_type = value
         .get(path!("type"))
-        .ok_or_else(|| "field \"value.type\" not found")?
+        .ok_or("field \"value.type\" not found")?
         .as_str()
-        .ok_or_else(|| "expected field \"value.type\" to contain a string")?;
+        .ok_or("expected field \"value.type\" to contain a string")?;
 
     let value_value = value
         .get(path!("value"))
-        .ok_or_else(|| "field \"value.value\" not found")?;
+        .ok_or("field \"value.value\" not found")?;
 
     match value_type.borrow() {
         "counter" | "gauge" => validate_counter_or_gauge(value_value),
@@ -155,9 +159,9 @@ fn validate_counter_or_gauge(value: &Value) -> Result<Value, ExpressionError> {
 fn validate_set(value: &Value) -> Result<Value, ExpressionError> {
     let values = value
         .get(path!("values"))
-        .ok_or_else(|| "field \"value.value.values\" not found")?
+        .ok_or("field \"value.value.values\" not found")?
         .as_array()
-        .ok_or_else(|| "expected set metric field \"value.value.values\" to contain an array")?;
+        .ok_or("expected set metric field \"value.value.values\" to contain an array")?;
 
     for (i, element) in values.iter().enumerate() {
         if !element.is_bytes() {
@@ -170,10 +174,10 @@ fn validate_set(value: &Value) -> Result<Value, ExpressionError> {
 fn validate_distribution(value: &Value) -> Result<Value, ExpressionError> {
     let statistic = value
         .get(path!("statistic"))
-        .ok_or_else(|| "field \"value.value.statistic\" not found")?
+        .ok_or("field \"value.value.statistic\" not found")?
         .as_str()
-        .ok_or_else(
-            || "expected distribution metric field \"value.value.statistic\" to contain a string",
+        .ok_or(
+            "expected distribution metric field \"value.value.statistic\" to contain a string",
         )?;
 
     if statistic != "histogram" && statistic != "summary" {
@@ -182,11 +186,9 @@ fn validate_distribution(value: &Value) -> Result<Value, ExpressionError> {
 
     let samples = value
         .get(path!("samples"))
-        .ok_or_else(|| "field \"value.value.samples\" not found")?
+        .ok_or("field \"value.value.samples\" not found")?
         .as_array()
-        .ok_or_else(
-            || "expected distribution metric field \"value.value.samples\" to contain an array",
-        )?;
+        .ok_or("expected distribution metric field \"value.value.samples\" to contain an array")?;
 
     for (i, sample) in samples.iter().enumerate() {
         if !sample
@@ -222,7 +224,7 @@ fn validate_distribution(value: &Value) -> Result<Value, ExpressionError> {
 fn validate_histogram(value: &Value) -> Result<Value, ExpressionError> {
     let sum = value
         .get(path!("sum"))
-        .ok_or_else(|| "field \"value.value.sum\" not found")?;
+        .ok_or("field \"value.value.sum\" not found")?;
 
     if !sum.is_number() {
         return Err(
@@ -232,11 +234,9 @@ fn validate_histogram(value: &Value) -> Result<Value, ExpressionError> {
 
     let count = value
         .get(path!("count"))
-        .ok_or_else(|| "field \"value.value.count\" not found")?
+        .ok_or("field \"value.value.count\" not found")?
         .as_integer()
-        .ok_or_else(
-            || "expected histogram metric field \"value.value.count\" to contain an integer",
-        )?;
+        .ok_or("expected histogram metric field \"value.value.count\" to contain an integer")?;
 
     if count < 0 {
         return Err(
@@ -247,11 +247,9 @@ fn validate_histogram(value: &Value) -> Result<Value, ExpressionError> {
 
     let buckets = value
         .get(path!("buckets"))
-        .ok_or_else(|| "field \"value.value.buckets\" not found")?
+        .ok_or("field \"value.value.buckets\" not found")?
         .as_array()
-        .ok_or_else(
-            || "expected histogram metric field \"value.value.buckets\" to contain an array",
-        )?;
+        .ok_or("expected histogram metric field \"value.value.buckets\" to contain an array")?;
 
     for (i, bucket) in buckets.iter().enumerate() {
         if !bucket
@@ -286,7 +284,7 @@ fn validate_histogram(value: &Value) -> Result<Value, ExpressionError> {
 fn validate_summary(value: &Value) -> Result<Value, ExpressionError> {
     let sum = value
         .get(path!("sum"))
-        .ok_or_else(|| "field \"value.value.sum\" not found")?;
+        .ok_or("field \"value.value.sum\" not found")?;
 
     if !sum.is_number() {
         return Err("expected summary metric field \"value.value.sum\" to contain a number".into());
@@ -294,11 +292,9 @@ fn validate_summary(value: &Value) -> Result<Value, ExpressionError> {
 
     let count = value
         .get(path!("count"))
-        .ok_or_else(|| "field \"value.value.count\" not found")?
+        .ok_or("field \"value.value.count\" not found")?
         .as_integer()
-        .ok_or_else(
-            || "expected summary metric field \"value.value.count\" to contain an integer",
-        )?;
+        .ok_or("expected summary metric field \"value.value.count\" to contain an integer")?;
 
     if count < 0 {
         return Err(
@@ -309,11 +305,9 @@ fn validate_summary(value: &Value) -> Result<Value, ExpressionError> {
 
     let quantiles = value
         .get(path!("quantiles"))
-        .ok_or_else(|| "field \"value.value.quantiles\" not found")?
+        .ok_or("field \"value.value.quantiles\" not found")?
         .as_array()
-        .ok_or_else(
-            || "expected summary metric field \"value.value.quantiles\" to contain an array",
-        )?;
+        .ok_or("expected summary metric field \"value.value.quantiles\" to contain an array")?;
 
     for (i, quantile) in quantiles.iter().enumerate() {
         if !quantile
@@ -341,6 +335,7 @@ fn validate_summary(value: &Value) -> Result<Value, ExpressionError> {
 }
 
 #[cfg(test)]
+#[allow(clippy::unreadable_literal)]
 mod tests {
     use super::*;
 

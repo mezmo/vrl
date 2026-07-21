@@ -15,6 +15,10 @@ impl Function for EndsWith {
         "ends_with"
     }
 
+    fn usage(&self) -> &'static str {
+        "Determines whether the `value` string ends with the specified `substring`."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -56,18 +60,18 @@ impl Function for EndsWith {
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
-                title: "case sensitive",
-                source: r#"ends_with("foobar", "R")"#,
-                result: Ok("false"),
-            },
-            example! {
-                title: "case insensitive",
-                source: r#"ends_with("foobar", "R", false)"#,
+                title: "String ends with (case sensitive)",
+                source: r#"ends_with("The Needle In The Haystack", "The Haystack")"#,
                 result: Ok("true"),
             },
             example! {
-                title: "mismatch",
-                source: r#"ends_with("foobar", "foo")"#,
+                title: "String ends with (case insensitive)",
+                source: r#"ends_with("The Needle In The Haystack", "the haystack", case_sensitive: false)"#,
+                result: Ok("true"),
+            },
+            example! {
+                title: "String ends with (case sensitive failure)",
+                source: r#"ends_with("foobar", "R")"#,
                 result: Ok("false"),
             },
         ]

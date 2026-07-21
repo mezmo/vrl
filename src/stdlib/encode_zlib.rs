@@ -40,11 +40,15 @@ impl Function for EncodeZlib {
         "encode_zlib"
     }
 
+    fn usage(&self) -> &'static str {
+        "Encodes the `value` to [Zlib](https://www.zlib.net)."
+    }
+
     fn examples(&self) -> &'static [Example] {
         &[example! {
-            title: "demo string",
-            source: r#"encode_base64(encode_zlib("encode_me"))"#,
-            result: Ok("eJxLzUvOT0mNz00FABI5A6A="),
+            title: "Encode to Zlib",
+            source: r#"encode_base64(encode_zlib("please encode me"))"#,
+            result: Ok("eJwryElNLE5VSM1Lzk9JVchNBQA0RQX7"),
         }]
     }
 

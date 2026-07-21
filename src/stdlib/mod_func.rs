@@ -13,6 +13,10 @@ impl Function for Mod {
         "mod"
     }
 
+    fn usage(&self) -> &'static str {
+        "Calculates the remainder of `value` divided by `modulus`."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -30,9 +34,9 @@ impl Function for Mod {
 
     fn examples(&self) -> &'static [Example] {
         &[example! {
-            title: "mod",
-            source: "mod(5, 3)",
-            result: Ok("2"),
+            title: "Calculate the remainder of two integers",
+            source: "mod(5, 2)",
+            result: Ok("1"),
         }]
     }
 

@@ -15,6 +15,10 @@ impl Function for Boolean {
         "bool"
     }
 
+    fn usage(&self) -> &'static str {
+        "The value to check if it is a Boolean."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",
@@ -26,16 +30,24 @@ impl Function for Boolean {
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
-                title: "valid",
+                title: "Valid Boolean",
                 source: "bool(false)",
                 result: Ok("false"),
             },
             example! {
-                title: "invalid",
+                title: "Invalid Boolean",
                 source: "bool!(42)",
                 result: Err(
                     r#"function call error for "bool" at (0:9): expected boolean, got integer"#,
                 ),
+            },
+            example! {
+                title: "Valid Boolean from path",
+                source: indoc! {r#"
+                    . = { "value": true }
+                    bool(.value)
+                "#},
+                result: Ok("true"),
             },
         ]
     }
