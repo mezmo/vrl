@@ -14,6 +14,10 @@ impl Function for Includes {
         "includes"
     }
 
+    fn usage(&self) -> &'static str {
+        "Determines whether the `value` array includes the specified `item`."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -32,12 +36,17 @@ impl Function for Includes {
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
-                title: "includes",
+                title: "Array includes",
+                source: r#"includes(["apple", "orange", "banana"], "banana")"#,
+                result: Ok("true"),
+            },
+            example! {
+                title: "Includes boolean",
                 source: "includes([1, true], true)",
                 result: Ok("true"),
             },
             example! {
-                title: "no includes",
+                title: "Doesn't include",
                 source: r#"includes(["foo", "bar"], "baz")"#,
                 result: Ok("false"),
             },

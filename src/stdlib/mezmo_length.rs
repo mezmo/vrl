@@ -1,6 +1,7 @@
 use crate::compiler::prelude::*;
 
 /// Returns the string length (utf8), the array length or the property "length" value
+#[allow(clippy::unnecessary_wraps)]
 fn mezmo_length(value: Value) -> Resolved {
     Ok(match value {
         Value::Bytes(text) => String::from_utf8_lossy(&text).chars().count().into(),
@@ -16,6 +17,10 @@ pub struct MezmoLength;
 impl Function for MezmoLength {
     fn identifier(&self) -> &'static str {
         "mezmo_length"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Returns the length of `value`: the number of UTF-8 characters for a string, the number of elements for an array, or the `length` property for an object. Returns `null` for other types."
     }
 
     fn parameters(&self) -> &'static [Parameter] {

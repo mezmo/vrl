@@ -63,6 +63,7 @@ fn parse_splunk_hec(value: Value) -> Resolved {
 }
 
 /// Converts a JSON number to a timestamp using the same method used by the Splunk HEC source.
+#[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
 fn to_timestamp(number: &serde_json::Number) -> ParseResult<DateTime<Utc>> {
     if let Some(time) = number.as_i64() {
         parse_timestamp(time).ok_or_else(|| r#""time" is invalid date format"#.into())
@@ -136,6 +137,10 @@ impl Function for ParseSplunkHec {
 
     fn summary(&self) -> &'static str {
         "parse a string to a Splunk HEC log events"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Parses a string containing one or more Splunk HEC (HTTP Event Collector) log events and returns the decoded events."
     }
 
     fn parameters(&self) -> &'static [Parameter] {

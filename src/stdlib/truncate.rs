@@ -32,6 +32,10 @@ impl Function for Truncate {
         "truncate"
     }
 
+    fn usage(&self) -> &'static str {
+        "Truncates the `value` string up to the `limit` number of characters."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -55,19 +59,19 @@ impl Function for Truncate {
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
-                title: "truncate",
+                title: "Truncate a string",
+                source: r#"truncate("A rather long sentence.", limit: 11, suffix: "...")"#,
+                result: Ok("A rather lo..."),
+            },
+            example! {
+                title: "Truncate a string (custom suffix)",
+                source: r#"truncate("A rather long sentence.", limit: 11, suffix: "[TRUNCATED]")"#,
+                result: Ok("A rather lo[TRUNCATED]"),
+            },
+            example! {
+                title: "Truncate",
                 source: r#"truncate("foobar", 3)"#,
                 result: Ok("foo"),
-            },
-            example! {
-                title: "ellipsis",
-                source: r#"truncate("foobarzoo", 3, suffix: "...")"#,
-                result: Ok("foo..."),
-            },
-            example! {
-                title: "custom suffix",
-                source: r#"truncate("foo bar zoo", 4, suffix: "[TRUNCATED]")"#,
-                result: Ok("foo [TRUNCATED]"),
             },
         ]
     }

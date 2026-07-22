@@ -1,6 +1,12 @@
 use crate::compiler::prelude::*;
 use std::borrow::Cow;
 
+#[allow(
+    clippy::needless_pass_by_value,
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss,
+    clippy::cast_possible_wrap
+)]
 fn index_of(value: Cow<'_, str>, search_value: Cow<'_, str>, position: i64) -> Value {
     let position = std::cmp::max(position, 0); // Negative values clamped to 0
 
@@ -12,8 +18,7 @@ fn index_of(value: Cow<'_, str>, search_value: Cow<'_, str>, position: i64) -> V
     let byte_position = value
         .char_indices()
         .nth(position as usize)
-        .map(|(pos, _)| pos)
-        .unwrap_or(value.len());
+        .map_or(value.len(), |(pos, _)| pos);
 
     if byte_position == value.len() {
         // Nothing to search
@@ -45,13 +50,17 @@ fn index_of(value: Cow<'_, str>, search_value: Cow<'_, str>, position: i64) -> V
 /// string greater than or equal to that position are considered. Position can
 /// be negative and counts from the back of the string to be searched.
 ///
-/// Behaves like the JavaScript's String.prototype.indexOf() method.
+/// Behaves like the JavaScript's `String.prototype.indexOf()` method.
 #[derive(Clone, Copy, Debug)]
 pub struct MezmoIndexOf;
 
 impl Function for MezmoIndexOf {
     fn identifier(&self) -> &'static str {
         "mezmo_index_of"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Returns the zero-based index of the first occurrence of `find` within `value`, optionally starting the search at `from_index`. Returns `-1` if the substring is not found."
     }
 
     fn parameters(&self) -> &'static [Parameter] {

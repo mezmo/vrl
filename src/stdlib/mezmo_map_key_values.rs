@@ -7,16 +7,17 @@ use crate::compiler::prelude::*;
 ///   - -1: infinite recursion
 ///   -  0: no recursion (only current level)
 ///   -  N > 0: recurse up to N levels deeper
-/// - Uses Value::into_iter(false) to process items at the current depth
+/// - Uses `Value::into_iter(false)` to process items at the current depth
 /// - Recurses into nested objects/arrays up to the specified depth
 /// - Mutates keys/values in-place
-/// - Key collision behavior is based on the sort order of the BTreeMap.
-///   - Value is a BTreeMap; keys are sorted
+/// - Key collision behavior is based on the sort order of the `BTreeMap`.
+///   - Value is a `BTreeMap`; keys are sorted
 ///   - On collision, overwrite is based on which key is last in the list
-///   - See lib/tests/tests/mezmo/mezmo_map_key_values/key_collision_overwrite.vrl for an
+///   - See `lib/tests/tests/mezmo/mezmo_map_key_values/key_collision_overwrite.vrl` for an
 ///     example of how this may differ from a caller's expectations
 /// - The overhead of this function is the same as using `Value::into_iter(true).by_ref()`
-///   and collecting the final results as used in map_keys and map_values
+///   and collecting the final results as used in `map_keys` and `map_values`
+#[allow(clippy::unnecessary_wraps)]
 fn mezmo_map_key_values<T>(
     value: Value,
     max_depth: i64,
@@ -28,7 +29,7 @@ where
 {
     let mut value_clone = value.clone();
     match map_key_values(&mut value_clone, max_depth, ctx, runner) {
-        Ok(_) => Ok(value_clone),
+        Ok(()) => Ok(value_clone),
         _ => Ok(value),
     }
 }
@@ -105,6 +106,7 @@ fn next_depth(remaining_depth: i64) -> i64 {
 ///   key to UTF-8 and mutate the key in-place.
 /// - If key coercion fails, we keep the original key and just update the value.
 /// - If the result is not a 2-element array, or not an array at all, we ignore it.
+#[allow(clippy::unnecessary_wraps)]
 fn apply_result(
     result: Value,
     key_slot: Option<&mut KeyString>,
@@ -122,12 +124,11 @@ fn apply_result(
     let result_key = iter.next().expect("must have a key entry");
     let result_value = iter.next().expect("must have a value entry");
 
-    if let Some(key) = key_slot {
-        if let Ok(new_key) = result_key.try_bytes_utf8_lossy() {
-            if !new_key.trim().is_empty() {
-                *key = new_key.into_owned().into();
-            }
-        }
+    if let Some(key) = key_slot
+        && let Ok(new_key) = result_key.try_bytes_utf8_lossy()
+        && !new_key.trim().is_empty()
+    {
+        *key = new_key.into_owned().into();
     }
 
     *value_slot = result_value;
@@ -141,6 +142,10 @@ pub struct MezmoMapKeyValues;
 impl Function for MezmoMapKeyValues {
     fn identifier(&self) -> &'static str {
         "mezmo_map_key_values"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Iterates depth-first over the keys and values of an object (or the values of an array), applying a closure to each and mutating them in place. Recursion depth is controlled by `max_depth`: -1 for infinite, 0 for the current level only, or N to recurse up to N levels deeper."
     }
 
     fn parameters(&self) -> &'static [Parameter] {

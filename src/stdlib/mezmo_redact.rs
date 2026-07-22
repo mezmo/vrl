@@ -1,5 +1,8 @@
 use crate::compiler::prelude::*;
-use crate::stdlib::mezmo_patterns::*;
+use crate::stdlib::mezmo_patterns::{
+    CREDIT_CARD_PATTERN, EMAIL_ADDRESS_PATTERN, IPV4_ADDRESS_PATTERN, PHONE_NUMBER_PATTERN,
+    US_SOCIAL_SECURITY_NUMBER_PATTERN,
+};
 use base64::engine::Engine;
 use regex::Regex;
 use std::cmp::Ordering;
@@ -44,6 +47,10 @@ impl Function for MezmoRedact {
         "mezmo_redact"
     }
 
+    fn usage(&self) -> &'static str {
+        "Redacts sensitive data in `value` by replacing text that matches the given filters (a regex, built-in patterns such as US social security numbers, or a custom text redactor) with a redaction string or a hash such as sha2, sha3, or sha256."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -64,7 +71,7 @@ impl Function for MezmoRedact {
             example! {
                 title: "regex",
                 source: r#"redact("my id is 123456", filters: [r'\d+'])"#,
-                result: Ok(r#"my id is [REDACTED]"#),
+                result: Ok(r"my id is [REDACTED]"),
             },
             example! {
                 title: "us_social_security_number",
@@ -74,25 +81,25 @@ impl Function for MezmoRedact {
             example! {
                 title: "text redactor",
                 source: r#"redact("my id is 123456", filters: [{ "type": "pattern", "patterns": [r'\d+'], "redactor": {"type": "text", "replacement": "***"}}])"#,
-                result: Ok(r#"my id is ***"#),
+                result: Ok(r"my id is ***"),
             },
             example! {
                 title: "sha2",
                 source: r#"redact("my id is 123456", filters: [{ "type": "pattern", "patterns": [r'\d+'], "redactor": "sha2" }])"#,
-                result: Ok(r#"my id is GEtTedW1p6tC094dDKH+3B8P+xSnZz69AmpjaXRd63I="#),
+                result: Ok(r"my id is GEtTedW1p6tC094dDKH+3B8P+xSnZz69AmpjaXRd63I="),
             },
             example! {
                 title: "sha3",
                 source: r#"redact("my id is 123456", filters: [{ "type": "pattern", "patterns", [r'\d+'], redactor: "sha3" }])"#,
                 result: Ok(
-                    r#"my id is ZNCdmTDI7PeeUTFnpYjLdUObdizo+bIupZdl8yqnTKGdLx6X3JIqPUlUWUoFBikX+yTR+OcvLtAqWO11NPlNJw=="#,
+                    r"my id is ZNCdmTDI7PeeUTFnpYjLdUObdizo+bIupZdl8yqnTKGdLx6X3JIqPUlUWUoFBikX+yTR+OcvLtAqWO11NPlNJw==",
                 ),
             },
             example! {
                 title: "sha256 hex",
                 source: r#"redact("my id is 123456", filters: [{ "type": "pattern", "patterns": [r'\d+'], redactor: {"type": "sha2", "variant": "SHA-256", "encoding": "base16"} }])"#,
                 result: Ok(
-                    r#"my id is 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92"#,
+                    r"my id is 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
                 ),
             },
         ]
@@ -221,9 +228,9 @@ impl<'a> FilterProcessor<'a> {
                 }
                 res.into_owned().into()
             })
-            .into()
     }
 
+    #[allow(clippy::cast_possible_wrap)]
     fn match_values(&self) -> Value {
         Value::Array(
             self.matches
@@ -343,9 +350,7 @@ impl Filter {
                                 Pattern::Regex(regex) => {
                                     regex.replace_all(&input, redactor).into_owned()
                                 }
-                                Pattern::String(pattern) => {
-                                    str_replace(&input, pattern, redactor).into()
-                                }
+                                Pattern::String(pattern) => str_replace(&input, pattern, redactor),
                             };
                             if value != input {
                                 found_match = true;
@@ -383,10 +388,10 @@ fn replace_with_pattern<'t>(
     redactor: &Redactor,
 ) -> (Cow<'t, str>, bool) {
     let redacted = pattern.replace_all(input, redactor);
-    if input != redacted {
-        (redacted, true)
-    } else {
+    if input == redacted {
         (redacted, false)
+    } else {
+        (redacted, true)
     }
 }
 
@@ -421,11 +426,12 @@ impl Redactor {
                 dst.push_str(s);
             }
             Redactor::Hash { encoder, hasher } => {
-                dst.push_str(&hasher(*encoder, original.as_bytes()))
+                dst.push_str(&hasher(*encoder, original.as_bytes()));
             }
         }
     }
 
+    #[allow(clippy::needless_pass_by_value)]
     fn from_object(obj: ObjectMap) -> std::result::Result<Self, &'static str> {
         let r#type = match obj.get("type").ok_or(
             "redactor specified as objects must have type
@@ -760,23 +766,19 @@ mod test {
 
         us_social_security_number_additional {
             args: func_args![
-                value: vec![
-                    "242-22-1348 you said?",
+                value: ["242-22-1348 you said?",
                     "I guess that is valid. How about: ",
                     "333 44 5231, 400-20 2000 and 525 44-9000",
                     "Those seem to be valid too. However, ",
-                    "666 33 1442, 5872-22-2244, 187-223-3342 are not valid"
-                ].join("\n"),
+                    "666 33 1442, 5872-22-2244, 187-223-3342 are not valid"].join("\n"),
                 filters: vec!["us_social_security_number"],
             ],
             want: Ok(Value::from(btreemap!{
-                "data" => vec![
-                    "[REDACTED] you said?",
+                "data" => ["[REDACTED] you said?",
                     "I guess that is valid. How about: ",
                     "[REDACTED], [REDACTED] and [REDACTED]",
                     "Those seem to be valid too. However, ",
-                    "666 33 1442, 5872-22-2244, 187-223-3342 are not valid"
-                ].join("\n"),
+                    "666 33 1442, 5872-22-2244, 187-223-3342 are not valid"].join("\n"),
                 "matches" => value!([0])
             })),
             tdef: TypeDef::bytes().infallible(),
@@ -784,21 +786,17 @@ mod test {
 
         email_address {
             args: func_args![
-                value: vec![
-                    "jon@doe.com, jon.doe@company.com are valid",
+                value: ["jon@doe.com, jon.doe@company.com are valid",
                     "So are second+user@example.com and last_user@example.com",
                     "dev@null and @null.com are not valid",
-                    "IP based emails such as local@127.0.0.1 and user@1.1.1.1 are also supported"
-                ].join("\n"),
+                    "IP based emails such as local@127.0.0.1 and user@1.1.1.1 are also supported"].join("\n"),
                 filters: vec!["email"],
             ],
             want: Ok(Value::from(btreemap!{
-                "data" => vec![
-                    "[REDACTED], [REDACTED] are valid",
+                "data" => ["[REDACTED], [REDACTED] are valid",
                     "So are [REDACTED] and [REDACTED]",
                     "dev@null and @null.com are not valid",
-                    "IP based emails such as [REDACTED] and [REDACTED] are also supported"
-                ].join("\n"),
+                    "IP based emails such as [REDACTED] and [REDACTED] are also supported"].join("\n"),
                 "matches" => value!([0])
             })),
             tdef: TypeDef::bytes().infallible(),
@@ -806,8 +804,7 @@ mod test {
 
         phone_number {
             args: func_args![
-                value: vec![
-                    "+1 (422) 386 4425, 1 222 333 4343, (422) 000 4000 and 318 111 3000 are valid",
+                value: ["+1 (422) 386 4425, 1 222 333 4343, (422) 000 4000 and 318 111 3000 are valid",
                     "So are the dot-delimited numbers +1.(422).386.4425, 1.222.333.4343, (422).000.4000 and 318.111.3000",
                     "Hypenated numbers are also valid",
                     "Examples: +1-(422)-386-4425, 1-222-333-4343, (422)-000-4000, 318-111-3000",
@@ -818,13 +815,11 @@ mod test {
                     "The pattern matches parts of some sequences such as +1_316.222.4000, ",
                     "22.4237.333.5555 and +200 388 2222 5000",
                     "Invalid numbers are: +20 (422)-3888-4421, 1 200 3000 4000, ",
-                    "+1 388 2222 4000, and +22 (289) 477 50001 are also not valid"
-                ].join("\n"),
+                    "+1 388 2222 4000, and +22 (289) 477 50001 are also not valid"].join("\n"),
                 filters: vec!["phone_number"],
             ],
             want: Ok(Value::from(btreemap!{
-                "data" => vec![
-                    "[REDACTED], [REDACTED], [REDACTED] and [REDACTED] are valid",
+                "data" => ["[REDACTED], [REDACTED], [REDACTED] and [REDACTED] are valid",
                         "So are the dot-delimited numbers [REDACTED], [REDACTED], [REDACTED] and [REDACTED]",
                         "Hypenated numbers are also valid",
                         "Examples: [REDACTED], [REDACTED], [REDACTED], [REDACTED]",
@@ -835,8 +830,7 @@ mod test {
                         "The pattern matches parts of some sequences such as +1_[REDACTED], ",
                         "22.[REDACTED] and +[REDACTED] 5000",
                         "Invalid numbers are: +20 (422)-3888-4421, 1 200 3000 4000, ",
-                        "+1 388 2222 4000, and +22 (289) 477 50001 are also not valid",
-                ].join("\n"),
+                        "+1 388 2222 4000, and +22 (289) 477 50001 are also not valid"].join("\n"),
                 "matches" => value!([0])
             })),
             tdef: TypeDef::bytes().infallible(),
@@ -844,17 +838,13 @@ mod test {
 
         credit_card_visa {
             args: func_args![
-                value: vec![
-                    "4012102240330, 4001-2224-3388 1000 and 4111000222333444 are valid",
-                    "400011122233 is not valid"
-                ].join("\n"),
+                value: ["4012102240330, 4001-2224-3388 1000 and 4111000222333444 are valid",
+                    "400011122233 is not valid"].join("\n"),
                 filters: vec!["credit_card"],
             ],
             want: Ok(Value::from(btreemap!{
-                "data" => vec![
-                    "[REDACTED], [REDACTED] and [REDACTED] are valid",
-                    "400011122233 is not valid"
-                ].join("\n"),
+                "data" => ["[REDACTED], [REDACTED] and [REDACTED] are valid",
+                    "400011122233 is not valid"].join("\n"),
                 "matches" => value!([0])
             })),
             tdef: TypeDef::bytes().infallible(),
@@ -862,19 +852,15 @@ mod test {
 
         credit_card_mastercard {
             args: func_args![
-                value: vec![
-                    "Older range like 5100112233445566 and 5222 3344 5566 7788 will match",
+                value: ["Older range like 5100112233445566 and 5222 3344 5566 7788 will match",
                     "Newer range: 2288 7766-5544 3322 and 2700-1122 3344-5566 should also match",
-                    "22887766554433 and 52223344556677 are invalid"
-                ].join("\n"),
+                    "22887766554433 and 52223344556677 are invalid"].join("\n"),
                 filters: vec!["credit_card"],
             ],
             want: Ok(Value::from(btreemap!{
-                "data" => vec![
-                    "Older range like [REDACTED] and [REDACTED] will match",
+                "data" => ["Older range like [REDACTED] and [REDACTED] will match",
                     "Newer range: [REDACTED] and [REDACTED] should also match",
-                    "22887766554433 and 52223344556677 are invalid"
-                ].join("\n"),
+                    "22887766554433 and 52223344556677 are invalid"].join("\n"),
                 "matches" => value!([0])
             })),
             tdef: TypeDef::bytes().infallible(),
@@ -882,21 +868,17 @@ mod test {
 
         credit_card_discover {
             args: func_args![
-                value: vec![
-                    "start with 6011 or 65 and have a total of 16 digits",
+                value: ["start with 6011 or 65 and have a total of 16 digits",
                     "6011000111222333 and 6511 1222 3334 4477 are valid",
                     "6440-2210-1110-0000 is also valid",
-                    "6011 0001112 223 and 651-11222 33344 are invalid"
-                ].join("\n"),
+                    "6011 0001112 223 and 651-11222 33344 are invalid"].join("\n"),
                 filters: vec!["credit_card"],
             ],
             want: Ok(Value::from(btreemap!{
-                "data" => vec![
-                    "start with 6011 or 65 and have a total of 16 digits",
+                "data" => ["start with 6011 or 65 and have a total of 16 digits",
                     "[REDACTED] and [REDACTED] are valid",
                     "[REDACTED] is also valid",
-                    "6011 0001112 223 and 651-11222 33344 are invalid"
-                ].join("\n"),
+                    "6011 0001112 223 and 651-11222 33344 are invalid"].join("\n"),
                 "matches" => value!([0])
             })),
             tdef: TypeDef::bytes().infallible(),
@@ -904,17 +886,13 @@ mod test {
 
         credit_card_amex {
             args: func_args![
-                value: vec![
-                    "Both 3400 011122 23334 and 3711-111111-22223 are valid",
-                    "34000111222333 and 3700022233344 are not valid"
-                ].join("\n"),
+                value: ["Both 3400 011122 23334 and 3711-111111-22223 are valid",
+                    "34000111222333 and 3700022233344 are not valid"].join("\n"),
                 filters: vec!["credit_card"],
             ],
             want: Ok(Value::from(btreemap!{
-                "data" => vec![
-                    "Both [REDACTED] and [REDACTED] are valid",
-                    "34000111222333 and 3700022233344 are not valid"
-                ].join("\n"),
+                "data" => ["Both [REDACTED] and [REDACTED] are valid",
+                    "34000111222333 and 3700022233344 are not valid"].join("\n"),
                 "matches" => value!([0])
             })),
             tdef: TypeDef::bytes().infallible(),
@@ -922,17 +900,13 @@ mod test {
 
         credit_card_diners {
             args: func_args![
-                value: vec![
-                    "3001-1122233344, 3890 001112 2233 are valid",
-                    "3011112223334, 380 111222 33333 are not valid"
-                ].join("\n"),
+                value: ["3001-1122233344, 3890 001112 2233 are valid",
+                    "3011112223334, 380 111222 33333 are not valid"].join("\n"),
                 filters: vec!["credit_card"],
             ],
             want: Ok(Value::from(btreemap!{
-                "data" => vec![
-                    "[REDACTED], [REDACTED] are valid",
-                    "3011112223334, 380 111222 33333 are not valid"
-                ].join("\n"),
+                "data" => ["[REDACTED], [REDACTED] are valid",
+                    "3011112223334, 380 111222 33333 are not valid"].join("\n"),
                 "matches" => value!([0])
             })),
             tdef: TypeDef::bytes().infallible(),
@@ -940,17 +914,13 @@ mod test {
 
         credit_card_jcb {
             args: func_args![
-                value: vec![
-                    "2131 0000 0000 0111, 1800-1111-1111-1222, 3500 0111-1111-1122 and 3522-2444-4444 4411 are valid",
-                    "3500111222333 is not valid"
-                ].join("\n"),
+                value: ["2131 0000 0000 0111, 1800-1111-1111-1222, 3500 0111-1111-1122 and 3522-2444-4444 4411 are valid",
+                    "3500111222333 is not valid"].join("\n"),
                 filters: vec!["credit_card"],
             ],
             want: Ok(Value::from(btreemap!{
-                "data" => vec![
-                "[REDACTED], [REDACTED], [REDACTED] and [REDACTED] are valid",
-                "3500111222333 is not valid"
-                ].join("\n"),
+                "data" => ["[REDACTED], [REDACTED], [REDACTED] and [REDACTED] are valid",
+                "3500111222333 is not valid"].join("\n"),
                 "matches" => value!([0])
             })),
             tdef: TypeDef::bytes().infallible(),
@@ -958,19 +928,15 @@ mod test {
 
         ipv4_address {
             args: func_args![
-                value: vec![
-                    "127.0.0.1, 0.0.0.0 are valid addresses",
+                value: ["127.0.0.1, 0.0.0.0 are valid addresses",
                     "192.168.0.1, 255.255.255.255 are also valid addresses",
-                    "257.0.0.1, 255.257.0.0, 128.255.269.0, 0.255.255.280 are not valid"
-                ].join("\n"),
+                    "257.0.0.1, 255.257.0.0, 128.255.269.0, 0.255.255.280 are not valid"].join("\n"),
                 filters: vec!["ipv4"],
             ],
             want: Ok(Value::from(btreemap!{
-                "data" => vec![
-                    "[REDACTED], [REDACTED] are valid addresses",
+                "data" => ["[REDACTED], [REDACTED] are valid addresses",
                     "[REDACTED], [REDACTED] are also valid addresses",
-                    "257.0.0.1, 255.257.0.0, 128.255.269.0, 0.255.255.280 are not valid"
-                ].join("\n"),
+                    "257.0.0.1, 255.257.0.0, 128.255.269.0, 0.255.255.280 are not valid"].join("\n"),
                 "matches" => value!([0])
             })),
             tdef: TypeDef::bytes().infallible(),

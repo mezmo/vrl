@@ -134,6 +134,10 @@ impl Function for ParseInfluxDB {
         "parse an InfluxDB line protocol string into a list of vector-compatible metrics"
     }
 
+    fn usage(&self) -> &'static str {
+        "Parses the `value` as an [InfluxDB line protocol](https://docs.influxdata.com/influxdb/cloud/reference/syntax/line-protocol/) string, producing a list of Vector-compatible metrics."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",
@@ -144,7 +148,7 @@ impl Function for ParseInfluxDB {
 
     fn examples(&self) -> &'static [Example] {
         &[example! {
-            title: "parse influxdb line protocol",
+            title: "Parse InfluxDB line protocol",
             source: r#"parse_influxdb!("cpu,host=A,region=us-west usage_system=64i,usage_user=10u,temperature=50.5,on=true,sleep=false 1590488773254420000")"#,
             result: Ok(indoc! {r#"
                 [

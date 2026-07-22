@@ -1,6 +1,12 @@
 use crate::compiler::prelude::*;
 use std::borrow::Cow;
 
+#[allow(
+    clippy::needless_pass_by_value,
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss,
+    clippy::cast_possible_wrap
+)]
 fn last_index_of(value: Cow<'_, str>, search_value: Cow<'_, str>, position: Option<i64>) -> Value {
     if search_value.is_empty() {
         return match position {
@@ -20,8 +26,7 @@ fn last_index_of(value: Cow<'_, str>, search_value: Cow<'_, str>, position: Opti
             let byte_position = value
                 .char_indices()
                 .nth(position as usize)
-                .map(|(pos, _)| pos)
-                .unwrap_or(value.len());
+                .map_or(value.len(), |(pos, _)| pos);
 
             // Starting from the search position include search value bytes
             std::cmp::min(byte_position + search_value.len(), value.len())
@@ -53,13 +58,17 @@ fn last_index_of(value: Cow<'_, str>, search_value: Cow<'_, str>, position: Opti
 /// string greater than or equal to that position are considered. Position can
 /// be negative and counts from the back of the string to be searched.
 ///
-/// Behaves like the JavaScript's String.prototype.lastIndexOf() method.
+/// Behaves like the JavaScript's `String.prototype.lastIndexOf()` method.
 #[derive(Clone, Copy, Debug)]
 pub struct MezmoLastIndexOf;
 
 impl Function for MezmoLastIndexOf {
     fn identifier(&self) -> &'static str {
         "mezmo_last_index_of"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Returns the zero-based index of the last occurrence of `find` within `value`, optionally searching up to `from_index`. Returns `-1` if the substring is not found."
     }
 
     fn parameters(&self) -> &'static [Parameter] {

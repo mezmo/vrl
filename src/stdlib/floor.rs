@@ -30,6 +30,10 @@ impl Function for Floor {
         "floor"
     }
 
+    fn usage(&self) -> &'static str {
+        "Rounds the `value` down to the specified `precision`."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -58,11 +62,18 @@ impl Function for Floor {
     }
 
     fn examples(&self) -> &'static [Example] {
-        &[example! {
-            title: "floor",
-            source: "floor(9.8)",
-            result: Ok("9.0"),
-        }]
+        &[
+            example! {
+                title: "Round a number down (without precision)",
+                source: "floor(9.8)",
+                result: Ok("9.0"),
+            },
+            example! {
+                title: "Round a number down (with precision)",
+                source: "floor(4.345, precision: 2)",
+                result: Ok("4.34"),
+            },
+        ]
     }
 }
 

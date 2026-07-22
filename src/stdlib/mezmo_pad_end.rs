@@ -1,6 +1,11 @@
 use crate::compiler::prelude::*;
 use std::borrow::Cow;
 
+#[allow(
+    clippy::needless_pass_by_value,
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss
+)]
 fn pad_end(value: Cow<'_, str>, target_length: i64, pad_value: Cow<'_, str>) -> Value {
     let current_length = value.chars().count();
     let target_length = if target_length < 0 {
@@ -27,13 +32,17 @@ fn pad_end(value: Cow<'_, str>, target_length: i64, pad_value: Cow<'_, str>) -> 
 /// Pads a string with the provided pad string, possibly multiple times, until
 /// it reaches the given target length. The string is padded from the end.
 ///
-/// Behaves like the JavaScript's String.prototype.padEnd() method.
+/// Behaves like the JavaScript's `String.prototype.padEnd()` method.
 #[derive(Clone, Copy, Debug)]
 pub struct MezmoPadEnd;
 
 impl Function for MezmoPadEnd {
     fn identifier(&self) -> &'static str {
         "mezmo_pad_end"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Pads the end of `value` with `pad_value` until it reaches `target_length` characters, then returns the result. Returns `value` unchanged if it is already at least `target_length` characters."
     }
 
     fn parameters(&self) -> &'static [Parameter] {

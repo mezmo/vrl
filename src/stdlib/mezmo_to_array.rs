@@ -18,6 +18,10 @@ impl Function for MezmoToArray {
         "mezmo_to_array"
     }
 
+    fn usage(&self) -> &'static str {
+        "Returns `value` if it is an array, otherwise returns an error. Equivalent to the standard `array` function but always fallible."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",

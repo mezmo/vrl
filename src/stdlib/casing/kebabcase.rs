@@ -11,6 +11,10 @@ impl Function for Kebabcase {
         "kebabcase"
     }
 
+    fn usage(&self) -> &'static str {
+        "Takes the `value` string, and turns it into kebab-case. Optionally, you can pass in the existing case of the function, or else we will try to figure out the case automatically."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -52,11 +56,23 @@ impl Function for Kebabcase {
     }
 
     fn examples(&self) -> &'static [Example] {
-        &[example! {
-            title: "kebabcase",
-            source: r#"kebabcase("input_string")"#,
-            result: Ok("input-string"),
-        }]
+        &[
+            example! {
+                title: "kebab-case a string without specifying original case",
+                source: r#"kebabcase("InputString")"#,
+                result: Ok("input-string"),
+            },
+            example! {
+                title: "kebab-case a snake_case string",
+                source: r#"kebabcase("foo_bar_baz", "snake_case")"#,
+                result: Ok("foo-bar-baz"),
+            },
+            example! {
+                title: "kebab-case specifying the wrong original case (noop)",
+                source: r#"kebabcase("foo_bar_baz", "PascalCase")"#,
+                result: Ok("foo_bar_baz"),
+            },
+        ]
     }
 }
 

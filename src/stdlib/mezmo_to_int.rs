@@ -1,5 +1,6 @@
 use crate::compiler::prelude::*;
 
+#[allow(clippy::cast_possible_truncation)]
 fn to_int(value: Value) -> Resolved {
     use Value::{Boolean, Bytes, Float, Integer, Null, Timestamp};
 
@@ -32,6 +33,10 @@ pub struct MezmoToInt;
 impl Function for MezmoToInt {
     fn identifier(&self) -> &'static str {
         "mezmo_to_int"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Coerces `value` into an integer and returns it. Floats, booleans, null, timestamps, and numeric strings are converted; other values (or NaN) return an error."
     }
 
     fn parameters(&self) -> &'static [Parameter] {
@@ -75,6 +80,7 @@ impl FunctionExpression for ToIntFn {
 }
 
 #[cfg(test)]
+#[allow(clippy::unreadable_literal)]
 mod tests {
     use super::*;
     use crate::value;

@@ -1,30 +1,42 @@
 use crate::compiler::prelude::*;
 
-const LETTER_NUMBER_DASH: &str = r#"[a-z0-9A-Z\-.]+"#;
+const LETTER_NUMBER_DASH: &str = r"[a-z0-9A-Z\-.]+";
 
 static MEZMO_PATTERNS: &[(&str, &str)] = &[
-    ("JSON_OBJECT", r#"{.*}"#),
-    ("JSON_ARRAY", r#"\[.*\]"#),
+    ("JSON_OBJECT", r"{.*}"),
+    ("JSON_ARRAY", r"\[.*\]"),
     ("XML", r#"<[\w"=\s]+>.*<\/[\w\s]+>"#),
-    ("CURLY_BRACKET", r#"{|}"#),
-    ("SQUARE_BRACKET", r#"\[|\]"#),
-    ("TAB", r#"\t"#),
-    ("SINGLE_SPACE", r#"\s"#), // SPACE is already defined in builtin patterns but it's greedy
-    ("ANY_CHAR", r#"."#),
+    ("CURLY_BRACKET", r"{|}"),
+    ("SQUARE_BRACKET", r"\[|\]"),
+    ("TAB", r"\t"),
+    ("SINGLE_SPACE", r"\s"), // SPACE is already defined in builtin patterns but it's greedy
+    ("ANY_CHAR", r"."),
     ("DOUBLE_QUOTE", r#"""#),
-    ("SINGLE_QUOTE", r#"'"#),
-    ("PERIOD", r#"\."#),
-    ("UTF8_WORD", r#"\p{L}+"#),
+    ("SINGLE_QUOTE", r"'"),
+    ("PERIOD", r"\."),
+    ("UTF8_WORD", r"\p{L}+"),
     ("SENTENCE", r#"[\p{L},":;\s\-]+"#), // Sentence with UTF8 chars
     ("OPTIONAL_SENTENCE", r#"[\p{L},":;\s\-]*"#),
-    ("PSQL_LOG", "%{TIMESTAMP_ISO8601:timestamp} %{DATA} %{SQUARE_BRACKET}%{INT:pid}%{SQUARE_BRACKET} %{EMAILLOCALPART:username}%{NOTSPACE}%{WORD:database} %{GREEDYDATA:message}"),
-    ("GOLANG_LOG", "%{DATESTAMP:timestamp} %{LOGLEVEL:level} %{GREEDYDATA:message}"),
-    ("ELASTICSEARCH_LOG", "%{SQUARE_BRACKET}%{TIMESTAMP_ISO8601:timestamp}%{SQUARE_BRACKET}%{SQUARE_BRACKET}%{LOGLEVEL:level}%{SPACE}%{SQUARE_BRACKET}%{SQUARE_BRACKET}%{DATA:source}%{SQUARE_BRACKET} %{GREEDYDATA:message}"),
+    (
+        "PSQL_LOG",
+        "%{TIMESTAMP_ISO8601:timestamp} %{DATA} %{SQUARE_BRACKET}%{INT:pid}%{SQUARE_BRACKET} %{EMAILLOCALPART:username}%{NOTSPACE}%{WORD:database} %{GREEDYDATA:message}",
+    ),
+    (
+        "GOLANG_LOG",
+        "%{DATESTAMP:timestamp} %{LOGLEVEL:level} %{GREEDYDATA:message}",
+    ),
+    (
+        "ELASTICSEARCH_LOG",
+        "%{SQUARE_BRACKET}%{TIMESTAMP_ISO8601:timestamp}%{SQUARE_BRACKET}%{SQUARE_BRACKET}%{LOGLEVEL:level}%{SPACE}%{SQUARE_BRACKET}%{SQUARE_BRACKET}%{DATA:source}%{SQUARE_BRACKET} %{GREEDYDATA:message}",
+    ),
     ("K8S_POD_NAME", LETTER_NUMBER_DASH),
     ("K8S_NAMESPACE", LETTER_NUMBER_DASH),
     ("K8S_CONTAINER", LETTER_NUMBER_DASH),
     ("K8S_CONTAINER_ID", r"[a-z0-9]{64}"),
-    ("K8S_MEZMO_AGENT_FILENAME", "/var/log/containers/%{K8S_POD_NAME:pod}_%{K8S_NAMESPACE:namespace}_%{K8S_CONTAINER:container}-%{K8S_CONTAINER_ID:containerid}\\.log")
+    (
+        "K8S_MEZMO_AGENT_FILENAME",
+        "/var/log/containers/%{K8S_POD_NAME:pod}_%{K8S_NAMESPACE:namespace}_%{K8S_CONTAINER:container}-%{K8S_CONTAINER_ID:containerid}\\.log",
+    ),
 ];
 
 #[cfg(not(target_arch = "wasm32"))]
@@ -130,6 +142,10 @@ impl Function for ParseGrok {
         "parse_grok"
     }
 
+    fn usage(&self) -> &'static str {
+        "Parses the `value` using the [`grok`](https://github.com/daschl/grok/tree/master/patterns) format. All patterns [listed here](https://github.com/daschl/grok/tree/master/patterns) are supported."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -147,7 +163,7 @@ impl Function for ParseGrok {
 
     fn examples(&self) -> &'static [Example] {
         &[example! {
-            title: "parse grok pattern",
+            title: "Parse using Grok",
             source: indoc! {r#"
                 value = "2020-10-02T23:22:12.223222Z info Hello world"
                 pattern = "%{TIMESTAMP_ISO8601:timestamp} %{LOGLEVEL:level} %{GREEDYDATA:message}"

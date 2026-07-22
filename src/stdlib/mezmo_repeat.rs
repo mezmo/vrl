@@ -2,7 +2,7 @@ use crate::compiler::prelude::*;
 
 /// Repeats a the given string by the provided count.
 ///
-/// Behaves like the JavaScript's String.prototype.repeat() method except for
+/// Behaves like the JavaScript's `String.prototype.repeat()` method except for
 /// not returning an error for negative counts. In this case an empty string is
 /// returned (behaves as if the count is 0).
 #[derive(Clone, Copy, Debug)]
@@ -11,6 +11,10 @@ pub struct MezmoRepeat;
 impl Function for MezmoRepeat {
     fn identifier(&self) -> &'static str {
         "mezmo_repeat"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Returns a new string consisting of `value` repeated `count` times."
     }
 
     fn parameters(&self) -> &'static [Parameter] {
@@ -56,6 +60,7 @@ struct MezmoRepeatFn {
 }
 
 impl FunctionExpression for MezmoRepeatFn {
+    #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
     fn resolve(&self, ctx: &mut Context) -> Resolved {
         let value = self.value.resolve(ctx)?;
         let count = self.count.resolve(ctx)?.try_integer()?;

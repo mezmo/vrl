@@ -16,7 +16,7 @@ fn matching_patterns(value: Value, pattern: &RegexSet) -> Resolved {
                 .collect(),
         )),
         Value::Array(values) => process_collection(values.into_iter(), pattern),
-        Value::Object(map) => process_collection(map.into_iter().map(|(_, value)| value), pattern),
+        Value::Object(map) => process_collection(map.into_values(), pattern),
         _ => Ok(Value::Array(vec![])),
     }
 }
@@ -50,6 +50,10 @@ pub struct MezmoMatchingPatterns;
 impl Function for MezmoMatchingPatterns {
     fn identifier(&self) -> &'static str {
         "mezmo_matching_patterns"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Returns the set of built-in patterns, such as credit card, email address, IPv4 address, phone number, and US social security number, that match within `value`."
     }
 
     fn parameters(&self) -> &'static [Parameter] {
@@ -132,7 +136,7 @@ impl Function for MezmoMatchingPatterns {
                         value
                             .try_regex()
                             .map_err(|_| err)
-                            .and_then(|re| Ok((*re).to_string()))
+                            .map(|re| (*re).to_string())
                     }
                 })
             })

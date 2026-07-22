@@ -7,7 +7,7 @@ fn is_truthy(value: Value) -> bool {
         Integer(v) => v != 0,
         Boolean(v) => v,
         Null => false,
-        Bytes(v) => v.len() > 0,
+        Bytes(v) => !v.is_empty(),
         _ => true,
     }
 }
@@ -18,6 +18,10 @@ pub struct MezmoIsTruthy;
 impl Function for MezmoIsTruthy {
     fn identifier(&self) -> &'static str {
         "mezmo_is_truthy"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Returns the truthiness of `value`: numbers are truthy when non-zero, strings when non-empty, and booleans as-is; `null` is false and all other values are truthy."
     }
 
     fn parameters(&self) -> &'static [Parameter] {

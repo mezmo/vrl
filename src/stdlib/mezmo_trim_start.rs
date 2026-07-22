@@ -9,6 +9,10 @@ impl Function for MezmoTrimStart {
         "mezmo_trim_start"
     }
 
+    fn usage(&self) -> &'static str {
+        "Returns `value` with leading whitespace removed."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",

@@ -27,6 +27,10 @@ impl Function for Chunks {
         "chunks"
     }
 
+    fn usage(&self) -> &'static str {
+        "Chunks `value` into slices of length `chunk_size` bytes."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -45,12 +49,12 @@ impl Function for Chunks {
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
-                title: "chunks by byte",
+                title: "Split a string into chunks",
                 source: r#"chunks("abcdefgh", 4)"#,
                 result: Ok(r#"["abcd", "efgh"]"#),
             },
             example! {
-                title: "chunk sizes do not respect unicode code point boundaries",
+                title: "Chunks do not respect unicode code point boundaries",
                 source: r#"chunks("ab你好", 4)"#,
                 result: Ok(r#"["ab�","�好"]"#),
             },

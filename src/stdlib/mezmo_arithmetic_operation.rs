@@ -36,10 +36,14 @@ pub struct MezmoMultiply;
 pub struct MezmoDivide;
 
 macro_rules! implement_function {
-    ($type_name: ident, $identifier: expr, $fn_name: ident) => {
+    ($type_name: ident, $identifier: expr, $fn_name: ident, $usage: expr) => {
         impl Function for $type_name {
             fn identifier(&self) -> &'static str {
                 $identifier
+            }
+
+            fn usage(&self) -> &'static str {
+                $usage
             }
 
             fn examples(&self) -> &'static [Example] {
@@ -81,9 +85,24 @@ macro_rules! implement_function {
     };
 }
 
-implement_function!(MezmoSubtract, "mezmo_sub", subtract);
-implement_function!(MezmoMultiply, "mezmo_mul", multiply);
-implement_function!(MezmoDivide, "mezmo_div", divide);
+implement_function!(
+    MezmoSubtract,
+    "mezmo_sub",
+    subtract,
+    "Subtracts `right` from `left` and returns the result. Errors if the operands are not numeric types that can be subtracted."
+);
+implement_function!(
+    MezmoMultiply,
+    "mezmo_mul",
+    multiply,
+    "Multiplies `left` by `right` and returns the result. Errors if the operands are not numeric types that can be multiplied."
+);
+implement_function!(
+    MezmoDivide,
+    "mezmo_div",
+    divide,
+    "Divides `left` by `right` and returns the result. Integer operands use integer division; dividing by zero returns an error."
+);
 
 #[derive(Debug, Clone)]
 struct ArithmeticOperatorFn {
@@ -105,6 +124,7 @@ impl FunctionExpression for ArithmeticOperatorFn {
 }
 
 #[cfg(test)]
+#[allow(clippy::unreadable_literal)]
 mod tests {
     use super::*;
     use crate::value;

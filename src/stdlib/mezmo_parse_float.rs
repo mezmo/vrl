@@ -1,6 +1,7 @@
 use crate::compiler::conversion::Conversion;
 use crate::compiler::prelude::*;
 
+#[allow(clippy::cast_precision_loss)]
 fn mezmo_parse_float(value: Value) -> Resolved {
     use Value::{Bytes, Float, Integer};
     match value {
@@ -26,6 +27,10 @@ pub struct MezmoParseFloat;
 impl Function for MezmoParseFloat {
     fn identifier(&self) -> &'static str {
         "mezmo_parse_float"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Converts an integer, float, or string `value` into a float, matching the behavior of JavaScript's `parseFloat()`. All other types result in an error. Unlike `to_float`, fallibility is determined entirely at runtime."
     }
 
     fn parameters(&self) -> &'static [Parameter] {

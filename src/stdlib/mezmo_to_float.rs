@@ -1,6 +1,7 @@
 use crate::compiler::conversion::Conversion;
 use crate::compiler::prelude::*;
 
+#[allow(clippy::cast_precision_loss)]
 fn to_float(value: Value) -> Resolved {
     use Value::{Boolean, Bytes, Float, Integer, Null, Timestamp};
     match value {
@@ -30,6 +31,10 @@ pub struct MezmoToFloat;
 impl Function for MezmoToFloat {
     fn identifier(&self) -> &'static str {
         "mezmo_to_float"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Coerces `value` into a float and returns it. Integers, booleans, null, timestamps, and numeric strings are converted; other values return an error."
     }
 
     fn parameters(&self) -> &'static [Parameter] {
@@ -73,6 +78,7 @@ impl FunctionExpression for ToFloatFn {
 }
 
 #[cfg(test)]
+#[allow(clippy::unreadable_literal)]
 mod tests {
     use super::*;
     use crate::value;

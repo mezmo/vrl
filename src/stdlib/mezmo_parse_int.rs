@@ -1,6 +1,7 @@
 use super::parse_int;
 use crate::compiler::prelude::*;
 
+#[allow(clippy::cast_possible_truncation)]
 fn mezmo_parse_int(value: Value, base: Option<Value>) -> Resolved {
     use Value::{Bytes, Float, Integer};
     match value {
@@ -25,6 +26,10 @@ pub struct MezmoParseInt;
 impl Function for MezmoParseInt {
     fn identifier(&self) -> &'static str {
         "mezmo_parse_int"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Converts an integer, float, or string `value` into an integer using the optional `base` (radix), matching the behavior of JavaScript's `parseInt()`. All other types result in an error. Unlike `to_int`, fallibility is determined entirely at runtime."
     }
 
     fn parameters(&self) -> &'static [Parameter] {

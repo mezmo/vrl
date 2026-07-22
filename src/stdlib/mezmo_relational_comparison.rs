@@ -40,10 +40,14 @@ pub struct MezmoLt;
 pub struct MezmoLte;
 
 macro_rules! implement_function {
-    ($type_name: ident, $identifier: expr, $fn_name: ident) => {
+    ($type_name: ident, $identifier: expr, $fn_name: ident, $usage: expr) => {
         impl Function for $type_name {
             fn identifier(&self) -> &'static str {
                 $identifier
+            }
+
+            fn usage(&self) -> &'static str {
+                $usage
             }
 
             fn examples(&self) -> &'static [Example] {
@@ -85,10 +89,30 @@ macro_rules! implement_function {
     };
 }
 
-implement_function!(MezmoGt, "mezmo_gt", gt);
-implement_function!(MezmoGte, "mezmo_gte", gte);
-implement_function!(MezmoLt, "mezmo_lt", lt);
-implement_function!(MezmoLte, "mezmo_lte", lte);
+implement_function!(
+    MezmoGt,
+    "mezmo_gt",
+    gt,
+    "Returns `true` if `left` is greater than `right`, otherwise `false`."
+);
+implement_function!(
+    MezmoGte,
+    "mezmo_gte",
+    gte,
+    "Returns `true` if `left` is greater than or equal to `right`, otherwise `false`."
+);
+implement_function!(
+    MezmoLt,
+    "mezmo_lt",
+    lt,
+    "Returns `true` if `left` is less than `right`, otherwise `false`."
+);
+implement_function!(
+    MezmoLte,
+    "mezmo_lte",
+    lte,
+    "Returns `true` if `left` is less than or equal to `right`, otherwise `false`."
+);
 
 #[derive(Debug, Clone)]
 struct RelationalOperatorFn {

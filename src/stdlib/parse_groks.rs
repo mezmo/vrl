@@ -77,6 +77,10 @@ impl Function for ParseGroks {
         "parse_groks"
     }
 
+    fn usage(&self) -> &'static str {
+        "Parses the `value` using multiple [`grok`](https://github.com/daschl/grok/tree/master/patterns) patterns. All patterns [listed here](https://github.com/daschl/grok/tree/master/patterns) are supported."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -103,31 +107,50 @@ impl Function for ParseGroks {
     }
 
     fn examples(&self) -> &'static [Example] {
-        &[example! {
-            title: "parse grok pattern",
-            source: indoc! {r#"
-                parse_groks!(
-                    "2020-10-02T23:22:12.223222Z info hello world",
-                    patterns: [
-                        "%{common_prefix} %{_status} %{_message}",
-                        "%{common_prefix} %{_message}"
-                    ],
-                    aliases: {
-                        "common_prefix": "%{_timestamp} %{_loglevel}",
-                        "_timestamp": "%{TIMESTAMP_ISO8601:timestamp}",
-                        "_loglevel": "%{LOGLEVEL:level}",
-                        "_status": "%{POSINT:status}",
-                        "_message": "%{GREEDYDATA:message}"
-                    })
-            "#},
-            result: Ok(indoc! {r#"
-                {
-                    "timestamp": "2020-10-02T23:22:12.223222Z",
-                    "level": "info",
-                    "message": "hello world"
-                }
-            "#}),
-        }]
+        &[
+            example! {
+                title: "Parse using multiple Grok patterns",
+                source: indoc! {r#"
+                    parse_groks!(
+                        "2020-10-02T23:22:12.223222Z info Hello world",
+                        patterns: [
+                            "%{common_prefix} %{_status} %{_message}",
+                            "%{common_prefix} %{_message}",
+                        ],
+                        aliases: {
+                            "common_prefix": "%{_timestamp} %{_loglevel}",
+                            "_timestamp": "%{TIMESTAMP_ISO8601:timestamp}",
+                            "_loglevel": "%{LOGLEVEL:level}",
+                            "_status": "%{POSINT:status}",
+                            "_message": "%{GREEDYDATA:message}"
+                        }
+                    )
+                "#},
+                result: Ok(indoc! {r#"
+                    {
+                        "timestamp": "2020-10-02T23:22:12.223222Z",
+                        "level": "info",
+                        "message": "Hello world"
+                    }
+                "#}),
+            },
+            example! {
+                title: "Parse using aliases from file",
+                source: indoc! {r#"
+                    parse_groks!(
+                      "username=foo",
+                      patterns: [ "%{PATTERN_A}" ],
+                      alias_sources: [ "tests/data/grok/aliases.json" ]
+                    )
+                    # aliases.json contents:
+                    # {
+                    #   "PATTERN_A": "%{PATTERN_B}",
+                    #   "PATTERN_B": "username=%{USERNAME:username}"
+                    # }
+                "#},
+                result: Ok(r#"{"username": "foo"}"#),
+            },
+        ]
     }
 
     #[cfg(not(target_arch = "wasm32"))]

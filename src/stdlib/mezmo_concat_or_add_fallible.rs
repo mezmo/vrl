@@ -7,6 +7,7 @@ pub(crate) const ERROR_MESSAGE: &str =
 
 /// Concatenates if any of the parameters is a string.
 /// Adds if both are numbers.
+#[allow(clippy::cast_precision_loss)]
 pub(crate) fn concat_or_add(left: Value, right: Value) -> Resolved {
     use Value::{Bytes, Float, Integer};
     match (&left, &right) {
@@ -32,6 +33,10 @@ pub struct MezmoConcatOrAddFallible;
 impl Function for MezmoConcatOrAddFallible {
     fn identifier(&self) -> &'static str {
         "mezmo_concat_or_add_fallible"
+    }
+
+    fn usage(&self) -> &'static str {
+        "Concatenates `left` and `right` as strings if either operand is a string, or adds them if both are numbers. Errors if the operands are neither strings nor numbers."
     }
 
     fn parameters(&self) -> &'static [Parameter] {

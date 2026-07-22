@@ -31,6 +31,10 @@ impl Function for FormatInt {
         "format_int"
     }
 
+    fn usage(&self) -> &'static str {
+        "Formats the integer `value` into a string representation using the given base/radix."
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
@@ -61,20 +65,20 @@ impl Function for FormatInt {
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
-                title: "format decimal integer",
-                source: "format_int!(42)",
-                // extra "s are needed to avoid being read as an integer by tests
-                result: Ok("\"42\""),
-            },
-            example! {
-                title: "format hexadecimal integer",
+                title: "Format as a hexadecimal integer",
                 source: "format_int!(42, 16)",
                 result: Ok("2a"),
             },
             example! {
-                title: "format negative hexadecimal integer",
+                title: "Format as a negative hexadecimal integer",
                 source: "format_int!(-42, 16)",
                 result: Ok("-2a"),
+            },
+            example! {
+                title: "Format as a decimal integer (default base)",
+                source: "format_int!(42)",
+                // extra "s are needed to avoid being read as an integer by tests
+                result: Ok("\"42\""),
             },
         ]
     }
@@ -100,7 +104,7 @@ impl FunctionExpression for FormatIntFn {
     }
 
     fn type_def(&self, _: &state::TypeState) -> TypeDef {
-        TypeDef::integer().fallible()
+        TypeDef::bytes().fallible()
     }
 }
 
@@ -144,19 +148,19 @@ mod tests {
         decimal {
             args: func_args![value: 42],
             want: Ok(value!("42")),
-            tdef: TypeDef::integer().fallible(),
+            tdef: TypeDef::bytes().fallible(),
         }
 
         hexidecimal {
             args: func_args![value: 42, base: 16],
             want: Ok(value!("2a")),
-            tdef: TypeDef::integer().fallible(),
+            tdef: TypeDef::bytes().fallible(),
         }
 
         negative_hexidecimal {
             args: func_args![value: -42, base: 16],
             want: Ok(value!("-2a")),
-            tdef: TypeDef::integer().fallible(),
+            tdef: TypeDef::bytes().fallible(),
         }
     ];
 }
