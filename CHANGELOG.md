@@ -1,3 +1,53 @@
+# [4.0.0](https://github.com/mezmo/vrl/compare/v3.5.1...v4.0.0) (2026-07-22)
+
+
+### Bug Fixes
+
+* **dev**: use dynamic year in examples (#1596) [866f5dc](https://github.com/mezmo/vrl/commit/866f5dc28825bfc9c2ab9977cafc36217f8d065d) - GitHub
+* make convert_value_raw private (ref #1605) (#1607) [ca46308](https://github.com/mezmo/vrl/commit/ca463081130ea10c12bba864055422305400b920) - GitHub
+* **stdlib**: correct format_int return type to bytes (#1586) [360b075](https://github.com/mezmo/vrl/commit/360b07545c1f82c6988657e5299c8ad22be4eb68) - GitHub
+
+
+### Chores
+
+* bump cargo-deny to 0.18.9 (#1587) [9724759](https://github.com/mezmo/vrl/commit/9724759b2197b76bdfa8fb7e432789f52e119dbf) - GitHub
+* **ci**: bump actions/checkout from 5 to 6 (#1595) [4ec20eb](https://github.com/mezmo/vrl/commit/4ec20eb1045d49290950b8acf06c96611eab4c1d) - GitHub
+* **deps**: bump criterion from 0.7.0 to 0.8.1 (#1593) [f6183d9](https://github.com/mezmo/vrl/commit/f6183d9d24042b91d84db04b93c5507565362292) - GitHub
+* **deps**: bump fancy-regex from 0.15.0 to 0.16.2 (#1568) [d0cb37d](https://github.com/mezmo/vrl/commit/d0cb37dd1a075c6a5bb5c6eb2e3035d6bb9ac40a) - GitHub
+* **deps**: bump fancy-regex from 0.16.2 to 0.17.0 (#1603) [0facd74](https://github.com/mezmo/vrl/commit/0facd748414d0329c5e9fbb8cd3a2e88bb97dc81) - GitHub
+* **deps**: bump half from 2.6.0 to 2.7.1 (#1592) [d7760ea](https://github.com/mezmo/vrl/commit/d7760ea31bbb49fd102af16bbda90d799b6676d6) - GitHub
+* **deps**: bump jsonschema from 0.37.4 to 0.38.1 (#1594) [1ab3f42](https://github.com/mezmo/vrl/commit/1ab3f42eb33e07de82fd0c1c4d8ccb509a7d3cd3) - GitHub
+* **deps**: Bump jsonschema to 0.38.1 in Cargo.toml (#1598) [aea0bec](https://github.com/mezmo/vrl/commit/aea0beca4879d8b22a596c7421b7e390df5646cf) - GitHub
+* **deps**: bump portable-atomic from 1.11.1 to 1.13.0 (#1590) [5e2de32](https://github.com/mezmo/vrl/commit/5e2de32ddc0da6142ea930eb206678d258807cca) - GitHub
+* **deps**: bump regex from 1.11.3 to 1.12.2 (#1567) [c27aa6d](https://github.com/mezmo/vrl/commit/c27aa6d04d09ae01cff9dab5eefdc13a64dfbe98) - GitHub
+* **deps**: bump roxmltree from 0.20.0 to 0.21.1 (#1570) [6c49708](https://github.com/mezmo/vrl/commit/6c49708501027d103070dbe639cd902d6f562cdf) - GitHub
+* **deps**: bump rustyline from 16.0.0 to 17.0.2 (#1569) [60e6692](https://github.com/mezmo/vrl/commit/60e6692e732efae7571a566ea578c4bae9777e82) - GitHub
+* **deps**: bump the patches group across 1 directory with 75 updates (#1578) [39c6011](https://github.com/mezmo/vrl/commit/39c6011c0a7ed06d42ce7512c0483f28c2614521) - GitHub
+* **deps**: change version from 0.29.0 with 0.30.0 [9eb783b](https://github.com/mezmo/vrl/commit/9eb783b4db854a49712fa4eb3ee5e057ee3b590a) - Thomas
+* **deps**: properly update deps in Cargo.toml (#1588) [6e78bcb](https://github.com/mezmo/vrl/commit/6e78bcb1acfe27b569ad60d74c3c39246f51410f) - GitHub
+* **dev**: Upgrade rust to 1.92.0 (#1582) [8be8f65](https://github.com/mezmo/vrl/commit/8be8f65d761214a5347ffa0341744be0df8bacf2) - GitHub
+* **releasing**: generate changelog [0689b22](https://github.com/mezmo/vrl/commit/0689b221f9483bef94bb44f8d3d6d4f989b74755) - Thomas
+* **tests**: don't ignore whitespace in vrl tests (#1580) [53f01df](https://github.com/mezmo/vrl/commit/53f01dfa6226fb3f4093d1bf838319c522f2dcad) - GitHub
+
+
+### Features
+
+* **ci**: add Cargo.lock sync check (#1604) [2aa1e4e](https://github.com/mezmo/vrl/commit/2aa1e4ef68a11e082b3f5635cd6ba75728b64b86) - GitHub
+* **stdlib**: Add required usage method to all functions (#1608) [7ab2c55](https://github.com/mezmo/vrl/commit/7ab2c5516a0c46e25d6f6efbd16977af4a3441a0) - GitHub
+* sync examples from Vector website (#1564) [b6b06e1](https://github.com/mezmo/vrl/commit/b6b06e1ad3baf0410cc457d7518872533d2d48da) - GitHub
+
+
+### Miscellaneous
+
+* Merge pull request #129 from mezmo/pciampini/merge-upstream-0.30.0 [b341462](https://github.com/mezmo/vrl/commit/b3414620d1dea0195f74e5203f1c024db6053d49) - GitHub
+* Merge upstream tag 'v0.30.0' into pciampini/merge-upstream-0.30.0 [6bcf4cd](https://github.com/mezmo/vrl/commit/6bcf4cda07ef02f9e1c6729c4a0919f5082ed41f) - Phil Ciampini
+* fix invalid references and add CI check (#1605) [2969b01](https://github.com/mezmo/vrl/commit/2969b01681517ad1390814c5faf19164eb2678eb) - GitHub
+
+
+### **BREAKING CHANGES**
+
+* **stdlib:** Add required usage method to all functions (#1608)
+
 ## [3.5.1](https://github.com/mezmo/vrl/compare/v3.5.0...v3.5.1) (2026-03-24)
 
 
