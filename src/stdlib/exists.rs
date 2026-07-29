@@ -18,12 +18,21 @@ impl Function for Exists {
             since it always returns `null` if the path doesn't exist.
         "}
     }
+
+    fn category(&self) -> &'static str {
+        Category::Path.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BOOLEAN
+    }
     fn parameters(&self) -> &'static [Parameter] {
-        &[Parameter {
-            keyword: "field",
-            kind: kind::ANY,
-            required: true,
-        }]
+        const PARAMETERS: &[Parameter] = &[Parameter::required(
+            "field",
+            kind::ANY,
+            "The path of the field to check.",
+        )];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {

@@ -18,19 +18,24 @@ impl Function for MatchAny {
         "Determines whether `value` matches any of the given `patterns`. All patterns are checked in a single pass over the target string, giving this function a potential performance advantage over the multiple calls in the `match` function."
     }
 
+    fn category(&self) -> &'static str {
+        Category::String.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BOOLEAN
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "patterns",
-                kind: kind::ARRAY,
-                required: true,
-            },
-        ]
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required("value", kind::BYTES, "The value to match."),
+            Parameter::required(
+                "patterns",
+                kind::ARRAY,
+                "The array of regular expression patterns to match against.",
+            ),
+        ];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {

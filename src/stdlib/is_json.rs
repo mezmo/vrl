@@ -1,5 +1,47 @@
+use crate::compiler::function::EnumVariant;
 use crate::compiler::prelude::*;
 use crate::value;
+
+static VARIANT_ENUM: &[EnumVariant] = &[
+    EnumVariant {
+        value: "object",
+        description: "JSON object - {}",
+    },
+    EnumVariant {
+        value: "array",
+        description: "JSON array - []",
+    },
+    EnumVariant {
+        value: "string",
+        description: "JSON-formatted string values wrapped with quote marks",
+    },
+    EnumVariant {
+        value: "number",
+        description: "Integer or float numbers",
+    },
+    EnumVariant {
+        value: "bool",
+        description: "True or false",
+    },
+    EnumVariant {
+        value: "null",
+        description: "Exact null value",
+    },
+];
+
+static PARAMETERS: &[Parameter] = &[
+    Parameter::required(
+        "value",
+        kind::BYTES,
+        "The value to check if it is a valid JSON document.",
+    ),
+    Parameter::optional(
+        "variant",
+        kind::BYTES,
+        "The variant of the JSON type to explicitly check for.",
+    )
+    .enum_variants(VARIANT_ENUM),
+];
 
 fn is_json(value: Value) -> Resolved {
     let bytes = value.try_bytes()?;
@@ -55,19 +97,23 @@ impl Function for IsJson {
         "Check if the string is a valid JSON document."
     }
 
-    fn parameters(&self) -> &'static [Parameter] {
+    fn category(&self) -> &'static str {
+        Category::Type.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BOOLEAN
+    }
+
+    fn return_rules(&self) -> &'static [&'static str] {
         &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "variant",
-                kind: kind::BYTES,
-                required: false,
-            },
+            "Returns `true` if `value` is a valid JSON document.",
+            "Returns `false` if `value` is not JSON-formatted.",
         ]
+    }
+
+    fn parameters(&self) -> &'static [Parameter] {
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {

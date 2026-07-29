@@ -1,4 +1,29 @@
 use crate::compiler::prelude::*;
+use std::sync::LazyLock;
+
+static DEFAULT_COUNT: LazyLock<Value> = LazyLock::new(|| Value::Integer(-1));
+
+static PARAMETERS: LazyLock<Vec<Parameter>> = LazyLock::new(|| {
+    vec![
+        Parameter::required("value", kind::BYTES, "The original string."),
+        Parameter::required(
+            "pattern",
+            kind::BYTES | kind::REGEX,
+            "Replace all matches of this pattern. Can be a static string or a regular expression.",
+        ),
+        Parameter::required(
+            "with",
+            kind::BYTES,
+            "The string that the matches are replaced with.",
+        ),
+        Parameter::optional(
+            "count",
+            kind::INTEGER,
+            "The maximum number of replacements to perform. `-1` means replace all matches.",
+        )
+        .default(&DEFAULT_COUNT),
+    ]
+});
 
 #[allow(clippy::cast_sign_loss, clippy::cast_possible_truncation)] // TODO consider removal options
 fn replace(value: &Value, with_value: &Value, count: Value, pattern: Value) -> Resolved {
@@ -62,29 +87,16 @@ impl Function for Replace {
         "}
     }
 
+    fn category(&self) -> &'static str {
+        Category::String.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "pattern",
-                kind: kind::BYTES | kind::REGEX,
-                required: true,
-            },
-            Parameter {
-                keyword: "with",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "count",
-                kind: kind::INTEGER,
-                required: false,
-            },
-        ]
+        PARAMETERS.as_slice()
     }
 
     fn examples(&self) -> &'static [Example] {
@@ -106,7 +118,11 @@ impl Function for Replace {
             },
             example! {
                 title: "Replace with capture groups",
-                source: r#"replace("foo123bar", r'foo(?P<num>\d+)bar', "$num")"#,
+                source: indoc! {r#"
+                    # Note that in the context of Vector configuration files, an extra `$` escape character is required
+                    # (i.e. `$$num`) to avoid interpreting `num` as an environment variable.
+                    replace("foo123bar", r'foo(?P<num>\d+)bar', "$num")
+                "#},
                 result: Ok(r#""123""#),
             },
             example! {
@@ -126,7 +142,7 @@ impl Function for Replace {
         let value = arguments.required("value");
         let pattern = arguments.required("pattern");
         let with = arguments.required("with");
-        let count = arguments.optional("count").unwrap_or(expr!(-1));
+        let count = arguments.optional("count");
 
         Ok(ReplaceFn {
             value,
@@ -143,14 +159,16 @@ struct ReplaceFn {
     value: Box<dyn Expression>,
     pattern: Box<dyn Expression>,
     with: Box<dyn Expression>,
-    count: Box<dyn Expression>,
+    count: Option<Box<dyn Expression>>,
 }
 
 impl FunctionExpression for ReplaceFn {
     fn resolve(&self, ctx: &mut Context) -> Resolved {
         let value = self.value.resolve(ctx)?;
         let with_value = self.with.resolve(ctx)?;
-        let count = self.count.resolve(ctx)?;
+        let count = self
+            .count
+            .map_resolve_with_default(ctx, || DEFAULT_COUNT.clone())?;
         let pattern = self.pattern.resolve(ctx)?;
 
         replace(&value, &with_value, count, pattern)

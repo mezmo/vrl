@@ -105,6 +105,26 @@ impl Function for ParseKlog {
         "Parses the `value` using the [klog](https://github.com/kubernetes/klog) format used by Kubernetes components."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Parse.as_ref()
+    }
+
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
+        &["`value` does not match the `klog` format."]
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::OBJECT
+    }
+
+    fn notices(&self) -> &'static [&'static str] {
+        &[indoc! {"
+            This function resolves the year for messages. If the current month is January and the
+            provided month is December, it sets the year to the previous year. Otherwise, it sets
+            the year to the current year.
+        "}]
+    }
+
     fn examples(&self) -> &'static [Example] {
         EXAMPLES.as_slice()
     }
@@ -121,11 +141,12 @@ impl Function for ParseKlog {
     }
 
     fn parameters(&self) -> &'static [Parameter] {
-        &[Parameter {
-            keyword: "value",
-            kind: kind::BYTES,
-            required: true,
-        }]
+        const PARAMETERS: &[Parameter] = &[Parameter::required(
+            "value",
+            kind::BYTES,
+            "The string to parse.",
+        )];
+        PARAMETERS
     }
 }
 

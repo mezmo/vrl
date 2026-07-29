@@ -41,24 +41,35 @@ impl Function for Split {
         "Splits the `value` string using `pattern`."
     }
 
-    fn parameters(&self) -> &'static [Parameter] {
+    fn category(&self) -> &'static str {
+        Category::String.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::ARRAY
+    }
+
+    fn return_rules(&self) -> &'static [&'static str] {
         &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "pattern",
-                kind: kind::BYTES | kind::REGEX,
-                required: true,
-            },
-            Parameter {
-                keyword: "limit",
-                kind: kind::INTEGER,
-                required: false,
-            },
+            "If `limit` is specified, the remainder of the string is returned unsplit after `limit` has been reached.",
         ]
+    }
+
+    fn parameters(&self) -> &'static [Parameter] {
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required("value", kind::BYTES, "The string to split."),
+            Parameter::required(
+                "pattern",
+                kind::BYTES | kind::REGEX,
+                "The string is split whenever this pattern is matched.",
+            ),
+            Parameter::optional(
+                "limit",
+                kind::INTEGER,
+                "The maximum number of substrings to return.",
+            ),
+        ];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {

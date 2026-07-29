@@ -1,15 +1,14 @@
+use super::util::example_path_or_basename;
 use crate::compiler::prelude::*;
-use std::env;
+#[cfg(not(target_arch = "wasm32"))]
 use std::path::PathBuf;
 use std::sync::LazyLock;
 
 // This needs to be static because validate_json_schema needs to read a file
 // and the file path needs to be a literal.
 static EXAMPLE_JSON_SCHEMA_VALID_EMAIL: LazyLock<&str> = LazyLock::new(|| {
-    let path = PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").unwrap())
-        .join("../../tests/data/jsonschema/validate_json_schema/schema_with_email_format.json")
-        .display()
-        .to_string();
+    let path =
+        example_path_or_basename("jsonschema/validate_json_schema/schema_with_email_format.json");
 
     Box::leak(
         format!(
@@ -20,10 +19,8 @@ static EXAMPLE_JSON_SCHEMA_VALID_EMAIL: LazyLock<&str> = LazyLock::new(|| {
 });
 
 static EXAMPLE_JSON_SCHEMA_INVALID_EMAIL: LazyLock<&str> = LazyLock::new(|| {
-    let path = PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").unwrap())
-        .join("../../tests/data/jsonschema/validate_json_schema/schema_with_email_format.json")
-        .display()
-        .to_string();
+    let path =
+        example_path_or_basename("jsonschema/validate_json_schema/schema_with_email_format.json");
 
     Box::leak(
         format!(
@@ -34,10 +31,8 @@ static EXAMPLE_JSON_SCHEMA_INVALID_EMAIL: LazyLock<&str> = LazyLock::new(|| {
 });
 
 static EXAMPLE_JSON_SCHEMA_CUSTOM_FORMAT_FALSE: LazyLock<&str> = LazyLock::new(|| {
-    let path = PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").unwrap())
-        .join("../../tests/data/jsonschema/validate_json_schema/schema_with_custom_format.json")
-        .display()
-        .to_string();
+    let path =
+        example_path_or_basename("jsonschema/validate_json_schema/schema_with_custom_format.json");
 
     Box::leak(
         format!(r#"validate_json_schema!(s'{{ "productUser": "a-custom-formatted-string" }}', "{path}", false)"#)
@@ -46,10 +41,8 @@ static EXAMPLE_JSON_SCHEMA_CUSTOM_FORMAT_FALSE: LazyLock<&str> = LazyLock::new(|
 });
 
 static EXAMPLE_JSON_SCHEMA_CUSTOM_FORMAT_TRUE: LazyLock<&str> = LazyLock::new(|| {
-    let path = PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").unwrap())
-        .join("../../tests/data/jsonschema/validate_json_schema/schema_with_custom_format.json")
-        .display()
-        .to_string();
+    let path =
+        example_path_or_basename("jsonschema/validate_json_schema/schema_with_custom_format.json");
 
     Box::leak(
         format!(r#"validate_json_schema!(s'{{ "productUser": "a-custom-formatted-string" }}', "{path}", true)"#)
@@ -108,28 +101,63 @@ impl Function for ValidateJsonSchema {
         "Check if `value` conforms to a JSON Schema definition. This function validates a JSON payload against a JSON Schema definition. It can be used to ensure that the data structure and types in `value` match the expectations defined in `schema_definition`."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Type.as_ref()
+    }
+
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
+        &[
+            "`value` is not a valid JSON Schema payload.",
+            "`value` contains custom format declarations and `ignore_unknown_formats` has not been set to `true`.",
+            "`schema_definition` is not a valid JSON Schema definition.",
+            "`schema_definition` file does not exist.",
+        ]
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BOOLEAN
+    }
+
+    fn return_rules(&self) -> &'static [&'static str] {
+        &[
+            "Returns `true` if `value` conforms to the JSON Schema definition.",
+            "Returns `false` if `value` does not conform to the JSON Schema definition.",
+        ]
+    }
+
+    fn notices(&self) -> &'static [&'static str] {
+        &[indoc! {"
+            This function uses a compiled schema cache. The first time it is called with a specific
+            `schema_definition`, it will compile the schema and cache it for subsequent calls. This
+            improves performance when validating multiple values against the same schema. The cache
+            implementation is fairly naive and does not support refreshing the schema if it changes.
+            If you update the schema definition file, you must restart Vector to clear the cache.
+        "}]
+    }
+
     fn examples(&self) -> &'static [Example] {
         EXAMPLES.as_slice()
     }
 
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "schema_definition",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "ignore_unknown_formats",
-                kind: kind::BOOLEAN,
-                required: false,
-            },
-        ]
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required(
+                "value",
+                kind::BYTES,
+                "The value to check if it conforms to the JSON schema definition.",
+            ),
+            Parameter::required(
+                "schema_definition",
+                kind::BYTES,
+                "The location (path) of the JSON Schema definition.",
+            ),
+            Parameter::optional(
+                "ignore_unknown_formats",
+                kind::BOOLEAN,
+                "Unknown formats can be silently ignored by setting this to `true` and validation continues without failing due to those fields.",
+            ),
+        ];
+        PARAMETERS
     }
 
     #[cfg(not(target_arch = "wasm32"))]
@@ -310,6 +338,7 @@ mod non_wasm {
 mod tests {
     use super::*;
     use crate::value;
+    use std::env;
 
     fn test_data_dir() -> PathBuf {
         PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").unwrap()).join("tests/data/jsonschema/")

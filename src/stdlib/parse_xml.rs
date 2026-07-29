@@ -1,5 +1,64 @@
 use crate::compiler::prelude::*;
-use crate::parsing::xml::{ParseOptions, parse_xml};
+use crate::parsing::xml::{
+    DEFAULT_ALWAYS_USE_TEXT_KEY, DEFAULT_ATTR_PREFIX, DEFAULT_INCLUDE_ATTR, DEFAULT_PARSE_BOOL,
+    DEFAULT_PARSE_NULL, DEFAULT_PARSE_NUMBER, DEFAULT_TEXT_KEY, DEFAULT_TRIM, ParseOptions,
+    parse_xml,
+};
+use std::sync::LazyLock;
+
+static PARAMETERS: LazyLock<Vec<Parameter>> = LazyLock::new(|| {
+    vec![
+        Parameter::required(
+            "value",
+            kind::BYTES,
+            "The string representation of the XML document to parse.",
+        ),
+        Parameter::optional(
+            "trim",
+            kind::BOOLEAN,
+            "Remove excess whitespace between XML elements.",
+        )
+        .default(&DEFAULT_TRIM),
+        Parameter::optional(
+            "include_attr",
+            kind::BOOLEAN,
+            "Include XML tag attributes in the returned object.",
+        )
+        .default(&DEFAULT_INCLUDE_ATTR),
+        Parameter::optional(
+            "attr_prefix",
+            kind::BYTES,
+            "String prefix to use for XML tag attribute keys.",
+        )
+        .default(&DEFAULT_ATTR_PREFIX),
+        Parameter::optional(
+            "text_key",
+            kind::BYTES,
+            "Key name to use for expanded text nodes.",
+        )
+        .default(&DEFAULT_TEXT_KEY),
+        Parameter::optional(
+            "always_use_text_key",
+            kind::BOOLEAN,
+            "Always return text nodes as `{\"<text_key>\": \"value\"}.`",
+        )
+        .default(&DEFAULT_ALWAYS_USE_TEXT_KEY),
+        Parameter::optional(
+            "parse_bool",
+            kind::BOOLEAN,
+            "Parse \"true\" and \"false\" as boolean.",
+        )
+        .default(&DEFAULT_PARSE_BOOL),
+        Parameter::optional("parse_null", kind::BOOLEAN, "Parse \"null\" as null.")
+            .default(&DEFAULT_PARSE_NULL),
+        Parameter::optional(
+            "parse_number",
+            kind::BOOLEAN,
+            "Parse numbers as integers/floats.",
+        )
+        .default(&DEFAULT_PARSE_NUMBER),
+    ]
+});
 
 #[derive(Clone, Copy, Debug)]
 pub struct ParseXml;
@@ -11,6 +70,22 @@ impl Function for ParseXml {
 
     fn usage(&self) -> &'static str {
         "Parses the `value` as XML."
+    }
+
+    fn category(&self) -> &'static str {
+        Category::Parse.as_ref()
+    }
+
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
+        &["`value` is not a valid XML document."]
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::OBJECT
+    }
+
+    fn notices(&self) -> &'static [&'static str] {
+        &["Valid XML must contain exactly one root node. Always returns an object."]
     }
 
     fn examples(&self) -> &'static [Example] {
@@ -59,53 +134,7 @@ impl Function for ParseXml {
     }
 
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "trim",
-                kind: kind::BOOLEAN,
-                required: false,
-            },
-            Parameter {
-                keyword: "include_attr",
-                kind: kind::BOOLEAN,
-                required: false,
-            },
-            Parameter {
-                keyword: "attr_prefix",
-                kind: kind::BYTES,
-                required: false,
-            },
-            Parameter {
-                keyword: "text_key",
-                kind: kind::BYTES,
-                required: false,
-            },
-            Parameter {
-                keyword: "always_use_text_key",
-                kind: kind::BOOLEAN,
-                required: false,
-            },
-            Parameter {
-                keyword: "parse_bool",
-                kind: kind::BOOLEAN,
-                required: false,
-            },
-            Parameter {
-                keyword: "parse_null",
-                kind: kind::BOOLEAN,
-                required: false,
-            },
-            Parameter {
-                keyword: "parse_number",
-                kind: kind::BOOLEAN,
-                required: false,
-            },
-        ]
+        PARAMETERS.as_slice()
     }
 }
 

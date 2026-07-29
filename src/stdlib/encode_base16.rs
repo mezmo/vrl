@@ -14,15 +14,24 @@ impl Function for EncodeBase16 {
     }
 
     fn usage(&self) -> &'static str {
-        "Encodes the `value` to [Base16](https://en.wikipedia.org/wiki/Hexadecimal))."
+        "Encodes the `value` to [Base16](https://en.wikipedia.org/wiki/Hexadecimal)."
+    }
+
+    fn category(&self) -> &'static str {
+        Category::Codec.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
     }
 
     fn parameters(&self) -> &'static [Parameter] {
-        &[Parameter {
-            keyword: "value",
-            kind: kind::BYTES,
-            required: true,
-        }]
+        const PARAMETERS: &[Parameter] = &[Parameter::required(
+            "value",
+            kind::BYTES,
+            "The string to encode.",
+        )];
+        PARAMETERS
     }
 
     fn compile(

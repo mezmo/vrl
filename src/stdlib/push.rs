@@ -18,19 +18,24 @@ impl Function for Push {
         "Adds the `item` to the end of the `value` array."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Array.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::ARRAY
+    }
+
+    fn return_rules(&self) -> &'static [&'static str] {
+        &["Returns a new array. The `value` is _not_ modified in place."]
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::ARRAY,
-                required: true,
-            },
-            Parameter {
-                keyword: "item",
-                kind: kind::ANY,
-                required: true,
-            },
-        ]
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required("value", kind::ARRAY, "The target array."),
+            Parameter::required("item", kind::ANY, "The item to push."),
+        ];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {

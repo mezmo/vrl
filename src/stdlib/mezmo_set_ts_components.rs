@@ -96,47 +96,79 @@ impl Function for MezmoSetTsComponents {
         "Sets the given year, month, day, hour, minute, second, and/or millisecond components of a timestamp and returns the resulting timestamp, leaving unspecified components unchanged."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Timestamp.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
                 keyword: "value",
                 kind: kind::TIMESTAMP,
                 required: true,
+                description: "The timestamp to modify.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "years",
                 kind: kind::INTEGER,
                 required: false,
+                description: "The year to set on the timestamp.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "months",
                 kind: kind::INTEGER,
                 required: false,
+                description: "The month (1-12) to set on the timestamp.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "days",
                 kind: kind::INTEGER,
                 required: false,
+                description: "The day of the month (1-31) to set on the timestamp.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "hours",
                 kind: kind::INTEGER,
                 required: false,
+                description: "The hour (0-23) to set on the timestamp.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "minutes",
                 kind: kind::INTEGER,
                 required: false,
+                description: "The minute (0-59) to set on the timestamp.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "seconds",
                 kind: kind::INTEGER,
                 required: false,
+                description: "The second (0-59) to set on the timestamp.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "milliseconds",
                 kind: kind::INTEGER,
                 required: false,
+                description: "The millisecond (0-999) to set on the timestamp.",
+                default: None,
+                enum_variants: None,
             },
         ]
     }

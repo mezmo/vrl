@@ -1,6 +1,63 @@
+use crate::compiler::function::EnumVariant;
 use crate::compiler::prelude::*;
 use crate::value;
 use percent_encoding::{AsciiSet, utf8_percent_encode};
+use std::sync::LazyLock;
+
+static DEFAULT_ASCII_SET: LazyLock<Value> =
+    LazyLock::new(|| Value::Bytes(Bytes::from("NON_ALPHANUMERIC")));
+
+static ASCII_SET_ENUM: &[EnumVariant] = &[
+    EnumVariant {
+        value: "NON_ALPHANUMERIC",
+        description: "Encode any non-alphanumeric characters. This is the safest option.",
+    },
+    EnumVariant {
+        value: "CONTROLS",
+        description: "Encode only [control characters](https://infra.spec.whatwg.org/#c0-control).",
+    },
+    EnumVariant {
+        value: "FRAGMENT",
+        description: "Encode only [fragment characters](https://url.spec.whatwg.org/#fragment-percent-encode-set)",
+    },
+    EnumVariant {
+        value: "QUERY",
+        description: "Encode only [query characters](https://url.spec.whatwg.org/#query-percent-encode-set)",
+    },
+    EnumVariant {
+        value: "SPECIAL",
+        description: "Encode only [special characters](https://url.spec.whatwg.org/#special-percent-encode-set)",
+    },
+    EnumVariant {
+        value: "PATH",
+        description: "Encode only [path characters](https://url.spec.whatwg.org/#path-percent-encode-set)",
+    },
+    EnumVariant {
+        value: "USERINFO",
+        description: "Encode only [userinfo characters](https://url.spec.whatwg.org/#userinfo-percent-encode-set)",
+    },
+    EnumVariant {
+        value: "COMPONENT",
+        description: "Encode only [component characters](https://url.spec.whatwg.org/#component-percent-encode-set)",
+    },
+    EnumVariant {
+        value: "WWW_FORM_URLENCODED",
+        description: "Encode only [`application/x-www-form-urlencoded`](https://url.spec.whatwg.org/#application-x-www-form-urlencoded-percent-encode-set)",
+    },
+];
+
+static PARAMETERS: LazyLock<Vec<Parameter>> = LazyLock::new(|| {
+    vec![
+        Parameter::required("value", kind::BYTES, "The string to encode."),
+        Parameter::optional(
+            "ascii_set",
+            kind::BYTES,
+            "The ASCII set to use when encoding the data.",
+        )
+        .default(&DEFAULT_ASCII_SET)
+        .enum_variants(ASCII_SET_ENUM),
+    ]
+});
 
 fn encode_percent(value: &Value, ascii_set: &Bytes) -> Resolved {
     let string = value.try_bytes_utf8_lossy()?;
@@ -88,19 +145,16 @@ impl Function for EncodePercent {
         "Encodes a `value` with [percent encoding](https://url.spec.whatwg.org/#percent-encoded-bytes) to safely be used in URLs."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Codec.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "ascii_set",
-                kind: kind::BYTES,
-                required: false,
-            },
-        ]
+        PARAMETERS.as_slice()
     }
 
     fn compile(
@@ -112,7 +166,7 @@ impl Function for EncodePercent {
         let value = arguments.required("value");
         let ascii_set = arguments
             .optional_enum("ascii_set", &ascii_sets(), state)?
-            .unwrap_or_else(|| value!("NON_ALPHANUMERIC"))
+            .unwrap_or_else(|| DEFAULT_ASCII_SET.clone())
             .try_bytes()
             .expect("ascii_set not bytes");
 

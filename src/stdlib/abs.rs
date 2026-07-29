@@ -24,12 +24,25 @@ impl Function for Abs {
         "Computes the absolute value of `value`."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Number.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::INTEGER | kind::FLOAT
+    }
+
+    fn return_rules(&self) -> &'static [&'static str] {
+        &["Returns the absolute value."]
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[Parameter {
-            keyword: "value",
-            kind: kind::FLOAT | kind::INTEGER,
-            required: true,
-        }]
+        const PARAMETERS: &[Parameter] = &[Parameter::required(
+            "value",
+            kind::FLOAT | kind::INTEGER,
+            "The number to calculate the absolute value.",
+        )];
+        PARAMETERS
     }
 
     fn compile(

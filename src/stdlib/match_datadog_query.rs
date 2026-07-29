@@ -23,6 +23,14 @@ impl Function for MatchDatadogQuery {
         "Matches an object against a [Datadog Search Syntax](https://docs.datadoghq.com/logs/explorer/search_syntax/) query."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Object.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BOOLEAN
+    }
+
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
@@ -82,18 +90,11 @@ impl Function for MatchDatadogQuery {
     }
 
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::OBJECT,
-                required: true,
-            },
-            Parameter {
-                keyword: "query",
-                kind: kind::BYTES,
-                required: true,
-            },
-        ]
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required("value", kind::OBJECT, "The object."),
+            Parameter::required("query", kind::BYTES, "The Datadog Search Syntax query."),
+        ];
+        PARAMETERS
     }
 }
 

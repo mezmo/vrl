@@ -1,6 +1,46 @@
+use crate::compiler::function::EnumVariant;
 use crate::compiler::prelude::*;
 use crate::value;
 use sha_3::{Digest, Sha3_224, Sha3_256, Sha3_384, Sha3_512};
+use std::sync::LazyLock;
+
+static DEFAULT_VARIANT: LazyLock<Value> = LazyLock::new(|| Value::Bytes(Bytes::from("SHA3-512")));
+
+static VARIANT_ENUM: &[EnumVariant] = &[
+    EnumVariant {
+        value: "SHA3-224",
+        description: "SHA3-224 algorithm",
+    },
+    EnumVariant {
+        value: "SHA3-256",
+        description: "SHA3-256 algorithm",
+    },
+    EnumVariant {
+        value: "SHA3-384",
+        description: "SHA3-384 algorithm",
+    },
+    EnumVariant {
+        value: "SHA3-512",
+        description: "SHA3-512 algorithm",
+    },
+];
+
+static PARAMETERS: LazyLock<Vec<Parameter>> = LazyLock::new(|| {
+    vec![
+        Parameter::required(
+            "value",
+            kind::BYTES,
+            "The string to calculate the hash for.",
+        ),
+        Parameter::optional(
+            "variant",
+            kind::BYTES,
+            "The variant of the algorithm to use.",
+        )
+        .default(&DEFAULT_VARIANT)
+        .enum_variants(VARIANT_ENUM),
+    ]
+});
 
 fn sha3(value: Value, variant: &Bytes) -> Resolved {
     let value = value.try_bytes()?;
@@ -35,19 +75,16 @@ impl Function for Sha3 {
         "Calculates a [SHA-3](https://en.wikipedia.org/wiki/SHA-3) hash of the `value`."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Cryptography.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "variant",
-                kind: kind::BYTES,
-                required: false,
-            },
-        ]
+        PARAMETERS.as_slice()
     }
 
     fn examples(&self) -> &'static [Example] {
@@ -83,7 +120,7 @@ impl Function for Sha3 {
         let value = arguments.required("value");
         let variant = arguments
             .optional_enum("variant", &variants(), state)?
-            .unwrap_or_else(|| value!("SHA3-512"))
+            .unwrap_or_else(|| DEFAULT_VARIANT.clone())
             .try_bytes()
             .expect("variant not bytes");
 

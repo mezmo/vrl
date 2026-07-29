@@ -15,11 +15,22 @@ impl Function for IsMezmoMetric {
         "Returns `true` if `value` is a valid Mezmo metric object, otherwise `false`. Used to check whether an event conforms to the Mezmo internal metric schema, including a value object with a recognized type such as counter, gauge, histogram, or summary."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Type.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BOOLEAN
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",
             kind: kind::ANY,
             required: true,
+            description: "The value to validate against the Mezmo metric schema.",
+            default: None,
+            enum_variants: None,
         }]
     }
 

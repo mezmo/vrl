@@ -32,11 +32,22 @@ impl Function for MezmoToString {
         "Converts `value` into its string representation. Arrays render as \"[Array]\", objects as \"[Object]\", and null as \"null\". This conversion is infallible."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Coerce.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",
             kind: kind::ANY,
             required: true,
+            description: "The value to convert into a string.",
+            default: None,
+            enum_variants: None,
         }]
     }
 

@@ -13,6 +13,21 @@ impl Function for ParseQueryString {
         "Parses the `value` as a query string."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Parse.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::OBJECT
+    }
+
+    fn notices(&self) -> &'static [&'static str] {
+        &[indoc! {"
+            All values are returned as strings. We recommend manually coercing values to desired
+            types as you see fit. Empty keys and values are allowed.
+        "}]
+    }
+
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
@@ -56,11 +71,12 @@ impl Function for ParseQueryString {
     }
 
     fn parameters(&self) -> &'static [Parameter] {
-        &[Parameter {
-            keyword: "value",
-            kind: kind::BYTES,
-            required: true,
-        }]
+        const PARAMETERS: &[Parameter] = &[Parameter::required(
+            "value",
+            kind::BYTES,
+            "The string to parse.",
+        )];
+        PARAMETERS
     }
 }
 

@@ -17,17 +17,31 @@ impl Function for MezmoRepeat {
         "Returns a new string consisting of `value` repeated `count` times."
     }
 
+    fn category(&self) -> &'static str {
+        Category::String.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
                 keyword: "value",
                 kind: kind::BYTES,
                 required: true,
+                description: "The string to repeat.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "count",
                 kind: kind::INTEGER,
                 required: true,
+                description: "The number of times to repeat the string.",
+                default: None,
+                enum_variants: None,
             },
         ]
     }

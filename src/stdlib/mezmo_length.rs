@@ -23,11 +23,22 @@ impl Function for MezmoLength {
         "Returns the length of `value`: the number of UTF-8 characters for a string, the number of elements for an array, or the `length` property for an object. Returns `null` for other types."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Enumerate.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::ANY
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",
             kind: kind::ANY,
             required: true,
+            description: "The string, array, or object to measure.",
+            default: None,
+            enum_variants: None,
         }]
     }
 

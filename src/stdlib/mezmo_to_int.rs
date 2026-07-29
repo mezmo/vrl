@@ -39,11 +39,22 @@ impl Function for MezmoToInt {
         "Coerces `value` into an integer and returns it. Floats, booleans, null, timestamps, and numeric strings are converted; other values (or NaN) return an error."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Coerce.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::INTEGER
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",
             kind: kind::ANY,
             required: true,
+            description: "The value to coerce into an integer.",
+            default: None,
+            enum_variants: None,
         }]
     }
 

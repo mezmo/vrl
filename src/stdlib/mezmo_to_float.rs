@@ -37,11 +37,22 @@ impl Function for MezmoToFloat {
         "Coerces `value` into a float and returns it. Integers, booleans, null, timestamps, and numeric strings are converted; other values return an error."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Coerce.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::FLOAT
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",
             kind: kind::ANY,
             required: true,
+            description: "The value to coerce into a float.",
+            default: None,
+            enum_variants: None,
         }]
     }
 

@@ -30,12 +30,21 @@ impl Function for TypeDef {
         "}
     }
 
+    fn category(&self) -> &'static str {
+        Category::Type.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::ANY
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[Parameter {
-            keyword: "value",
-            kind: kind::ANY,
-            required: true,
-        }]
+        const PARAMETERS: &[Parameter] = &[Parameter::required(
+            "value",
+            kind::ANY,
+            "The expression to get the type definition for.",
+        )];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {

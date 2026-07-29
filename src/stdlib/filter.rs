@@ -67,12 +67,21 @@ impl Function for Filter {
         "}
     }
 
+    fn category(&self) -> &'static str {
+        Category::Enumerate.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::ARRAY | kind::OBJECT
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[Parameter {
-            keyword: "value",
-            kind: kind::OBJECT | kind::ARRAY,
-            required: true,
-        }]
+        const PARAMETERS: &[Parameter] = &[Parameter::required(
+            "value",
+            kind::OBJECT | kind::ARRAY,
+            "The array or object to filter.",
+        )];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {

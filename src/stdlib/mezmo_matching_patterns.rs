@@ -56,17 +56,31 @@ impl Function for MezmoMatchingPatterns {
         "Returns the set of built-in patterns, such as credit card, email address, IPv4 address, phone number, and US social security number, that match within `value`."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Enumerate.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::ARRAY
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
                 keyword: "value",
                 kind: kind::BYTES | kind::OBJECT | kind::ARRAY,
                 required: true,
+                description: "The string, object, or array to search for pattern matches.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "patterns",
                 kind: kind::ARRAY,
                 required: true,
+                description: "The array of regular expressions or built-in pattern names to match against.",
+                default: None,
+                enum_variants: None,
             },
         ]
     }

@@ -1,8 +1,25 @@
 use std::collections::btree_map;
 
 use crate::compiler::prelude::*;
+use std::sync::LazyLock;
 
-static DEFAULT_SEPARATOR: &str = ".";
+static DEFAULT_SEPARATOR: LazyLock<Value> = LazyLock::new(|| Value::Bytes(Bytes::from(".")));
+
+static PARAMETERS: LazyLock<Vec<Parameter>> = LazyLock::new(|| {
+    vec![
+        Parameter::required(
+            "value",
+            kind::OBJECT | kind::ARRAY,
+            "The array or object to flatten.",
+        ),
+        Parameter::optional(
+            "separator",
+            kind::BYTES,
+            "The separator to join nested keys",
+        )
+        .default(&DEFAULT_SEPARATOR),
+    ]
+});
 
 fn flatten(value: Value, separator: &Value) -> Resolved {
     let separator = separator.try_bytes_utf8_lossy()?;
@@ -36,19 +53,20 @@ impl Function for Flatten {
         "Flattens the `value` into a single-level representation."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Enumerate.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::ARRAY | kind::OBJECT
+    }
+
+    fn return_rules(&self) -> &'static [&'static str] {
+        &["The return type matches the `value` type."]
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::OBJECT | kind::ARRAY,
-                required: true,
-            },
-            Parameter {
-                keyword: "separator",
-                kind: kind::BYTES,
-                required: false,
-            },
-        ]
+        PARAMETERS.as_slice()
     }
 
     fn examples(&self) -> &'static [Example] {
@@ -60,7 +78,17 @@ impl Function for Flatten {
             },
             example! {
                 title: "Flatten object",
-                source: r#"flatten({ "parent1": { "child1": 1, "child2": 2 }, "parent2": { "child3": 3 } })"#,
+                source: indoc! {r#"
+                    flatten({
+                        "parent1": {
+                            "child1": 1,
+                            "child2": 2
+                        },
+                        "parent2": {
+                            "child3": 3
+                        }
+                    })
+                "#},
                 result: Ok(r#"{ "parent1.child1": 1, "parent1.child2": 2, "parent2.child3": 3 }"#),
             },
             example! {
@@ -77,9 +105,7 @@ impl Function for Flatten {
         _ctx: &mut FunctionCompileContext,
         arguments: ArgumentList,
     ) -> Compiled {
-        let separator = arguments
-            .optional("separator")
-            .unwrap_or_else(|| expr!(DEFAULT_SEPARATOR));
+        let separator = arguments.optional("separator");
         let value = arguments.required("value");
         Ok(FlattenFn { value, separator }.as_expr())
     }
@@ -88,13 +114,15 @@ impl Function for Flatten {
 #[derive(Debug, Clone)]
 struct FlattenFn {
     value: Box<dyn Expression>,
-    separator: Box<dyn Expression>,
+    separator: Option<Box<dyn Expression>>,
 }
 
 impl FunctionExpression for FlattenFn {
     fn resolve(&self, ctx: &mut Context) -> Resolved {
         let value = self.value.resolve(ctx)?;
-        let separator = self.separator.resolve(ctx)?;
+        let separator = self
+            .separator
+            .map_resolve_with_default(ctx, || DEFAULT_SEPARATOR.clone())?;
 
         flatten(value, &separator)
     }

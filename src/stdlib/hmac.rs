@@ -1,8 +1,9 @@
+use crate::compiler::function::EnumVariant;
 use crate::compiler::prelude::*;
-use crate::value;
 use hmac::{Hmac as HmacHasher, Mac};
 use sha_2::{Sha224, Sha256, Sha384, Sha512};
 use sha1::Sha1;
+use std::sync::LazyLock;
 
 macro_rules! hmac {
     ($algorithm:ty, $key:expr_2021, $val:expr_2021) => {{
@@ -14,6 +15,49 @@ macro_rules! hmac {
         code_bytes.to_vec()
     }};
 }
+
+static DEFAULT_ALGORITHM: LazyLock<Value> = LazyLock::new(|| Value::Bytes(Bytes::from("SHA-256")));
+
+static ALGORITHM_ENUM: &[EnumVariant] = &[
+    EnumVariant {
+        value: "SHA1",
+        description: "SHA1 algorithm",
+    },
+    EnumVariant {
+        value: "SHA-224",
+        description: "SHA-224 algorithm",
+    },
+    EnumVariant {
+        value: "SHA-256",
+        description: "SHA-256 algorithm",
+    },
+    EnumVariant {
+        value: "SHA-384",
+        description: "SHA-384 algorithm",
+    },
+    EnumVariant {
+        value: "SHA-512",
+        description: "SHA-512 algorithm",
+    },
+];
+
+static PARAMETERS: LazyLock<Vec<Parameter>> = LazyLock::new(|| {
+    vec![
+        Parameter::required(
+            "value",
+            kind::BYTES,
+            "The string to calculate the HMAC for.",
+        ),
+        Parameter::required(
+            "key",
+            kind::BYTES,
+            "The string to use as the cryptographic key.",
+        ),
+        Parameter::optional("algorithm", kind::BYTES, "The hashing algorithm to use.")
+            .default(&DEFAULT_ALGORITHM)
+            .enum_variants(ALGORITHM_ENUM),
+    ]
+});
 
 fn hmac(value: Value, key: Value, algorithm: &Value) -> Resolved {
     let value = value.try_bytes()?;
@@ -54,24 +98,16 @@ impl Function for Hmac {
         "}
     }
 
+    fn category(&self) -> &'static str {
+        Category::Cryptography.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "key",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "algorithm",
-                kind: kind::BYTES,
-                required: false,
-            },
-        ]
+        PARAMETERS.as_slice()
     }
 
     fn examples(&self) -> &'static [Example] {
@@ -93,13 +129,13 @@ impl Function for Hmac {
             },
             example! {
                 title: "Calculate message HMAC using a variable hash algorithm",
-                source: r#"
-.hash_algo = "SHA-256"
-hmac_bytes, err = hmac("Hello there", "super-secret-key", algorithm: .hash_algo)
-if err == null {
-	.hmac = encode_base16(hmac_bytes)
-}
-"#,
+                source: indoc! {r#"
+                    .hash_algo = "SHA-256"
+                    hmac_bytes, err = hmac("Hello there", "super-secret-key", algorithm: .hash_algo)
+                    if err == null {
+                        .hmac = encode_base16(hmac_bytes)
+                    }
+                "#},
                 result: Ok("78b184f1832f8aff3934f5e0212454671b2d04d494e3b25075c5e45167029662"),
             },
         ]
@@ -135,10 +171,9 @@ impl FunctionExpression for HmacFn {
     fn resolve(&self, ctx: &mut Context) -> Resolved {
         let value = self.value.resolve(ctx)?;
         let key = self.key.resolve(ctx)?;
-        let algorithm = match &self.algorithm {
-            Some(algorithm) => algorithm.resolve(ctx)?,
-            None => value!("SHA-256"),
-        };
+        let algorithm = self
+            .algorithm
+            .map_resolve_with_default(ctx, || DEFAULT_ALGORITHM.clone())?;
 
         hmac(value, key, &algorithm)
     }
@@ -169,6 +204,7 @@ impl FunctionExpression for HmacFn {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::value;
 
     test_function![
         hmac => Hmac;

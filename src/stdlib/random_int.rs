@@ -35,28 +35,33 @@ impl Function for RandomInt {
         "Returns a random integer between [min, max)."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Random.as_ref()
+    }
+
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
+        &["`max` is not greater than `min`."]
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::INTEGER
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "min",
-                kind: kind::INTEGER,
-                required: true,
-            },
-            Parameter {
-                keyword: "max",
-                kind: kind::INTEGER,
-                required: true,
-            },
-        ]
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required("min", kind::INTEGER, "Minimum value (inclusive)."),
+            Parameter::required("max", kind::INTEGER, "Maximum value (exclusive)."),
+        ];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {
         &[example! {
             title: "Random integer from 0 to 10, not including 10",
-            source: "
-				i = random_int(0, 10)
-				i >= 0 && i < 10
-                ",
+            source: indoc! {"
+                i = random_int(0, 10)
+                i >= 0 && i < 10
+            "},
             result: Ok("true"),
         }]
     }

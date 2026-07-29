@@ -38,26 +38,35 @@ impl Function for EncodeCharset {
 
     fn usage(&self) -> &'static str {
         indoc! {"
-            Encode UTF-8 to non UTF-8 charset.
-
-            The `value` parameter is a UTF-8 encoded string.
-            The `to_charset` parameter specifies the charset to encode the `value`.
+            Encodes the `value` (a UTF8 string) to a non-UTF8 string using the specified
+            [character set](https://encoding.spec.whatwg.org/#names-and-labels).
         "}
     }
 
-    fn parameters(&self) -> &'static [Parameter] {
+    fn category(&self) -> &'static str {
+        Category::Codec.as_ref()
+    }
+
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
         &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "to_charset",
-                kind: kind::BYTES,
-                required: true,
-            },
+            "`to_charset` isn't a valid [character set](https://encoding.spec.whatwg.org/#names-and-labels).",
         ]
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
+    fn parameters(&self) -> &'static [Parameter] {
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required("value", kind::BYTES, "The UTF8 string to encode."),
+            Parameter::required(
+                "to_charset",
+                kind::BYTES,
+                "The [character set](https://encoding.spec.whatwg.org/#names-and-labels) to use when encoding the data.",
+            ),
+        ];
+        PARAMETERS
     }
 
     fn compile(

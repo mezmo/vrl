@@ -1,3 +1,4 @@
+use crate::compiler::function::EnumVariant;
 use crate::compiler::prelude::*;
 use std::{
     borrow::Cow,
@@ -11,6 +12,44 @@ use woothee::parser::Parser as WootheeParser;
 static UA_EXTRACTOR: LazyLock<ua_parser::Extractor> = LazyLock::new(|| {
     let regexes = include!(concat!(env!("OUT_DIR"), "/user_agent_regexes.rs"));
     ua_parser::Extractor::try_from(regexes).expect("Regex file is not valid.")
+});
+
+static DEFAULT_MODE: LazyLock<Value> = LazyLock::new(|| Value::Bytes(Bytes::from("fast")));
+
+static MODE_ENUM: &[EnumVariant] = &[
+    EnumVariant {
+        value: "fast",
+        description: "Fastest mode but most unreliable. Uses parser from project [Woothee](https://github.com/woothee/woothee).",
+    },
+    EnumVariant {
+        value: "reliable",
+        description: indoc! {"
+            Provides greater reliability than `fast` and retains it's speed in common cases.
+            Parses with [Woothee](https://github.com/woothee/woothee) parser and with parser from
+            [uap project](https://github.com/ua-parser/uap-core) if there are some missing fields
+            that the first parser wasn't able to parse out but the second one maybe can.
+        "},
+    },
+    EnumVariant {
+        value: "enriched",
+        description: indoc! {"
+            Parses with both parser from [Woothee](https://github.com/woothee/woothee) and parser from
+            [uap project](https://github.com/ua-parser/uap-core) and combines results. Result has the full schema.
+        "},
+    },
+];
+
+static PARAMETERS: LazyLock<Vec<Parameter>> = LazyLock::new(|| {
+    vec![
+        Parameter::required("value", kind::BYTES, "The string to parse."),
+        Parameter::optional(
+            "mode",
+            kind::BYTES,
+            "Determines performance and reliability characteristics.",
+        )
+        .default(&DEFAULT_MODE)
+        .enum_variants(MODE_ENUM),
+    ]
 });
 
 #[derive(Clone, Copy, Debug)]
@@ -27,50 +66,118 @@ impl Function for ParseUserAgent {
 
     fn usage(&self) -> &'static str {
         indoc! {"
-            Parses the provided `value` as a user agent.
+            Parses the provided `value` as a user agent, which has
+            [a loosely defined format](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent).
 
             Parses on the basis of best effort. Returned schema depends only on the configured `mode`,
             so if the function fails to parse a field it will set it to `null`.
         "}
     }
 
-    fn parameters(&self) -> &'static [Parameter] {
+    fn category(&self) -> &'static str {
+        Category::Parse.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::OBJECT
+    }
+
+    fn notices(&self) -> &'static [&'static str] {
         &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "mode",
-                kind: kind::BYTES,
-                required: false,
-            },
+            indoc! {"
+                All values are returned as strings or as null. We recommend manually coercing values
+                to desired types as you see fit.
+            "},
+            "Different modes return different schema.",
+            "Field which were not parsed out are set as `null`.",
         ]
+    }
+
+    fn parameters(&self) -> &'static [Parameter] {
+        PARAMETERS.as_slice()
     }
 
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
                 title: "Fast mode",
-                source: r#"parse_user_agent("Mozilla Firefox 1.0.1 Mozilla/5.0 (X11; U; Linux i686; de-DE; rv:1.7.6) Gecko/20050223 Firefox/1.0.1")"#,
-                result: Ok(
-                    r#"{ "browser": { "family": "Firefox", "version": "1.0.1" }, "device": { "category": "pc" }, "os": { "family": "Linux", "version": null } }"#,
-                ),
+                source: indoc! {r#"
+                    parse_user_agent(
+                        "Mozilla Firefox 1.0.1 Mozilla/5.0 (X11; U; Linux i686; de-DE; rv:1.7.6) Gecko/20050223 Firefox/1.0.1"
+                    )
+                "#},
+                result: Ok(indoc! {r#"
+                    {
+                        "browser": {
+                            "family": "Firefox",
+                            "version": "1.0.1"
+                        },
+                        "device": {
+                            "category": "pc"
+                        },
+                        "os": {
+                            "family": "Linux",
+                            "version": null
+                        }
+                    }
+                    "#}),
             },
             example! {
                 title: "Reliable mode",
-                source: r#"parse_user_agent("Mozilla/4.0 (compatible; MSIE 7.66; Windows NT 5.1; SV1; .NET CLR 1.1.4322)", mode: "reliable")"#,
-                result: Ok(
-                    r#"{ "browser": { "family": "Internet Explorer", "version": "7.66" }, "device": { "category": "pc" }, "os": { "family": "Windows XP", "version": "NT 5.1" } }"#,
-                ),
+                source: indoc! {r#"
+                    parse_user_agent(
+                        "Mozilla/4.0 (compatible; MSIE 7.66; Windows NT 5.1; SV1; .NET CLR 1.1.4322)",
+                        mode: "reliable")
+                "#},
+                result: Ok(indoc! {r#"
+                    {
+                        "browser": {
+                            "family": "Internet Explorer",
+                            "version": "7.66"
+                        },
+                        "device": {
+                            "category": "pc"
+                        },
+                        "os": {
+                            "family": "Windows XP",
+                            "version": "NT 5.1"
+                        }
+                    }
+                    "#}),
             },
             example! {
                 title: "Enriched mode",
-                source: r#"parse_user_agent("Opera/9.80 (J2ME/MIDP; Opera Mini/4.3.24214; iPhone; CPU iPhone OS 4_2_1 like Mac OS X; AppleWebKit/24.783; U; en) Presto/2.5.25 Version/10.54", mode: "enriched")"#,
-                result: Ok(
-                    r#"{ "browser": { "family": "Opera Mini", "major": "4", "minor": "3", "patch": "24214", "version": "10.54" }, "device": { "brand": "Apple", "category": "smartphone", "family": "iPhone", "model": "iPhone" }, "os": { "family": "iOS", "major": "4", "minor": "2", "patch": "1", "patch_minor": null, "version": "4.2.1" } }"#,
-                ),
+                source: indoc! {r#"
+                    parse_user_agent(
+                        "Opera/9.80 (J2ME/MIDP; Opera Mini/4.3.24214; iPhone; CPU iPhone OS 4_2_1 like Mac OS X; AppleWebKit/24.783; U; en) Presto/2.5.25 Version/10.54",
+                        mode: "enriched"
+                    )
+                "#},
+                result: Ok(indoc! {r#"
+                    {
+                        "browser": {
+                            "family": "Opera Mini",
+                            "major": "4",
+                            "minor": "3",
+                            "patch": "24214",
+                            "version": "10.54"
+                        },
+                        "device": {
+                            "brand": "Apple",
+                            "category": "smartphone",
+                            "family": "iPhone",
+                            "model": "iPhone"
+                        },
+                        "os": {
+                            "family": "iOS",
+                            "major": "4",
+                            "minor": "2",
+                            "patch": "1",
+                            "patch_minor": null,
+                            "version": "4.2.1"
+                        }
+                    }
+                    "#}),
             },
         ]
     }
@@ -85,11 +192,10 @@ impl Function for ParseUserAgent {
 
         let mode = arguments
             .optional_enum("mode", &Mode::all_value(), state)?
-            .map(|s| {
-                Mode::from_str(&s.try_bytes_utf8_lossy().expect("mode not bytes"))
-                    .expect("validated enum")
-            })
-            .unwrap_or_default();
+            .unwrap_or_else(|| DEFAULT_MODE.clone())
+            .try_bytes_utf8_lossy()
+            .map(|s| Mode::from_str(&s).expect("validated enum"))
+            .expect("mode not bytes");
 
         let parser = match mode {
             Mode::Fast => {

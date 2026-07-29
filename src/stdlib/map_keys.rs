@@ -1,4 +1,19 @@
 use crate::compiler::prelude::*;
+use std::sync::LazyLock;
+
+static DEFAULT_RECURSIVE: LazyLock<Value> = LazyLock::new(|| Value::Boolean(false));
+
+static PARAMETERS: LazyLock<Vec<Parameter>> = LazyLock::new(|| {
+    vec![
+        Parameter::required("value", kind::OBJECT, "The object to iterate."),
+        Parameter::optional(
+            "recursive",
+            kind::BOOLEAN,
+            "Whether to recursively iterate the collection.",
+        )
+        .default(&DEFAULT_RECURSIVE),
+    ]
+});
 
 fn map_keys<T>(
     value: Value,
@@ -64,19 +79,16 @@ impl Function for MapKeys {
         "}
     }
 
+    fn category(&self) -> &'static str {
+        Category::Enumerate.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::OBJECT
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::OBJECT,
-                required: true,
-            },
-            Parameter {
-                keyword: "recursive",
-                kind: kind::BOOLEAN,
-                required: false,
-            },
-        ]
+        PARAMETERS.as_slice()
     }
 
     fn examples(&self) -> &'static [Example] {
@@ -107,7 +119,14 @@ impl Function for MapKeys {
             },
             example! {
                 title: "Recursively map object keys",
-                source: r#"map_keys({ "a": 1, "b": [{ "c": 2 }, { "d": 3 }], "e": { "f": 4 } }, recursive: true) -> |key| { upcase(key) }"#,
+                source: indoc! {r#"
+                    val = {
+                        "a": 1,
+                        "b": [{ "c": 2 }, { "d": 3 }],
+                        "e": { "f": 4 }
+                    }
+                    map_keys(val, recursive: true) -> |key| { upcase(key) }
+                "#},
                 result: Ok(r#"{ "A": 1, "B": [{ "C": 2 }, { "D": 3 }], "E": { "F": 4 } }"#),
             },
         ]
@@ -162,10 +181,10 @@ struct MapKeysFn {
 
 impl FunctionExpression for MapKeysFn {
     fn resolve(&self, ctx: &mut Context) -> ExpressionResult<Value> {
-        let recursive = match &self.recursive {
-            None => false,
-            Some(expr) => expr.resolve(ctx)?.try_boolean()?,
-        };
+        let recursive = self
+            .recursive
+            .map_resolve_with_default(ctx, || DEFAULT_RECURSIVE.clone())?
+            .try_boolean()?;
 
         let value = self.value.resolve(ctx)?;
         let Closure {

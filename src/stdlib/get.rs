@@ -56,19 +56,32 @@ impl Function for Get {
         "}
     }
 
+    fn category(&self) -> &'static str {
+        Category::Path.as_ref()
+    }
+
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
+        &["The `path` segment must be a string or an integer."]
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::ANY
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::OBJECT | kind::ARRAY,
-                required: true,
-            },
-            Parameter {
-                keyword: "path",
-                kind: kind::ARRAY,
-                required: true,
-            },
-        ]
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required(
+                "value",
+                kind::OBJECT | kind::ARRAY,
+                "The object or array to query.",
+            ),
+            Parameter::required(
+                "path",
+                kind::ARRAY,
+                "An array of path segments to look for the value.",
+            ),
+        ];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {
@@ -105,10 +118,8 @@ impl Function for Get {
             },
             example! {
                 title: "External target",
-                source: indoc! {r#"
-                    . = { "foo": true }
-                    get!(value: ., path: ["foo"])
-                "#},
+                source: r#"get!(value: ., path: ["foo"])"#,
+                input: r#"{ "foo": true }"#,
                 result: Ok("true"),
             },
             example! {

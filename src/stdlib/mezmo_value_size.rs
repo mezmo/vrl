@@ -37,11 +37,22 @@ impl Function for MezmoValueSize {
         "Returns the computed size in bytes of `value`, matching the size calculation used by Mezmo usage metrics, including a base overhead for arrays and objects."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Enumerate.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::INTEGER
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",
             kind: kind::ANY,
             required: true,
+            description: "The value whose size in bytes is computed.",
+            default: None,
+            enum_variants: None,
         }]
     }
 

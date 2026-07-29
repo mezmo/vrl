@@ -36,24 +36,36 @@ impl Function for Truncate {
         "Truncates the `value` string up to the `limit` number of characters."
     }
 
+    fn category(&self) -> &'static str {
+        Category::String.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
+    fn return_rules(&self) -> &'static [&'static str] {
+        &["The string is returned unchanged its length is less than `limit`."]
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "limit",
-                kind: kind::INTEGER,
-                required: true,
-            },
-            Parameter {
-                keyword: "suffix",
-                kind: kind::BYTES,
-                required: false,
-            },
-        ]
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required("value", kind::BYTES, "The string to truncate."),
+            Parameter::required(
+                "limit",
+                kind::INTEGER,
+                "The number of characters to truncate the string after.",
+            ),
+            Parameter::optional(
+                "suffix",
+                kind::BYTES,
+                indoc! {"
+                    A custom suffix to be appended to truncated strings. If a custom `suffix` is
+                    provided, the total length of the string will be `limit + <suffix length>`.
+                "},
+            ),
+        ];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {

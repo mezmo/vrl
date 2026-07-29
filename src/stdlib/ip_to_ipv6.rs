@@ -24,12 +24,32 @@ impl Function for IpToIpv6 {
         "Converts the `ip` to an IPv6 address."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Ip.as_ref()
+    }
+
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
+        &["`ip` is not a valid IP address."]
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
+    fn return_rules(&self) -> &'static [&'static str] {
+        &[
+            "The `ip` is returned unchanged if it's already an IPv6 address.",
+            "The `ip` is converted to an IPv6 address if it's an IPv4 address.",
+        ]
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[Parameter {
-            keyword: "value",
-            kind: kind::BYTES,
-            required: true,
-        }]
+        const PARAMETERS: &[Parameter] = &[Parameter::required(
+            "value",
+            kind::BYTES,
+            "The IP address to convert to IPv6.",
+        )];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {

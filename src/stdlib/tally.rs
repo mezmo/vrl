@@ -36,6 +36,14 @@ impl Function for Tally {
         "Counts the occurrences of each string value in the provided array and returns an object with the counts."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Enumerate.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::OBJECT
+    }
+
     fn examples(&self) -> &'static [Example] {
         &[example! {
             title: "tally",
@@ -56,11 +64,12 @@ impl Function for Tally {
     }
 
     fn parameters(&self) -> &'static [Parameter] {
-        &[Parameter {
-            keyword: "value",
-            kind: kind::ARRAY,
-            required: true,
-        }]
+        const PARAMETERS: &[Parameter] = &[Parameter::required(
+            "value",
+            kind::ARRAY,
+            "The array of strings to count occurrences for.",
+        )];
+        PARAMETERS
     }
 }
 

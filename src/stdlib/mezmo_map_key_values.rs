@@ -148,17 +148,31 @@ impl Function for MezmoMapKeyValues {
         "Iterates depth-first over the keys and values of an object (or the values of an array), applying a closure to each and mutating them in place. Recursion depth is controlled by `max_depth`: -1 for infinite, 0 for the current level only, or N to recurse up to N levels deeper."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Enumerate.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::OBJECT | kind::ARRAY
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
                 keyword: "value",
                 kind: kind::OBJECT | kind::ARRAY,
                 required: true,
+                description: "The object or array to iterate over.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "max_depth",
                 kind: kind::INTEGER,
                 required: false,
+                description: "The recursion depth: -1 for infinite, 0 for the current level only, or N to recurse up to N levels deeper.",
+                default: None,
+                enum_variants: None,
             },
         ]
     }

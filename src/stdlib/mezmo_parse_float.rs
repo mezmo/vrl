@@ -33,11 +33,22 @@ impl Function for MezmoParseFloat {
         "Converts an integer, float, or string `value` into a float, matching the behavior of JavaScript's `parseFloat()`. All other types result in an error. Unlike `to_float`, fallibility is determined entirely at runtime."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Coerce.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::FLOAT
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",
             kind: kind::ANY,
             required: true,
+            description: "The value to convert into a float.",
+            default: None,
+            enum_variants: None,
         }]
     }
 

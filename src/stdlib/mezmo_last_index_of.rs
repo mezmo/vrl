@@ -71,22 +71,39 @@ impl Function for MezmoLastIndexOf {
         "Returns the zero-based index of the last occurrence of `find` within `value`, optionally searching up to `from_index`. Returns `-1` if the substring is not found."
     }
 
+    fn category(&self) -> &'static str {
+        Category::String.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::INTEGER
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
                 keyword: "value",
                 kind: kind::BYTES,
                 required: true,
+                description: "The string to search within.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "search_value",
                 kind: kind::BYTES,
                 required: true,
+                description: "The substring to search for.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "position",
                 kind: kind::INTEGER,
                 required: false,
+                description: "The optional character position to search up to. Negative values are clamped to zero.",
+                default: None,
+                enum_variants: None,
             },
         ]
     }

@@ -16,6 +16,14 @@ impl Function for Upcase {
         "Upcases `value`, where upcase is defined according to the Unicode Derived Core Property Uppercase."
     }
 
+    fn category(&self) -> &'static str {
+        Category::String.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
     fn examples(&self) -> &'static [Example] {
         &[example! {
             title: "Upcase a string",
@@ -25,11 +33,12 @@ impl Function for Upcase {
     }
 
     fn parameters(&self) -> &'static [Parameter] {
-        &[Parameter {
-            keyword: "value",
-            kind: kind::BYTES,
-            required: true,
-        }]
+        const PARAMETERS: &[Parameter] = &[Parameter::required(
+            "value",
+            kind::BYTES,
+            "The string to convert to uppercase.",
+        )];
+        PARAMETERS
     }
 
     fn compile(

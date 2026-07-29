@@ -22,11 +22,22 @@ impl Function for MezmoToArray {
         "Returns `value` if it is an array, otherwise returns an error. Equivalent to the standard `array` function but always fallible."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Coerce.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::ARRAY
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",
             kind: kind::ANY,
             required: true,
+            description: "The value to coerce into an array.",
+            default: None,
+            enum_variants: None,
         }]
     }
 
