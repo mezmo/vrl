@@ -22,9 +22,29 @@ impl Function for ParseCbor {
     }
 
     fn usage(&self) -> &'static str {
-        indoc! {"
-            Parses the provided `value` as CBOR.
-        "}
+        "Parses the `value` as [CBOR](https://cbor.io)."
+    }
+
+    fn category(&self) -> &'static str {
+        Category::Parse.as_ref()
+    }
+
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
+        &["`value` is not a valid CBOR-formatted payload."]
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BOOLEAN
+            | kind::INTEGER
+            | kind::FLOAT
+            | kind::BYTES
+            | kind::OBJECT
+            | kind::ARRAY
+            | kind::NULL
+    }
+
+    fn notices(&self) -> &'static [&'static str] {
+        &["Only CBOR types are returned."]
     }
 
     fn examples(&self) -> &'static [Example] {
@@ -73,11 +93,12 @@ impl Function for ParseCbor {
     }
 
     fn parameters(&self) -> &'static [Parameter] {
-        &[Parameter {
-            keyword: "value",
-            kind: kind::BYTES,
-            required: true,
-        }]
+        const PARAMETERS: &[Parameter] = &[Parameter::required(
+            "value",
+            kind::BYTES,
+            "The CBOR payload to parse.",
+        )];
+        PARAMETERS
     }
 }
 

@@ -33,6 +33,44 @@ pub trait Function: Send + Sync + fmt::Debug {
     /// A more elaborate multi-paragraph description on how to use the function.
     fn usage(&self) -> &'static str;
 
+    /// The category this function belongs to.
+    ///
+    /// This categorizes functions for documentation and tooling purposes.
+    fn category(&self) -> &'static str;
+
+    /// Human-readable internal failure reasons for the function.
+    ///
+    /// This returns an empty slice by default, indicating no internal failure
+    /// reasons are documented for a function.
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
+        &[]
+    }
+
+    /// The return type kind(s) this function can return.
+    fn return_kind(&self) -> u16;
+
+    /// Human-readable rules describing the return value of the function.
+    ///
+    /// This returns an empty slice by default, indicating no return rules
+    /// are documented for this function.
+    fn return_rules(&self) -> &'static [&'static str] {
+        &[]
+    }
+
+    /// Important notices about the function's behavior or usage.
+    ///
+    /// This returns an empty slice by default, indicating no notices
+    /// are documented for this function.
+    fn notices(&self) -> &'static [&'static str] {
+        &[]
+    }
+
+    /// Whether a function is pure or not. When a function is pure, it is
+    /// idempotent and has no side-effects. Otherwise, it is impure.
+    fn pure(&self) -> bool {
+        true
+    }
+
     /// One or more examples demonstrating usage of the function in VRL source
     /// code.
     fn examples(&self) -> &'static [Example];
@@ -75,9 +113,13 @@ pub trait Function: Send + Sync + fmt::Debug {
 pub struct Example {
     pub title: &'static str,
     pub source: &'static str,
+    pub input: Option<&'static str>,
     pub result: Result<&'static str, &'static str>,
     pub file: &'static str,
     pub line: u32,
+    /// Whether this example produces deterministic output.
+    /// When false, tests validate output type instead of exact value.
+    pub deterministic: bool,
 }
 
 /// Macro to create an Example with automatic source location tracking
@@ -86,14 +128,48 @@ macro_rules! example {
     (
         title: $title:expr,
         source: $source:expr,
+        input: $input:expr,
         result: $result:expr $(,)?
     ) => {
         $crate::compiler::function::Example {
             title: $title,
             source: $source,
+            input: Some($input),
             result: $result,
             file: file!(),
             line: line!(),
+            deterministic: true,
+        }
+    };
+    (
+        title: $title:expr,
+        source: $source:expr,
+        result: $result:expr $(,)?
+    ) => {
+        $crate::compiler::function::Example {
+            title: $title,
+            source: $source,
+            input: None,
+            result: $result,
+            file: file!(),
+            line: line!(),
+            deterministic: true,
+        }
+    };
+    (
+        title: $title:expr,
+        source: $source:expr,
+        result: $result:expr,
+        deterministic: $det:expr $(,)?
+    ) => {
+        $crate::compiler::function::Example {
+            title: $title,
+            source: $source,
+            input: None,
+            result: $result,
+            file: file!(),
+            line: line!(),
+            deterministic: $det,
         }
     };
 }
@@ -143,6 +219,12 @@ impl FunctionCompileContext {
 // -----------------------------------------------------------------------------
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
+pub struct EnumVariant {
+    pub value: &'static str,
+    pub description: &'static str,
+}
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub struct Parameter {
     /// The keyword of the parameter.
     ///
@@ -161,9 +243,65 @@ pub struct Parameter {
     /// If it isn't, the function can be called without errors, even if the
     /// argument matching this parameter is missing.
     pub required: bool,
+
+    /// A description of what this parameter does.
+    pub description: &'static str,
+
+    /// The default value for this parameter, if any.
+    ///
+    /// Notes on creating a `Option<&'static Value>`:
+    ///
+    /// * If the inner [`Value`] is copiable, such as [`Value::Integer`], you likely won't have issues.
+    /// * If the value can contain owned data, such as [`Value::Bytes`], use [`LazyLock`](std::sync::LazyLock)
+    ///   to create static [`Value`] instances. If you are already in a [`LazyLock`](std::sync::LazyLock) block,
+    ///   you'll have to create another [`LazyLock`](std::sync::LazyLock) in order to make both static.
+    pub default: Option<&'static Value>,
+
+    /// Enum variants for this parameter, if the parameter accepts a limited set of values.
+    pub enum_variants: Option<&'static [EnumVariant]>,
 }
 
 impl Parameter {
+    /// Create a required parameter with default values for `default` and `enum_variants`.
+    #[must_use]
+    pub const fn required(keyword: &'static str, kind: u16, description: &'static str) -> Self {
+        Self {
+            keyword,
+            kind,
+            required: true,
+            description,
+            default: None,
+            enum_variants: None,
+        }
+    }
+
+    /// Create an optional parameter with default values for `default` and `enum_variants`.
+    #[must_use]
+    pub const fn optional(keyword: &'static str, kind: u16, description: &'static str) -> Self {
+        Self {
+            keyword,
+            kind,
+            required: false,
+            description,
+            default: None,
+            enum_variants: None,
+        }
+    }
+
+    /// Set the default value for this parameter.
+    #[must_use]
+    pub const fn default(mut self, value: &'static Value) -> Self {
+        self.default = Some(value);
+        self
+    }
+
+    /// Set the enum variants for this parameter.
+    #[must_use]
+    pub const fn enum_variants(mut self, variants: &'static [EnumVariant]) -> Self {
+        self.enum_variants = Some(variants);
+        self
+    }
+
     #[allow(arithmetic_overflow)]
     #[must_use]
     pub fn kind(&self) -> Kind {
@@ -646,11 +784,7 @@ mod tests {
                 },
             ),
         ]) {
-            let parameter = Parameter {
-                keyword: "",
-                kind: parameter_kind,
-                required: false,
-            };
+            let parameter = Parameter::optional("", parameter_kind, "");
 
             assert_eq!(parameter.kind(), kind, "{title}");
         }

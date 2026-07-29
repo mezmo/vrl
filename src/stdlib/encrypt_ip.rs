@@ -52,24 +52,46 @@ impl Function for EncryptIp {
         "}
     }
 
-    fn parameters(&self) -> &'static [Parameter] {
+    fn category(&self) -> &'static str {
+        Category::Ip.as_ref()
+    }
+
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
         &[
-            Parameter {
-                keyword: "ip",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "key",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "mode",
-                kind: kind::BYTES,
-                required: true,
-            },
+            "`ip` is not a valid IP address.",
+            "`mode` is not a supported mode (must be `aes128` or `pfx`).",
+            "`key` length does not match the requirements for the specified mode (16 bytes for `aes128`, 32 bytes for `pfx`).",
         ]
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
+    fn notices(&self) -> &'static [&'static str] {
+        &[indoc! {"
+            The `aes128` mode implements the `ipcrypt-deterministic` algorithm from the IPCrypt
+            specification, while the `pfx` mode implements the `ipcrypt-pfx` algorithm. Both modes
+            provide deterministic encryption where the same input IP address encrypted with the
+            same key will always produce the same encrypted output.
+        "}]
+    }
+
+    fn parameters(&self) -> &'static [Parameter] {
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required("ip", kind::BYTES, "The IP address to encrypt (v4 or v6)."),
+            Parameter::required(
+                "key",
+                kind::BYTES,
+                "The encryption key in raw bytes (not encoded). For AES128 mode, the key must be exactly 16 bytes. For PFX mode, the key must be exactly 32 bytes.",
+            ),
+            Parameter::required(
+                "mode",
+                kind::BYTES,
+                "The encryption mode to use. Must be either `aes128` or `pfx`.",
+            ),
+        ];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {

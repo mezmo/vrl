@@ -157,41 +157,54 @@ impl Function for Decrypt {
         "}
     }
 
-    fn parameters(&self) -> &'static [Parameter] {
+    fn category(&self) -> &'static str {
+        Category::Cryptography.as_ref()
+    }
+
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
         &[
-            Parameter {
-                keyword: "ciphertext",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "algorithm",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "key",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "iv",
-                kind: kind::BYTES,
-                required: true,
-            },
+            "`algorithm` is not a supported algorithm.",
+            "`key` length does not match the key size required for the algorithm specified.",
+            "`iv` length does not match the `iv` size required for the algorithm specified.",
         ]
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
+    fn parameters(&self) -> &'static [Parameter] {
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required("ciphertext", kind::BYTES, "The string in raw bytes (not encoded) to decrypt."),
+            Parameter::required("algorithm", kind::BYTES, "The algorithm to use."),
+            Parameter::required("key", kind::BYTES, "The key in raw bytes (not encoded) for decryption. The length must match the algorithm requested."),
+            Parameter::required("iv", kind::BYTES, "The IV in raw bytes (not encoded) for decryption. The length must match the algorithm requested.
+A new IV should be generated for every message. You can use `random_bytes` to generate a cryptographically secure random value.
+The value should match the one used during encryption."),
+        ];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
                 title: "Decrypt value using AES-256-CFB",
-                source: r#"decrypt!(decode_base64!("c/dIOA=="), "AES-256-CFB", key: "01234567890123456789012345678912", iv: "0123456789012345")"#,
+                source: indoc! {r#"
+                    iv = "0123456789012345"
+                    key = "01234567890123456789012345678912"
+                    ciphertext = decode_base64!("c/dIOA==")
+                    decrypt!(ciphertext, "AES-256-CFB", key: key, iv: iv)
+                "#},
                 result: Ok("data"),
             },
             example! {
                 title: "Decrypt value using AES-128-CBC-PKCS7",
-                source: r#"decrypt!(decode_base64!("5fLGcu1VHdzsPcGNDio7asLqE1P43QrVfPfmP4i4zOU="), "AES-128-CBC-PKCS7", key: "16_byte_keyxxxxx", iv: decode_base64!("fVEIRkIiczCRWNxaarsyxA=="))"#,
+                source: indoc! {r#"
+                    iv = decode_base64!("fVEIRkIiczCRWNxaarsyxA==")
+                    key = "16_byte_keyxxxxx"
+                    ciphertext = decode_base64!("5fLGcu1VHdzsPcGNDio7asLqE1P43QrVfPfmP4i4zOU=")
+                    decrypt!(ciphertext, "AES-128-CBC-PKCS7", key: key, iv: iv)
+                "#},
                 result: Ok("super_secret_message"),
             },
         ]

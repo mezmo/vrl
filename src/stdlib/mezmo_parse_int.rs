@@ -32,17 +32,31 @@ impl Function for MezmoParseInt {
         "Converts an integer, float, or string `value` into an integer using the optional `base` (radix), matching the behavior of JavaScript's `parseInt()`. All other types result in an error. Unlike `to_int`, fallibility is determined entirely at runtime."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Coerce.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::INTEGER
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
                 keyword: "value",
                 kind: kind::ANY,
                 required: true,
+                description: "The value to convert into an integer.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "base",
                 kind: kind::INTEGER,
                 required: false,
+                description: "The base (radix) to use when parsing a string value.",
+                default: None,
+                enum_variants: None,
             },
         ]
     }

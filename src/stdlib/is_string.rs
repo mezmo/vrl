@@ -13,12 +13,28 @@ impl Function for IsString {
         "Check if `value`'s type is a string."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Type.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BOOLEAN
+    }
+
+    fn return_rules(&self) -> &'static [&'static str] {
+        &[
+            "Returns `true` if `value` is a string.",
+            "Returns `false` if `value` is anything else.",
+        ]
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[Parameter {
-            keyword: "value",
-            kind: kind::ANY,
-            required: true,
-        }]
+        const PARAMETERS: &[Parameter] = &[Parameter::required(
+            "value",
+            kind::ANY,
+            "The value to check if it is a string.",
+        )];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {

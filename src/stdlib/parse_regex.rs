@@ -2,6 +2,27 @@ use crate::compiler::prelude::*;
 use regex::Regex;
 
 use super::util;
+use std::sync::LazyLock;
+
+static DEFAULT_NUMERIC_GROUPS: LazyLock<Value> = LazyLock::new(|| Value::Boolean(false));
+
+static PARAMETERS: LazyLock<Vec<Parameter>> = LazyLock::new(|| {
+    vec![
+        Parameter::required("value", kind::BYTES, "The string to search."),
+        Parameter::required(
+            "pattern",
+            kind::REGEX,
+            "The regular expression pattern to search against.",
+        ),
+        Parameter::optional(
+            "numeric_groups",
+            kind::BOOLEAN,
+            "If true, the index of each group in the regular expression is also captured. Index `0`
+contains the whole match.",
+        )
+        .default(&DEFAULT_NUMERIC_GROUPS),
+    ]
+});
 
 fn parse_regex(value: &Value, numeric_groups: bool, pattern: &Regex) -> Resolved {
     let value = value.try_bytes_utf8_lossy()?;
@@ -28,24 +49,44 @@ impl Function for ParseRegex {
         "}
     }
 
-    fn parameters(&self) -> &'static [Parameter] {
+    fn category(&self) -> &'static str {
+        Category::Parse.as_ref()
+    }
+
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
+        &["`value` fails to parse using the provided `pattern`."]
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::OBJECT
+    }
+
+    fn return_rules(&self) -> &'static [&'static str] {
         &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "pattern",
-                kind: kind::REGEX,
-                required: true,
-            },
-            Parameter {
-                keyword: "numeric_groups",
-                kind: kind::BOOLEAN,
-                required: false,
-            },
+            "Matches return all capture groups corresponding to the leftmost matches in the text.",
+            "Raises an error if no match is found.",
         ]
+    }
+
+    fn notices(&self) -> &'static [&'static str] {
+        &[
+            indoc! {"
+                VRL aims to provide purpose-specific [parsing functions](/docs/reference/vrl/functions/#parse-functions)
+                for common log formats. Before reaching for the `parse_regex` function, see if a VRL
+                [`parse_*` function](/docs/reference/vrl/functions/#parse-functions) already exists
+                for your format. If not, we recommend
+                [opening an issue](https://github.com/vectordotdev/vector/issues/new?labels=type%3A+new+feature)
+                to request support for the desired format.
+            "},
+            indoc! {"
+                All values are returned as strings. We recommend manually coercing values to desired
+                types as you see fit.
+            "},
+        ]
+    }
+
+    fn parameters(&self) -> &'static [Parameter] {
+        PARAMETERS.as_slice()
     }
 
     fn compile(
@@ -56,9 +97,7 @@ impl Function for ParseRegex {
     ) -> Compiled {
         let value = arguments.required("value");
         let pattern = arguments.required_regex("pattern", state)?;
-        let numeric_groups = arguments
-            .optional("numeric_groups")
-            .unwrap_or_else(|| expr!(false));
+        let numeric_groups = arguments.optional("numeric_groups");
 
         Ok(ParseRegexFn {
             value,
@@ -103,10 +142,11 @@ impl Function for ParseRegex {
             }"# }),
             },
             example! {
-                title: "Parse using Regex with variable",
-                source: r#"
-                variable = r'^(?P<host>[\w\.]+) - (?P<user>[\w]+)';
-                parse_regex!("8.7.6.5 - zorp", variable)"#,
+                title: "Parse using Regex with variables",
+                source: indoc! {r#"
+                    variable = r'^(?P<host>[\w\.]+) - (?P<user>[\w]+)';
+                    parse_regex!("8.7.6.5 - zorp", variable)
+                "#},
                 result: Ok(indoc! { r#"{
                 "host": "8.7.6.5",
                 "user": "zorp"
@@ -120,13 +160,15 @@ impl Function for ParseRegex {
 pub(crate) struct ParseRegexFn {
     value: Box<dyn Expression>,
     pattern: Regex,
-    numeric_groups: Box<dyn Expression>,
+    numeric_groups: Option<Box<dyn Expression>>,
 }
 
 impl FunctionExpression for ParseRegexFn {
     fn resolve(&self, ctx: &mut Context) -> Resolved {
         let value = self.value.resolve(ctx)?;
-        let numeric_groups = self.numeric_groups.resolve(ctx)?;
+        let numeric_groups = self
+            .numeric_groups
+            .map_resolve_with_default(ctx, || DEFAULT_NUMERIC_GROUPS.clone())?;
         let pattern = &self.pattern;
 
         parse_regex(&value, numeric_groups.try_boolean()?, pattern)

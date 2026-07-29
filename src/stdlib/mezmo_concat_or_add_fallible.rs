@@ -39,17 +39,31 @@ impl Function for MezmoConcatOrAddFallible {
         "Concatenates `left` and `right` as strings if either operand is a string, or adds them if both are numbers. Errors if the operands are neither strings nor numbers."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Number.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES | kind::INTEGER | kind::FLOAT
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
                 keyword: "left",
                 kind: kind::ANY,
                 required: true,
+                description: "The left-hand operand to concatenate or add.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "right",
                 kind: kind::ANY,
                 required: true,
+                description: "The right-hand operand to concatenate or add.",
+                default: None,
+                enum_variants: None,
             },
         ]
     }

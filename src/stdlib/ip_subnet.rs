@@ -48,19 +48,35 @@ impl Function for IpSubnet {
         "}
     }
 
-    fn parameters(&self) -> &'static [Parameter] {
+    fn category(&self) -> &'static str {
+        Category::Ip.as_ref()
+    }
+
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
         &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "subnet",
-                kind: kind::BYTES,
-                required: true,
-            },
+            "`ip` is not a valid IP address.",
+            "`subnet` is not a valid subnet.",
         ]
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
+    fn notices(&self) -> &'static [&'static str] {
+        &[indoc! {"
+            Works with both IPv4 and IPv6 addresses. The IP version for the mask must be the same as
+            the supplied address.
+        "}]
+    }
+
+    fn parameters(&self) -> &'static [Parameter] {
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required("value", kind::BYTES, "The IP address (v4 or v6)."),
+            Parameter::required("subnet", kind::BYTES, "The subnet to extract from the IP address. This can be either a prefix length like `/8` or a net mask
+like `255.255.0.0`. The net mask can be either an IPv4 or IPv6 address."),
+        ];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {

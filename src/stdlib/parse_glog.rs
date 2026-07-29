@@ -81,6 +81,18 @@ impl Function for ParseGlog {
         "Parses the `value` using the [glog (Google Logging Library)](https://github.com/google/glog) format."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Parse.as_ref()
+    }
+
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
+        &["`value` does not match the `glog` format."]
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::OBJECT
+    }
+
     fn examples(&self) -> &'static [Example] {
         &[example! {
             title: "Parse using glog",
@@ -108,11 +120,12 @@ impl Function for ParseGlog {
     }
 
     fn parameters(&self) -> &'static [Parameter] {
-        &[Parameter {
-            keyword: "value",
-            kind: kind::BYTES,
-            required: true,
-        }]
+        const PARAMETERS: &[Parameter] = &[Parameter::required(
+            "value",
+            kind::BYTES,
+            "The string to parse.",
+        )];
+        PARAMETERS
     }
 }
 

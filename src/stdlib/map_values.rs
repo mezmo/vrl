@@ -1,4 +1,23 @@
 use crate::compiler::prelude::*;
+use std::sync::LazyLock;
+
+static DEFAULT_RECURSIVE: LazyLock<Value> = LazyLock::new(|| Value::Boolean(false));
+
+static PARAMETERS: LazyLock<Vec<Parameter>> = LazyLock::new(|| {
+    vec![
+        Parameter::required(
+            "value",
+            kind::OBJECT | kind::ARRAY,
+            "The object or array to iterate.",
+        ),
+        Parameter::optional(
+            "recursive",
+            kind::BOOLEAN,
+            "Whether to recursively iterate the collection.",
+        )
+        .default(&DEFAULT_RECURSIVE),
+    ]
+});
 
 fn map_values<T>(
     value: Value,
@@ -60,19 +79,16 @@ impl Function for MapValues {
         "}
     }
 
+    fn category(&self) -> &'static str {
+        Category::Enumerate.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::ARRAY | kind::OBJECT
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::OBJECT | kind::ARRAY,
-                required: true,
-            },
-            Parameter {
-                keyword: "recursive",
-                kind: kind::BOOLEAN,
-                required: false,
-            },
-        ]
+        PARAMETERS.as_slice()
     }
 
     fn examples(&self) -> &'static [Example] {
@@ -90,7 +106,16 @@ impl Function for MapValues {
             },
             example! {
                 title: "Recursively map object values",
-                source: r#"map_values({ "a": 1, "b": [{ "c": 2 }, { "d": 3 }], "e": { "f": 4 } }, recursive: true) -> |value| { if is_integer(value) { int!(value) + 1 } else { value } }"#,
+                source: indoc! {r#"
+                    val = {
+                        "a": 1,
+                        "b": [{ "c": 2 }, { "d": 3 }],
+                        "e": { "f": 4 }
+                    }
+                    map_values(val, recursive: true) -> |value| {
+                        if is_integer(value) { int!(value) + 1 } else { value }
+                    }
+                "#},
                 result: Ok(r#"{ "a": 2, "b": [{ "c": 3 }, { "d": 4 }], "e": { "f": 5 } }"#),
             },
         ]
@@ -145,10 +170,10 @@ struct MapValuesFn {
 
 impl FunctionExpression for MapValuesFn {
     fn resolve(&self, ctx: &mut Context) -> ExpressionResult<Value> {
-        let recursive = match &self.recursive {
-            None => false,
-            Some(expr) => expr.resolve(ctx)?.try_boolean()?,
-        };
+        let recursive = self
+            .recursive
+            .map_resolve_with_default(ctx, || DEFAULT_RECURSIVE.clone())?
+            .try_boolean()?;
 
         let value = self.value.resolve(ctx)?;
         let Closure {

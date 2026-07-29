@@ -1,6 +1,6 @@
 use crate::compiler::prelude::*;
 
-use crate::stdlib::casing::into_case;
+use crate::stdlib::casing::{ORIGINAL_CASE, into_case};
 use convert_case::Case;
 
 #[derive(Clone, Copy, Debug)]
@@ -15,19 +15,20 @@ impl Function for Kebabcase {
         "Takes the `value` string, and turns it into kebab-case. Optionally, you can pass in the existing case of the function, or else we will try to figure out the case automatically."
     }
 
+    fn category(&self) -> &'static str {
+        Category::String.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "original_case",
-                kind: kind::BYTES,
-                required: false,
-            },
-        ]
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required("value", kind::BYTES, "The string to convert to kebab-case."),
+            ORIGINAL_CASE,
+        ];
+        PARAMETERS
     }
 
     fn compile(

@@ -18,12 +18,25 @@ impl Function for Pop {
         "Removes the last item from the `value` array."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Array.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::ARRAY
+    }
+
+    fn return_rules(&self) -> &'static [&'static str] {
+        &["The original `value` is not modified."]
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[Parameter {
-            keyword: "value",
-            kind: kind::ARRAY,
-            required: true,
-        }]
+        const PARAMETERS: &[Parameter] = &[Parameter::required(
+            "value",
+            kind::ARRAY,
+            "The target array.",
+        )];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {

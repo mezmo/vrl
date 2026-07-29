@@ -45,22 +45,39 @@ impl Function for MezmoPadEnd {
         "Pads the end of `value` with `pad_value` until it reaches `target_length` characters, then returns the result. Returns `value` unchanged if it is already at least `target_length` characters."
     }
 
+    fn category(&self) -> &'static str {
+        Category::String.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
                 keyword: "value",
                 kind: kind::BYTES,
                 required: true,
+                description: "The string to pad.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "target_length",
                 kind: kind::INTEGER,
                 required: true,
+                description: "The desired length of the resulting string in characters.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "pad_value",
                 kind: kind::BYTES,
                 required: false,
+                description: "The string used for padding. Defaults to a single space.",
+                default: None,
+                enum_variants: None,
             },
         ]
     }

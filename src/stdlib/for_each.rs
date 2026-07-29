@@ -46,12 +46,21 @@ impl Function for ForEach {
             See the examples below to learn about the closure syntax.
         "}
     }
+
+    fn category(&self) -> &'static str {
+        Category::Enumerate.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::NULL
+    }
     fn parameters(&self) -> &'static [Parameter] {
-        &[Parameter {
-            keyword: "value",
-            kind: kind::OBJECT | kind::ARRAY,
-            required: true,
-        }]
+        const PARAMETERS: &[Parameter] = &[Parameter::required(
+            "value",
+            kind::OBJECT | kind::ARRAY,
+            "The array or object to iterate.",
+        )];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {
@@ -71,12 +80,24 @@ impl Function for ForEach {
             },
             example! {
                 title: "Iterate over an object",
-                source: r#"count = 0; for_each({ "a": 1, "b": 2 }) -> |_key, value| { count = count + value }; count"#,
+                source: indoc! {r#"
+                    count = 0
+                    for_each({ "a": 1, "b": 2 }) -> |_key, value| {
+                        count = count + value
+                    }
+                    count
+                "#},
                 result: Ok("3"),
             },
             example! {
                 title: "Iterate over an array",
-                source: "count = 0; for_each([1,2,3]) -> |index, value| { count = count + index + value }; count",
+                source: indoc! {"
+                    count = 0
+                    for_each([1, 2, 3]) -> |index, value| {
+                        count = count + index + value
+                    }
+                    count
+                "},
                 result: Ok("9"),
             },
         ]

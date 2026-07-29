@@ -31,24 +31,29 @@ impl Function for ContainsAll {
         "Determines whether the `value` string contains all the specified `substrings`."
     }
 
+    fn category(&self) -> &'static str {
+        Category::String.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BOOLEAN
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "substrings",
-                kind: kind::ARRAY,
-                required: true,
-            },
-            Parameter {
-                keyword: "case_sensitive",
-                kind: kind::BOOLEAN,
-                required: false,
-            },
-        ]
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required("value", kind::BYTES, "The text to search."),
+            Parameter::required(
+                "substrings",
+                kind::ARRAY,
+                "An array of substrings to search for in `value`.",
+            ),
+            Parameter::optional(
+                "case_sensitive",
+                kind::BOOLEAN,
+                "Whether the match should be case sensitive.",
+            ),
+        ];
+        PARAMETERS
     }
 
     fn compile(

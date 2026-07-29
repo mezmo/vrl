@@ -51,17 +51,31 @@ impl Function for MezmoRedact {
         "Redacts sensitive data in `value` by replacing text that matches the given filters (a regex, built-in patterns such as US social security numbers, or a custom text redactor) with a redaction string or a hash such as sha2, sha3, or sha256."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Codec.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES | kind::OBJECT | kind::ARRAY
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
                 keyword: "value",
                 kind: kind::BYTES | kind::OBJECT | kind::ARRAY,
                 required: true,
+                description: "The value to redact sensitive data from.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "filters",
                 kind: kind::ARRAY,
                 required: true,
+                description: "The list of filters used to determine what to redact.",
+                default: None,
+                enum_variants: None,
             },
         ]
     }

@@ -34,24 +34,57 @@ impl Function for Length {
         "}
     }
 
+    fn category(&self) -> &'static str {
+        Category::Enumerate.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::INTEGER
+    }
+
+    fn return_rules(&self) -> &'static [&'static str] {
+        &[
+            "If `value` is an array, returns the number of elements.",
+            "If `value` is an object, returns the number of top-level keys.",
+            "If `value` is a string, returns the number of bytes in the string.",
+        ]
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[Parameter {
-            keyword: "value",
-            kind: kind::ARRAY | kind::OBJECT | kind::BYTES,
-            required: true,
-        }]
+        const PARAMETERS: &[Parameter] = &[Parameter::required(
+            "value",
+            kind::ARRAY | kind::OBJECT | kind::BYTES,
+            "The array or object.",
+        )];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
                 title: "Length (object)",
-                source: r#"length({ "portland": "Trail Blazers", "seattle": "Supersonics" })"#,
+                source: indoc! {r#"
+                    length({
+                        "portland": "Trail Blazers",
+                        "seattle": "Supersonics"
+                    })
+                "#},
                 result: Ok("2"),
             },
             example! {
                 title: "Length (nested object)",
-                source: r#"length({ "home": { "city": "Portland", "state": "Oregon" }, "name": "Trail Blazers", "mascot": { "name": "Blaze the Trail Cat" } })"#,
+                source: indoc! {r#"
+                    length({
+                        "home": {
+                            "city":  "Portland",
+                            "state": "Oregon"
+                        },
+                        "name": "Trail Blazers",
+                        "mascot": {
+                            "name": "Blaze the Trail Cat"
+                        }
+                    })
+                "#},
                 result: Ok("3"),
             },
             example! {

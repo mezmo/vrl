@@ -1,5 +1,37 @@
+use crate::compiler::function::EnumVariant;
 use crate::compiler::prelude::*;
 use std::str::FromStr;
+use std::sync::LazyLock;
+
+static DEFAULT_UNIT: LazyLock<Value> = LazyLock::new(|| Value::Bytes(Bytes::from("seconds")));
+
+static UNIT_ENUM: &[EnumVariant] = &[
+    EnumVariant {
+        value: "seconds",
+        description: "Express Unix time in seconds",
+    },
+    EnumVariant {
+        value: "milliseconds",
+        description: "Express Unix time in milliseconds",
+    },
+    EnumVariant {
+        value: "nanoseconds",
+        description: "Express Unix time in nanoseconds",
+    },
+];
+
+static PARAMETERS: LazyLock<Vec<Parameter>> = LazyLock::new(|| {
+    vec![
+        Parameter::required(
+            "value",
+            kind::TIMESTAMP,
+            "The timestamp to convert into a Unix timestamp.",
+        ),
+        Parameter::optional("unit", kind::BYTES, "The time unit.")
+            .default(&DEFAULT_UNIT)
+            .enum_variants(UNIT_ENUM),
+    ]
+});
 
 fn to_unix_timestamp(value: Value, unit: Unit) -> Resolved {
     let ts = value.try_timestamp()?;
@@ -31,6 +63,20 @@ impl Function for ToUnixTimestamp {
         "}
     }
 
+    fn category(&self) -> &'static str {
+        Category::Convert.as_ref()
+    }
+
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
+        &[
+            "`value` cannot be represented in nanoseconds. Result is too large or too small for a 64 bit integer.",
+        ]
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::INTEGER
+    }
+
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
@@ -57,18 +103,7 @@ impl Function for ToUnixTimestamp {
     }
 
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::TIMESTAMP,
-                required: true,
-            },
-            Parameter {
-                keyword: "unit",
-                kind: kind::BYTES,
-                required: false,
-            },
-        ]
+        PARAMETERS.as_slice()
     }
 
     fn compile(
@@ -79,13 +114,14 @@ impl Function for ToUnixTimestamp {
     ) -> Compiled {
         let value = arguments.required("value");
 
-        let unit = arguments
-            .optional_enum("unit", Unit::all_value().as_slice(), state)?
-            .map(|s| {
-                Unit::from_str(&s.try_bytes_utf8_lossy().expect("unit not bytes"))
-                    .expect("validated enum")
-            })
-            .unwrap_or_default();
+        let unit = Unit::from_str(
+            &arguments
+                .optional_enum("unit", Unit::all_value().as_slice(), state)?
+                .unwrap_or_else(|| DEFAULT_UNIT.clone())
+                .try_bytes_utf8_lossy()
+                .expect("unit not bytes"),
+        )
+        .expect("validated enum");
 
         Ok(ToUnixTimestampFn { value, unit }.as_expr())
     }

@@ -1,13 +1,26 @@
 use crate::compiler::prelude::*;
+use std::sync::LazyLock;
+
+static DEFAULT_FROM: LazyLock<Value> = LazyLock::new(|| Value::Integer(0));
+
+static PARAMETERS: LazyLock<Vec<Parameter>> = LazyLock::new(|| {
+    vec![
+        Parameter::required("value", kind::BYTES, "The string to find the pattern in."),
+        Parameter::required(
+            "pattern",
+            kind::BYTES | kind::REGEX,
+            "The regular expression or string pattern to match against.",
+        ),
+        Parameter::optional("from", kind::INTEGER, "Offset to start searching.")
+            .default(&DEFAULT_FROM),
+    ]
+});
 
 #[allow(clippy::cast_possible_wrap)]
-fn find(value: Value, pattern: Value, from: Option<Value>) -> Resolved {
+fn find(value: Value, pattern: Value, from: Value) -> Resolved {
     // TODO consider removal options
     #[allow(clippy::cast_sign_loss, clippy::cast_possible_truncation)]
-    let from = match from {
-        Some(value) => value.try_integer()?,
-        None => 0,
-    } as usize;
+    let from = from.try_integer()? as usize;
 
     Ok(FindFn::find(value, pattern, from)?
         .map_or(Value::Null, |value| Value::Integer(value as i64)))
@@ -25,24 +38,16 @@ impl Function for Find {
         "Determines from left to right the start position of the first found element in `value` that matches `pattern`. Returns `-1` if not found."
     }
 
+    fn category(&self) -> &'static str {
+        Category::String.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::INTEGER
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "pattern",
-                kind: kind::BYTES | kind::REGEX,
-                required: true,
-            },
-            Parameter {
-                keyword: "from",
-                kind: kind::INTEGER,
-                required: false,
-            },
-        ]
+        PARAMETERS.as_slice()
     }
 
     fn examples(&self) -> &'static [Example] {
@@ -146,9 +151,7 @@ impl FunctionExpression for FindFn {
         let pattern = self.pattern.resolve(ctx)?;
         let from = self
             .from
-            .as_ref()
-            .map(|expr| expr.resolve(ctx))
-            .transpose()?;
+            .map_resolve_with_default(ctx, || DEFAULT_FROM.clone())?;
 
         find(value, pattern, from)
     }

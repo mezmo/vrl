@@ -10,15 +10,31 @@ impl Function for IsInteger {
     }
 
     fn usage(&self) -> &'static str {
-        "Check if the value`'s type is an integer."
+        "Check if the `value`'s type is an integer."
+    }
+
+    fn category(&self) -> &'static str {
+        Category::Type.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BOOLEAN
+    }
+
+    fn return_rules(&self) -> &'static [&'static str] {
+        &[
+            "Returns `true` if `value` is an integer.",
+            "Returns `false` if `value` is anything else.",
+        ]
     }
 
     fn parameters(&self) -> &'static [Parameter] {
-        &[Parameter {
-            keyword: "value",
-            kind: kind::ANY,
-            required: true,
-        }]
+        const PARAMETERS: &[Parameter] = &[Parameter::required(
+            "value",
+            kind::ANY,
+            "The value to check if it is an integer.",
+        )];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {

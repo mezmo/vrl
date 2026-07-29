@@ -18,19 +18,20 @@ impl Function for Includes {
         "Determines whether the `value` array includes the specified `item`."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Enumerate.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BOOLEAN
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::ARRAY,
-                required: true,
-            },
-            Parameter {
-                keyword: "item",
-                kind: kind::ANY,
-                required: true,
-            },
-        ]
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required("value", kind::ARRAY, "The array."),
+            Parameter::required("item", kind::ANY, "The item to check."),
+        ];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {

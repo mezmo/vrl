@@ -46,19 +46,35 @@ impl Function for ParseInt {
         "Parses the string `value` representing a number in an optional base/radix to an integer."
     }
 
-    fn parameters(&self) -> &'static [Parameter] {
+    fn category(&self) -> &'static str {
+        Category::Parse.as_ref()
+    }
+
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
         &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "base",
-                kind: kind::INTEGER,
-                required: false,
-            },
+            "The base is not between 2 and 36.",
+            "The number cannot be parsed in the base.",
         ]
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::INTEGER
+    }
+
+    fn parameters(&self) -> &'static [Parameter] {
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required("value", kind::BYTES, "The string to parse."),
+            Parameter::optional(
+                "base",
+                kind::INTEGER,
+                "The base the number is in. Must be between 2 and 36 (inclusive).
+
+If unspecified, the string prefix is used to
+determine the base: \"0b\", 8 for \"0\" or \"0o\", 16 for \"0x\",
+and 10 otherwise.",
+            ),
+        ];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {

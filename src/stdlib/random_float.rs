@@ -40,28 +40,33 @@ impl Function for RandomFloat {
         "Returns a random float between [min, max)."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Random.as_ref()
+    }
+
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
+        &["`max` is not greater than `min`."]
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::FLOAT
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "min",
-                kind: kind::FLOAT,
-                required: true,
-            },
-            Parameter {
-                keyword: "max",
-                kind: kind::FLOAT,
-                required: true,
-            },
-        ]
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required("min", kind::FLOAT, "Minimum value (inclusive)."),
+            Parameter::required("max", kind::FLOAT, "Maximum value (exclusive)."),
+        ];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {
         &[example! {
             title: "Random float from 0.0 to 10.0, not including 10.0",
-            source: "
-				f = random_float(0.0, 10.0)
-				f >= 0 && f < 10
-                ",
+            source: indoc! {"
+                f = random_float(0.0, 10.0)
+                f >= 0 && f < 10
+            "},
             result: Ok("true"),
         }]
     }

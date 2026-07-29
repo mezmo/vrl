@@ -41,47 +41,79 @@ impl Function for MezmoAddTsComponents {
         "Adds the given number of years, months, days, hours, minutes, seconds, and/or milliseconds to a timestamp and returns the resulting timestamp. Negative values subtract the corresponding component."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Timestamp.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
                 keyword: "value",
                 kind: kind::TIMESTAMP,
                 required: true,
+                description: "The timestamp to add the components to.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "years",
                 kind: kind::INTEGER,
                 required: false,
+                description: "The number of years to add. Negative values subtract years.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "months",
                 kind: kind::INTEGER,
                 required: false,
+                description: "The number of months to add. Negative values subtract months.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "days",
                 kind: kind::INTEGER,
                 required: false,
+                description: "The number of days to add. Negative values subtract days.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "hours",
                 kind: kind::INTEGER,
                 required: false,
+                description: "The number of hours to add. Negative values subtract hours.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "minutes",
                 kind: kind::INTEGER,
                 required: false,
+                description: "The number of minutes to add. Negative values subtract minutes.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "seconds",
                 kind: kind::INTEGER,
                 required: false,
+                description: "The number of seconds to add. Negative values subtract seconds.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "milliseconds",
                 kind: kind::INTEGER,
                 required: false,
+                description: "The number of milliseconds to add. Negative values subtract milliseconds.",
+                default: None,
+                enum_variants: None,
             },
         ]
     }

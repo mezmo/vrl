@@ -1,6 +1,55 @@
+use crate::compiler::function::EnumVariant;
 use crate::compiler::prelude::*;
 use crate::value;
 use sha_2::{Digest, Sha224, Sha256, Sha384, Sha512, Sha512_224, Sha512_256};
+use std::sync::LazyLock;
+
+static DEFAULT_VARIANT: LazyLock<Value> =
+    LazyLock::new(|| Value::Bytes(Bytes::from("SHA-512/256")));
+
+static VARIANT_ENUM: &[EnumVariant] = &[
+    EnumVariant {
+        value: "SHA-224",
+        description: "SHA-224 algorithm",
+    },
+    EnumVariant {
+        value: "SHA-256",
+        description: "SHA-256 algorithm",
+    },
+    EnumVariant {
+        value: "SHA-384",
+        description: "SHA-384 algorithm",
+    },
+    EnumVariant {
+        value: "SHA-512",
+        description: "SHA-512 algorithm",
+    },
+    EnumVariant {
+        value: "SHA-512/224",
+        description: "SHA-512/224 algorithm",
+    },
+    EnumVariant {
+        value: "SHA-512/256",
+        description: "SHA-512/256 algorithm",
+    },
+];
+
+static PARAMETERS: LazyLock<Vec<Parameter>> = LazyLock::new(|| {
+    vec![
+        Parameter::required(
+            "value",
+            kind::BYTES,
+            "The string to calculate the hash for.",
+        ),
+        Parameter::optional(
+            "variant",
+            kind::BYTES,
+            "The variant of the algorithm to use.",
+        )
+        .default(&DEFAULT_VARIANT)
+        .enum_variants(VARIANT_ENUM),
+    ]
+});
 
 fn sha2(value: Value, variant: &Bytes) -> Resolved {
     let value = value.try_bytes()?;
@@ -39,19 +88,16 @@ impl Function for Sha2 {
         "Calculates a [SHA-2](https://en.wikipedia.org/wiki/SHA-2) hash of the `value`."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Cryptography.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "variant",
-                kind: kind::BYTES,
-                required: false,
-            },
-        ]
+        PARAMETERS.as_slice()
     }
 
     fn examples(&self) -> &'static [Example] {
@@ -85,7 +131,7 @@ impl Function for Sha2 {
         let value = arguments.required("value");
         let variant = arguments
             .optional_enum("variant", &variants(), state)?
-            .unwrap_or_else(|| value!("SHA-512/256"))
+            .unwrap_or_else(|| DEFAULT_VARIANT.clone())
             .try_bytes()
             .expect("variant not bytes");
 

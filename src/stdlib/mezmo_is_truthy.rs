@@ -24,11 +24,22 @@ impl Function for MezmoIsTruthy {
         "Returns the truthiness of `value`: numbers are truthy when non-zero, strings when non-empty, and booleans as-is; `null` is false and all other values are truthy."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Type.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BOOLEAN
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",
             kind: kind::ANY,
             required: true,
+            description: "The value to evaluate for truthiness.",
+            default: None,
+            enum_variants: None,
         }]
     }
 

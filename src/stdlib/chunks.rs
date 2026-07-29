@@ -31,19 +31,37 @@ impl Function for Chunks {
         "Chunks `value` into slices of length `chunk_size` bytes."
     }
 
-    fn parameters(&self) -> &'static [Parameter] {
+    fn category(&self) -> &'static str {
+        Category::Array.as_ref()
+    }
+
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
         &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "chunk_size",
-                kind: kind::INTEGER,
-                required: true,
-            },
+            "`chunk_size` must be at least 1 byte.",
+            "`chunk_size` is too large.",
         ]
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::ARRAY
+    }
+
+    fn return_rules(&self) -> &'static [&'static str] {
+        &[
+            "`chunks` is considered fallible if the supplied `chunk_size` is an expression, and infallible if it's a literal integer.",
+        ]
+    }
+
+    fn parameters(&self) -> &'static [Parameter] {
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required("value", kind::BYTES, "The array of bytes to split."),
+            Parameter::required(
+                "chunk_size",
+                kind::INTEGER,
+                "The desired length of each chunk in bytes. This may be constrained by the host platform architecture.",
+            ),
+        ];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {

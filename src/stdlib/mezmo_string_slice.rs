@@ -49,22 +49,39 @@ impl Function for MezmoStringSlice {
         "Returns the substring of `value` between the `start` and `end` character indices. Negative indices count back from the end of the string, and out-of-range indices are clamped to the string bounds."
     }
 
+    fn category(&self) -> &'static str {
+        Category::String.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
                 keyword: "value",
                 kind: kind::BYTES,
                 required: true,
+                description: "The string to extract a substring from.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "index_start",
                 kind: kind::INTEGER,
                 required: true,
+                description: "The zero-based character index at which the substring begins. Negative values count back from the end of the string.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "index_end",
                 kind: kind::INTEGER,
                 required: false,
+                description: "The zero-based character index at which the substring ends (exclusive). Negative values count back from the end of the string. Defaults to the end of the string.",
+                default: None,
+                enum_variants: None,
             },
         ]
     }

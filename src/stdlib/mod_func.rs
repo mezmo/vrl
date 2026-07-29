@@ -17,19 +17,36 @@ impl Function for Mod {
         "Calculates the remainder of `value` divided by `modulus`."
     }
 
-    fn parameters(&self) -> &'static [Parameter] {
+    fn category(&self) -> &'static str {
+        Category::Number.as_ref()
+    }
+
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
         &[
-            Parameter {
-                keyword: "value",
-                kind: kind::INTEGER | kind::FLOAT,
-                required: true,
-            },
-            Parameter {
-                keyword: "modulus",
-                kind: kind::INTEGER | kind::FLOAT,
-                required: true,
-            },
+            "`value` is not an integer or float.",
+            "`modulus` is not an integer or float.",
+            "`modulus` is equal to 0.",
         ]
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::INTEGER | kind::FLOAT
+    }
+
+    fn parameters(&self) -> &'static [Parameter] {
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required(
+                "value",
+                kind::INTEGER | kind::FLOAT,
+                "The value the `modulus` is applied to.",
+            ),
+            Parameter::required(
+                "modulus",
+                kind::INTEGER | kind::FLOAT,
+                "The `modulus` value.",
+            ),
+        ];
+        PARAMETERS
     }
 
     fn examples(&self) -> &'static [Example] {

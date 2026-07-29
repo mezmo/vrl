@@ -1247,7 +1247,7 @@ impl DiagnosticMessage for FunctionCallError {
 
 #[cfg(test)]
 mod tests {
-    use crate::compiler::{FunctionExpression, value::kind};
+    use crate::compiler::{Category, FunctionExpression, value::kind};
 
     use super::*;
 
@@ -1276,28 +1276,26 @@ mod tests {
             "Test function"
         }
 
+        fn category(&self) -> &'static str {
+            Category::Debug.as_ref()
+        }
+
+        fn return_kind(&self) -> u16 {
+            kind::NULL
+        }
+
         fn examples(&self) -> &'static [crate::compiler::function::Example] {
             &[]
         }
 
         fn parameters(&self) -> &'static [Parameter] {
-            &[
-                Parameter {
-                    keyword: "one",
-                    kind: kind::INTEGER,
-                    required: false,
-                },
-                Parameter {
-                    keyword: "two",
-                    kind: kind::INTEGER,
-                    required: false,
-                },
-                Parameter {
-                    keyword: "three",
-                    kind: kind::INTEGER,
-                    required: false,
-                },
-            ]
+            const PARAMETERS: &[Parameter] = &[
+                Parameter::optional("one", kind::INTEGER, "one"),
+                Parameter::optional("two", kind::INTEGER, "two"),
+                Parameter::optional("three", kind::INTEGER, "three"),
+            ];
+
+            PARAMETERS
         }
 
         fn compile(

@@ -42,17 +42,31 @@ impl Function for MezmoStringAt {
         "Returns the character at the given zero-based `index` of a string. A negative index counts back from the end of the string; an out-of-range index returns an empty string."
     }
 
+    fn category(&self) -> &'static str {
+        Category::String.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
                 keyword: "value",
                 kind: kind::BYTES,
                 required: true,
+                description: "The string to index into.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "index",
                 kind: kind::INTEGER,
                 required: true,
+                description: "The zero-based index of the character to return. Negative values count back from the end of the string.",
+                default: None,
+                enum_variants: None,
             },
         ]
     }

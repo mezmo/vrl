@@ -50,6 +50,14 @@ macro_rules! implement_function {
                 $usage
             }
 
+            fn category(&self) -> &'static str {
+                Category::Number.as_ref()
+            }
+
+            fn return_kind(&self) -> u16 {
+                kind::BOOLEAN
+            }
+
             fn examples(&self) -> &'static [Example] {
                 &[]
             }
@@ -77,11 +85,17 @@ macro_rules! implement_function {
                         keyword: "left",
                         kind: kind::ANY,
                         required: true,
+                        description: "The left-hand value of the comparison.",
+                        default: None,
+                        enum_variants: None,
                     },
                     Parameter {
                         keyword: "right",
                         kind: kind::ANY,
                         required: true,
+                        description: "The right-hand value of the comparison.",
+                        default: None,
+                        enum_variants: None,
                     },
                 ]
             }

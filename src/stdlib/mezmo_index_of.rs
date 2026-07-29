@@ -63,22 +63,39 @@ impl Function for MezmoIndexOf {
         "Returns the zero-based index of the first occurrence of `find` within `value`, optionally starting the search at `from_index`. Returns `-1` if the substring is not found."
     }
 
+    fn category(&self) -> &'static str {
+        Category::String.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::INTEGER
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[
             Parameter {
                 keyword: "value",
                 kind: kind::BYTES,
                 required: true,
+                description: "The string to search within.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "search_value",
                 kind: kind::BYTES,
                 required: true,
+                description: "The substring to search for.",
+                default: None,
+                enum_variants: None,
             },
             Parameter {
                 keyword: "position",
                 kind: kind::INTEGER,
                 required: false,
+                description: "The zero-based index at which to start the search.",
+                default: None,
+                enum_variants: None,
             },
         ]
     }

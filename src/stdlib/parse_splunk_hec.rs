@@ -143,11 +143,22 @@ impl Function for ParseSplunkHec {
         "Parses a string containing one or more Splunk HEC (HTTP Event Collector) log events and returns the decoded events."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Parse.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::ARRAY
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
         &[Parameter {
             keyword: "value",
             kind: kind::BYTES,
             required: true,
+            description: "The string containing one or more Splunk HEC log events to parse.",
+            default: None,
+            enum_variants: None,
         }]
     }
 

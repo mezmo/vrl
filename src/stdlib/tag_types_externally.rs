@@ -18,6 +18,14 @@ impl Function for TagTypesExternally {
         "}
     }
 
+    fn category(&self) -> &'static str {
+        Category::Type.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::OBJECT | kind::ARRAY | kind::NULL
+    }
+
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
@@ -64,11 +72,12 @@ impl Function for TagTypesExternally {
     }
 
     fn parameters(&self) -> &'static [Parameter] {
-        &[Parameter {
-            keyword: "value",
-            kind: kind::ANY,
-            required: true,
-        }]
+        const PARAMETERS: &[Parameter] = &[Parameter::required(
+            "value",
+            kind::ANY,
+            "The value to tag with types.",
+        )];
+        PARAMETERS
     }
 }
 

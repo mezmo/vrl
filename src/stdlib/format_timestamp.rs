@@ -28,24 +28,29 @@ impl Function for FormatTimestamp {
         "Formats `value` into a string representation of the timestamp."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Timestamp.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::BYTES
+    }
+
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::TIMESTAMP,
-                required: true,
-            },
-            Parameter {
-                keyword: "format",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "timezone",
-                kind: kind::BYTES,
-                required: false,
-            },
-        ]
+        const PARAMETERS: &[Parameter] = &[
+            Parameter::required("value", kind::TIMESTAMP, "The timestamp to format as text."),
+            Parameter::required(
+                "format",
+                kind::BYTES,
+                "The format string as described by the [Chrono library](https://docs.rs/chrono/latest/chrono/format/strftime/index.html#specifiers).",
+            ),
+            Parameter::optional(
+                "timezone",
+                kind::BYTES,
+                "The timezone to use when formatting the timestamp. The parameter uses the TZ identifier or `local`.",
+            ),
+        ];
+        PARAMETERS
     }
 
     fn compile(

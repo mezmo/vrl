@@ -1,8 +1,26 @@
 use crate::compiler::prelude::*;
-use crate::value;
+use std::sync::LazyLock;
 use xxhash_rust::{xxh3, xxh32, xxh64};
 
+static DEFAULT_VARIANT: LazyLock<Value> = LazyLock::new(|| Value::Bytes(Bytes::from("XXH32")));
+
 const VALID_VARIANTS: &[&str] = &["XXH32", "XXH64", "XXH3-64", "XXH3-128"];
+
+static PARAMETERS: LazyLock<Vec<Parameter>> = LazyLock::new(|| {
+    vec![
+        Parameter::required(
+            "value",
+            kind::BYTES,
+            "The string to calculate the hash for.",
+        ),
+        Parameter::optional(
+            "variant",
+            kind::BYTES,
+            "The xxHash hashing algorithm to use.",
+        )
+        .default(&DEFAULT_VARIANT),
+    ]
+});
 
 #[allow(clippy::cast_possible_wrap)]
 fn xxhash(value: Value, variant: &Value) -> Resolved {
@@ -44,22 +62,28 @@ impl Function for Xxhash {
     }
 
     fn usage(&self) -> &'static str {
-        "xxhash"
+        "Calculates a [xxHash](https://github.com/DoumanAsh/xxhash-rust) hash of the `value`."
+    }
+
+    fn category(&self) -> &'static str {
+        Category::Checksum.as_ref()
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::INTEGER | kind::BYTES
     }
 
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "variant",
-                kind: kind::BYTES,
-                required: false,
-            },
-        ]
+        PARAMETERS.as_slice()
+    }
+
+    fn notices(&self) -> &'static [&'static str] {
+        &[indoc! {"
+            Due to limitations in the underlying VRL data types, this function converts the unsigned
+            64-bit integer hash result to a signed 64-bit integer. Results higher than the signed
+            64-bit integer maximum value wrap around to negative values. For the XXH3-128 hash
+            algorithm, values are returned as a string.
+        "}]
     }
 
     fn examples(&self) -> &'static [Example] {
@@ -114,10 +138,9 @@ struct XxhashFn {
 impl FunctionExpression for XxhashFn {
     fn resolve(&self, ctx: &mut Context) -> Resolved {
         let value = self.value.resolve(ctx)?;
-        let variant = match &self.variant {
-            Some(variant) => variant.resolve(ctx)?,
-            _ => value!("XXH32"),
-        };
+        let variant = self
+            .variant
+            .map_resolve_with_default(ctx, || DEFAULT_VARIANT.clone())?;
 
         xxhash(value, &variant)
     }

@@ -1,7 +1,57 @@
+use crate::compiler::function::EnumVariant;
 use crate::compiler::prelude::*;
 use regex::Regex;
 use rust_decimal::{Decimal, prelude::ToPrimitive};
 use std::{collections::HashMap, str::FromStr, sync::LazyLock};
+
+static UNIT_ENUM: &[EnumVariant] = &[
+    EnumVariant {
+        value: "ns",
+        description: "Nanoseconds (1 billion nanoseconds in a second)",
+    },
+    EnumVariant {
+        value: "us",
+        description: "Microseconds (1 million microseconds in a second)",
+    },
+    EnumVariant {
+        value: "µs",
+        description: "Microseconds (1 million microseconds in a second)",
+    },
+    EnumVariant {
+        value: "ms",
+        description: "Milliseconds (1 thousand microseconds in a second)",
+    },
+    EnumVariant {
+        value: "cs",
+        description: "Centiseconds (100 centiseconds in a second)",
+    },
+    EnumVariant {
+        value: "ds",
+        description: "Deciseconds (10 deciseconds in a second)",
+    },
+    EnumVariant {
+        value: "s",
+        description: "Seconds",
+    },
+    EnumVariant {
+        value: "m",
+        description: "Minutes (60 seconds in a minute)",
+    },
+    EnumVariant {
+        value: "h",
+        description: "Hours (60 minutes in an hour)",
+    },
+    EnumVariant {
+        value: "d",
+        description: "Days (24 hours in a day)",
+    },
+];
+
+static PARAMETERS: &[Parameter] = &[
+    Parameter::required("value", kind::BYTES, "The string of the duration."),
+    Parameter::required("unit", kind::BYTES, "The output units for the duration.")
+        .enum_variants(UNIT_ENUM),
+];
 
 fn parse_duration(bytes: &Value, unit: &Value) -> Resolved {
     let value = bytes.try_bytes_utf8_lossy()?;
@@ -25,7 +75,10 @@ fn parse_duration(bytes: &Value, unit: &Value) -> Resolved {
         let unit = UNITS
             .get(&captures["unit"])
             .ok_or(format!("unknown duration unit: '{}'", &captures["unit"]))?;
-        let number = value_decimal * unit / conversion_factor;
+        let number = value_decimal
+            .checked_mul(*unit)
+            .and_then(|v| v.checked_div(*conversion_factor))
+            .ok_or(format!("unable to convert duration: '{value}'"))?;
         let number = number
             .to_f64()
             .ok_or(format!("unable to format duration: '{number}'"))?;
@@ -76,6 +129,18 @@ impl Function for ParseDuration {
         "Parses the `value` into a human-readable duration format specified by `unit`."
     }
 
+    fn category(&self) -> &'static str {
+        Category::Parse.as_ref()
+    }
+
+    fn internal_failure_reasons(&self) -> &'static [&'static str] {
+        &["`value` is not a properly formatted duration."]
+    }
+
+    fn return_kind(&self) -> u16 {
+        kind::FLOAT
+    }
+
     fn examples(&self) -> &'static [Example] {
         &[
             example! {
@@ -104,18 +169,7 @@ impl Function for ParseDuration {
     }
 
     fn parameters(&self) -> &'static [Parameter] {
-        &[
-            Parameter {
-                keyword: "value",
-                kind: kind::BYTES,
-                required: true,
-            },
-            Parameter {
-                keyword: "unit",
-                kind: kind::BYTES,
-                required: true,
-            },
-        ]
+        PARAMETERS
     }
 }
 
@@ -304,6 +358,12 @@ mod tests {
             args: func_args![value: "1",
                              unit: "ns"],
             want: Err("unable to parse duration: '1'"),
+            tdef: TypeDef::float().fallible(),
+        }
+        error_overflow {
+            args: func_args![value: "1234567890123456789012345d",
+                             unit: "s"],
+            want: Err("unable to convert duration: '1234567890123456789012345d'"),
             tdef: TypeDef::float().fallible(),
         }
 
