@@ -1,3 +1,82 @@
+# [5.0.0](https://github.com/mezmo/vrl/compare/v4.0.0...v5.0.0) (2026-07-29)
+
+
+### Bug Fixes
+
+* **ci**: allow check-generated-docs to comment on fork PRs (#1685) [d5f3f77](https://github.com/mezmo/vrl/commit/d5f3f77d68e19840764327170d6585492958d459) - GitHub
+* **ci**: ensure check-generated-docs reports status on all PRs (#1689) [8e810c1](https://github.com/mezmo/vrl/commit/8e810c179fe94507ce2c9b0a94ad9cd6116fbf47) - GitHub
+* **ci**: move VRL_GITHUB_* into env vars (#1648) [640bfb0](https://github.com/mezmo/vrl/commit/640bfb09ddf77b9fdecc2df0686e40939de82b86) - GitHub
+* **dev**: fix broken src/stdlib/http_request.rs tests (#1660) [858a39d](https://github.com/mezmo/vrl/commit/858a39d69df2b8f75ddcfcd9b4fb80713c1844f2) - GitHub
+* **dev**: fix compilation errors in test code (#1687) [003847a](https://github.com/mezmo/vrl/commit/003847a7981406733fdf0b934b2297d6094963e3) - GitHub
+* **dev**: stdlib feature should include all functions (#1681) [43a08e2](https://github.com/mezmo/vrl/commit/43a08e226c32bdc1b51f9471c47839c068854b85) - GitHub
+* only restrict encode and parse proto with flag (#1631) [c1d8744](https://github.com/mezmo/vrl/commit/c1d8744def444a0b52e92aa1876394d33e7fe3fe) - GitHub
+* properly emit lexer parse errors (#1579) [ebfa92b](https://github.com/mezmo/vrl/commit/ebfa92b99001f3982782eb118f6c4c1cc086372a) - GitHub
+* **stdlib**: correct parameter types for md5, seahash, floor, parse_key_value (#1650) [e00ee1a](https://github.com/mezmo/vrl/commit/e00ee1a9f276169ca9b743360c0f94e498aa031d) - GitHub
+* **stdlib**: Fix incorrect `basename` type_def (#1635) [159286b](https://github.com/mezmo/vrl/commit/159286ba0c1490fa2bdac6a36a7d5e296750c2ea) - GitHub
+* **stdlib**: fix panic due to overflow in parse_duration (#1618) [04e7484](https://github.com/mezmo/vrl/commit/04e74846546d27aa18b1cd5b80421f10ae9281dd) - GitHub
+
+
+### Chores
+
+* **ci**: add scorecard action (#1643) [d3459ca](https://github.com/mezmo/vrl/commit/d3459caf05937fa9fcb8f5576257b1ec3ce97605) - GitHub
+* **deps**: bump bytes from 1.10.1 to 1.11.1 (#1621) [0ff0418](https://github.com/mezmo/vrl/commit/0ff04187cabac216f95c4365e80e5f0fb87d56ec) - GitHub
+* **deps**: bump crc from 3.3.0 to 3.4.0 (#1676) [91d3bc3](https://github.com/mezmo/vrl/commit/91d3bc3da4ad534700c5176e8bfef9fbab5288ea) - GitHub
+* **deps**: bump dns-lookup from 2.1.1 to 3.0.1 (#1573) [f16fba4](https://github.com/mezmo/vrl/commit/f16fba4bf88b82f371dc4a0e33fa94a4c542af7b) - GitHub
+* **deps**: bump http from 1.3.1 to 1.4.0 (#1675) [bf05eca](https://github.com/mezmo/vrl/commit/bf05eca9fd653a43d9c60d697008177a8b835c81) - GitHub
+* **deps**: bump keccak to 0.1.6 to mitigate RUSTSEC-2026-0012 (#1647) [387e575](https://github.com/mezmo/vrl/commit/387e57575a2a164e64644a2d69214ef1be9fd8cc) - GitHub
+* **deps**: bump mio from 1.0.4 to 1.1.1 (#1591) [4ab0ef7](https://github.com/mezmo/vrl/commit/4ab0ef79561111b9de06d6a6a838c508213affb9) - GitHub
+* **deps**: bump proptest from 1.7.0 to 1.9.0 (#1572) [1d27735](https://github.com/mezmo/vrl/commit/1d27735a5cfcf2ebd3f36e5e8685905856167764) - GitHub
+* **deps**: bump the patches group across 1 directory with 23 updates (#1679) [b9a9704](https://github.com/mezmo/vrl/commit/b9a97042ad611a71d468e8908e1fa8b0c20912f4) - GitHub
+* **deps**: bump the patches group across 1 directory with 58 updates (#1637) [6ea54cd](https://github.com/mezmo/vrl/commit/6ea54cd3e4d53d3111f8d40caf85cd6934357038) - GitHub
+* **deps**: bump time from 0.3.44 to 0.3.47 (#1625) [4f90cc0](https://github.com/mezmo/vrl/commit/4f90cc0626e52058e1c2106916843789be3ffa0a) - GitHub
+* **dev**: fix unused import warnings in build.rs (#1645) [9f0b873](https://github.com/mezmo/vrl/commit/9f0b873d0ab3af77c05994c66b279cf4663567fe) - GitHub
+* **dev**: Use builder pattern in Parameter (#1646) [bacda76](https://github.com/mezmo/vrl/commit/bacda767c055ff37865ec96fe168b31b344252d1) - GitHub
+* **releasing**: Prepare 0.30.0 release (#1611) [ee45ff6](https://github.com/mezmo/vrl/commit/ee45ff6caf724ff91ff7fac825baa7267fd7aab7) - GitHub
+* **releasing**: Prepare 0.31.0 release (#1688) [4d61e53](https://github.com/mezmo/vrl/commit/4d61e53334cb373b1cf5129d3963145bd5bff6d0) - GitHub
+* **rfc**: Update auto doc generation rfc with revised approach (#1664) [5e159aa](https://github.com/mezmo/vrl/commit/5e159aa6c66f6451af2802f92c2b91f1b268e92e) - GitHub
+* **stdlib**: replace __mock_return_values_for_tests with deterministic flag on Example (#1667) [9c833ca](https://github.com/mezmo/vrl/commit/9c833ca33aa57dff5ebdb2481c719e172661fe0b) - GitHub
+* **stdlib**: use basename in examples when files don't exist (#1652) [7cb13f6](https://github.com/mezmo/vrl/commit/7cb13f6eef275ea8bb11aa6abba133b2ab599283) - GitHub
+* **stdlib**: use enum_variants for excluded_boundaries/original_case (#1644) [b3414a4](https://github.com/mezmo/vrl/commit/b3414a4e6cb134e69f6ed891fd40e42c7ba03401) - GitHub
+
+
+### Features
+
+* add `parse_yaml` function (#1602) [abbcbae](https://github.com/mezmo/vrl/commit/abbcbae5f3fb08ab1f1c63e433e431265e6a22b9) - GitHub
+* add automatic docs generation (#1663) [b4424e1](https://github.com/mezmo/vrl/commit/b4424e16d24234bb691808b0c3a2689af5a1b206) - GitHub
+* **ci**: add code coverage workflow and upload to DD (#1661) [e03a914](https://github.com/mezmo/vrl/commit/e03a914868985f9b0a9793049522f4464156537d) - GitHub
+* **ci**: add support for Datadog Static Analyzer (#1662) [e7170cf](https://github.com/mezmo/vrl/commit/e7170cf4b6f0539ef1423a8ff172d7ce0e73ef83) - GitHub
+* **cli**: Add --quiet flag to suppress REPL banner (#1617) [cead4f8](https://github.com/mezmo/vrl/commit/cead4f8a3663f4d86344f8f9a437afdb5fcdebe4) - GitHub
+* **deps**: make reqwest optional behind enable_network_functions feature (#1668) [271d01d](https://github.com/mezmo/vrl/commit/271d01d3e986216c544965ecb9b1d815d1114fa7) - GitHub
+* **stdlib**: add `enum_variants` to Parameter (#1642) [80c4482](https://github.com/mezmo/vrl/commit/80c44820028c93b0441bbd57483097d073031379) - GitHub
+* **stdlib**: add `notices` to Function (#1632) [0005fab](https://github.com/mezmo/vrl/commit/0005fab894b1f5880bf64de79c7c6d6799a425a5) - GitHub
+* **stdlib**: Add optional `internal_failure_reasons` to Function (#1627) [6d4e44e](https://github.com/mezmo/vrl/commit/6d4e44ee26eb92578bae81d07868e5211ee4184f) - GitHub
+* **vrl**: add build flag to remove env and system functions (#1616) [321285e](https://github.com/mezmo/vrl/commit/321285e7dccde8ea7abf045341dc6a470b777951) - GitHub
+
+
+### Miscellaneous
+
+* Merge pull request #130 from mezmo/pciampini/update-vrl-0.31.0 [5ce1eff](https://github.com/mezmo/vrl/commit/5ce1eff962aab69a35f4b2080b04991ac8f035ea) - GitHub
+* Merge upstream tag 'v0.31.0' into pciampini/update-vrl-0.31.0 [1beb794](https://github.com/mezmo/vrl/commit/1beb79431c2ea938a4d4f560160a10916cd8db94) - Phil Ciampini
+* [Datadog] Fix Static Code Analysis violation (#1665) [856fd61](https://github.com/mezmo/vrl/commit/856fd617f2b08734ce4b5d6a687800732c09fcae) - GitHub
+* Add input to example (#1658) [74f9a58](https://github.com/mezmo/vrl/commit/74f9a58fea5ea39f53c614fb4a5d7521b85c0a46) - GitHub
+* feat!(stdlib): add `category` to Function (#1634) [7830c05](https://github.com/mezmo/vrl/commit/7830c051501a08a328c53033364af55fd898aa86) - GitHub
+* Add pure to Function (#1630) [ead8ad4](https://github.com/mezmo/vrl/commit/ead8ad42f2b7cd0e99ec94151e8825d95dac193d) - GitHub
+* feat!(stdlib): add `return_kind` and `return_rules` to Function (#1628) [8308bf7](https://github.com/mezmo/vrl/commit/8308bf70e0a524503a4f7388e090d0538b243440) - GitHub
+* feat!(stdlib): Add required optional default to Parameter (#1613) [e33f948](https://github.com/mezmo/vrl/commit/e33f948655c445f1b07020910e043b8498afe8a7) - GitHub
+* feat!(stdlib): add required description field to Parameter (#1610) [1f2c963](https://github.com/mezmo/vrl/commit/1f2c963ed13c30a8897c3555f82e85c772cd5643) - GitHub
+* **clippy**: allows cleanup and refactoring (#1629) [9c4be12](https://github.com/mezmo/vrl/commit/9c4be1227c2d10bac4cbb1c7f6289b43247eb013) - GitHub
+* fix encode_charset usage() (#1655) [902ebe8](https://github.com/mezmo/vrl/commit/902ebe869ee653bb171e6174a1d3a4943b026856) - GitHub
+* **http_request**: add redaction for sensitive headers (#1562) [533fd74](https://github.com/mezmo/vrl/commit/533fd749f7e907986060b86695dea6bae6768183) - GitHub
+* improve snakecase and format_number examples (#1654) [c4afddc](https://github.com/mezmo/vrl/commit/c4afddc9d18cc368796686c312cd87d90d3c8808) - GitHub
+* improve truncate's suffix description (#1659) [8c30afb](https://github.com/mezmo/vrl/commit/8c30afbe86e7566f1f3e89c5c36045085e728466) - GitHub
+* move network performance notice into notices (#1657) [af5b315](https://github.com/mezmo/vrl/commit/af5b315e45fa0ad4b43bef49a4c9263349a3c787) - GitHub
+* **stdlib**: format examples and fix descriptions (#1651) [ddabc4b](https://github.com/mezmo/vrl/commit/ddabc4bd3981de66f4c9ce744caa18f459c88dc9) - GitHub
+
+
+### **BREAKING CHANGES**
+
+* **stdlib:** add `enum_variants` to Parameter (#1642)
+
 # [4.0.0](https://github.com/mezmo/vrl/compare/v3.5.1...v4.0.0) (2026-07-22)
 
 
